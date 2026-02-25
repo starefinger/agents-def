@@ -1,7 +1,7 @@
 ---
 description: 运维工程师 - 部署、监控和基础设施
 mode: subagent
-model: zhipuai-coding-plan/glm-5
+model: bailian-coding-plan/kimi-k2.5
 tools:
   write: true
   edit: true

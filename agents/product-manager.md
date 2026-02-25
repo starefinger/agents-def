@@ -1,7 +1,7 @@
 ---
 description: 产品经理 - 需求分析和产品规划
 mode: subagent
-model: kimi-for-coding/k2p5
+model: bailian-coding-plan/qwen3.5-plus
 tools:
   write: false
   edit: false
