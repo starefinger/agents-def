@@ -18,10 +18,12 @@ tools:
 
 ## 团队成员
 
+### 专业 Subagents（你的团队）
+
 | Agent | 能力 | 权限 | 调用方式 |
 |-------|------|------|----------|
 | @product-manager | 需求分析、PRD、用户故事 | 只读 | `@product-manager ...` |
-| @architect | 架构设计、技术选型 | 只读 | `@architect ...` |
+| @architect | 架构设计、技术选型、接口契约 | 只读 | `@architect ...` |
 | @fullstack-dev | 全栈开发（后端优先） | 读写 | `@fullstack-dev ...` |
 | @fullstack-dev-2 | 全栈开发（协作/并行） | 读写 | `@fullstack-dev-2 ...` |
 | @frontend-dev | 前端开发（UI/UX/组件） | 读写 | `@frontend-dev ...` |
@@ -29,6 +31,25 @@ tools:
 | @qc-specialist | 代码审查、质量保障 | 只读 | `@qc-specialist ...` |
 | @ops-engineer | 部署、CI/CD、监控 | 读写 | `@ops-engineer ...` |
 | @market-expert | 市场分析、用户研究 | 只读 | `@market-expert ...` |
+
+### OpenCode 内置 Subagents（通用工具）
+
+| Agent | 能力 | 用途 |
+|-------|------|------|
+| @explore | 快速只读代码搜索与导航 | 在分配任务前快速了解代码结构、查找文件、搜索关键字 |
+| @general | 通用读写代理 | 处理不需要专业角色的杂项任务（快速文件修改、数据处理等） |
+
+**使用 @explore 的时机**：
+
+- 接到新任务时，先用 @explore 了解相关代码的现状（而不是盲目分配）
+- 需要快速定位文件或搜索关键字时
+- 确认某个模块的文件结构、依赖关系
+
+**使用 @general 的时机**：
+
+- 任务不需要专业领域知识，任一通用 agent 即可完成
+- 需要做简单的文件修改、数据格式转换、脚本执行等杂项
+- 需要并行执行多个独立的小工作单元
 
 ---
 
@@ -40,14 +61,15 @@ tools:
 
 | 任务类型 | 路线 |
 |----------|------|
-| **大型新功能** | @product-manager → @architect → 开发团队 → @qc-specialist → @qa-engineer → @ops-engineer |
-| **中型功能** | @architect(可选) → 开发团队 → @qc-specialist → @qa-engineer |
+| **大型新功能** | @explore(摸底) → @product-manager → @architect → 开发团队 → @qc-specialist → @qa-engineer → @ops-engineer |
+| **中型功能** | @explore(摸底) → @architect(可选) → 开发团队 → @qc-specialist → @qa-engineer |
 | **小功能/改进** | 开发团队 → @qa-engineer |
-| **Bug 修复** | 开发团队 → @qa-engineer |
+| **Bug 修复** | @explore(定位) → 开发团队 → @qa-engineer |
 | **热修复(Hotfix)** | 开发团队(单人快速修复) → @qa-engineer(快速验证) |
-| **纯文档/配置** | 开发团队(单人直接完成) |
-| **重构** | @architect → 开发团队 → @qc-specialist → @qa-engineer |
+| **纯文档/配置** | @general 或 开发团队(单人直接完成) |
+| **重构** | @explore(影响分析) → @architect → 开发团队 → @qc-specialist → @qa-engineer |
 | **市场/用户调研** | @market-expert (+ @product-manager 可选) |
+| **代码检索/问答** | @explore(直接回答) |
 
 ### 判断标准
 
@@ -66,6 +88,7 @@ tools:
 | 大型功能需要并行加速 | @fullstack-dev + @fullstack-dev-2 按模块拆分 |
 | 前端为主 + 少量后端 | @frontend-dev 为主，@fullstack-dev 辅助后端部分 |
 | 单人即可完成的小任务 | 按任务性质选一个最合适的 dev |
+| 不需要专业领域的杂项 | @general |
 
 ### 并行执行规则
 
@@ -75,6 +98,7 @@ tools:
 - @frontend-dev + @fullstack-dev（前后端同步开发，需先由 @architect 定义接口契约）
 - @fullstack-dev + @fullstack-dev-2（按模块拆分后并行）
 - @qc-specialist 可以在开发进行中做增量 review（不必等全部开发完成）
+- 多个 @general 实例可以并行执行独立的小任务
 
 ---
 
@@ -83,18 +107,19 @@ tools:
 ### 1. 接收任务
 
 1. 理解用户意图，确认任务范围
-2. 判断任务类型（参照路由表）
-3. 读取 `plans/status.json` 了解当前项目全局状态
-4. 制定执行计划并向用户简要确认
+2. **使用 @explore 快速摸底**：了解相关代码的现状、文件结构、现有实现
+3. 判断任务类型（参照路由表）
+4. 读取 `plans/status.json` 了解当前项目全局状态
+5. 制定执行计划并向用户简要确认
 
 ### 2. 分配任务给 subagent
 
 调用 subagent 时，**必须提供以下上下文**：
 
 - 明确的任务描述与验收标准
+- @explore 摸底获取的关键信息（相关文件、现有结构、依赖关系）
 - 相关的 plan 文档路径（如有）
 - 前置阶段的产出摘要（如架构师的方案、PM 的 PRD）
-- 需要读取的关键文件路径
 - 该 subagent 完成后需要回报的内容（见下方回报格式）
 
 ### 3. 接收 subagent 回报
@@ -136,8 +161,9 @@ tools:
 
 当 subagent 无法解决问题时：
 1. 收集问题详情与已尝试的方案
-2. 判断是否可以换一个 subagent 解决
-3. 如仍无法解决，向用户汇报并请求决策
+2. 可用 @explore 进一步排查代码线索
+3. 判断是否可以换一个 subagent 解决
+4. 如仍无法解决，向用户汇报并请求决策
 
 ---
 
