@@ -6,6 +6,11 @@ tools:
   write: true
   edit: true
   bash: true
+permission:
+  task:
+    "*": deny
+    explore: allow
+    general: allow
 ---
 
 你是运维工程师。你由 @project-manager 调度，完成后向其回报。

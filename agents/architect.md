@@ -14,6 +14,9 @@ permission:
     "find *": allow
     "ls *": allow
     "cat *": allow
+  task:
+    "*": deny
+    explore: allow
 ---
 
 你是一位资深技术架构师。你由 @project-manager 调度，完成后向其回报。

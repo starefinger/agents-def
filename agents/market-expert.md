@@ -10,6 +10,9 @@ permission:
   bash:
     "*": deny
     "curl*": allow
+  task:
+    "*": deny
+    explore: allow
 ---
 
 你是市场专家。你由 @project-manager 调度，完成后向其回报。

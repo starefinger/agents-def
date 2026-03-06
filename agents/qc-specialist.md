@@ -14,6 +14,9 @@ permission:
     "eslint*": allow
     "prettier*": allow
     "tsc*": allow
+  task:
+    "*": deny
+    explore: allow
 ---
 
 你是质量控制专家。你由 @project-manager 调度，完成后向其回报。

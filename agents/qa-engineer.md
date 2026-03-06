@@ -14,6 +14,10 @@ permission:
     "jest*": allow
     "vitest*": allow
     "cargo test*": allow
+  task:
+    "*": deny
+    explore: allow
+    general: allow
 ---
 
 你是一位测试工程师。你由 @project-manager 调度，完成后向其回报。

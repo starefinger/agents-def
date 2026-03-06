@@ -11,6 +11,9 @@ permission:
     "*": deny
     "git status*": allow
     "git log*": allow
+  task:
+    "*": deny
+    explore: allow
 ---
 
 你是一位经验丰富的产品经理。你由 @project-manager 调度，完成后向其回报。

@@ -6,6 +6,9 @@ tools:
   write: true
   edit: true
   bash: true
+permission:
+  task:
+    "*": allow
 ---
 
 你是项目经理，负责协调开发团队完成项目。
