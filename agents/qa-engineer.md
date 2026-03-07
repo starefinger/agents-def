@@ -8,11 +8,59 @@ tools:
 permission:
   bash:
     "*": deny
+    # JavaScript / TypeScript
     "npm test*": allow
-    "pytest*": allow
+    "npm run test*": allow
+    "npx*": allow
+    "pnpm test*": allow
+    "pnpm run test*": allow
+    "yarn test*": allow
+    "yarn run test*": allow
     "jest*": allow
     "vitest*": allow
+    "playwright*": allow
+    "cypress*": allow
+    "bun test*": allow
+    "deno test*": allow
+    "c8*": allow
+    "nyc*": allow
+    # Python
+    "pytest*": allow
+    "python -m pytest*": allow
+    "python3 -m pytest*": allow
+    "python -m unittest*": allow
+    "python3 -m unittest*": allow
+    "coverage*": allow
+    "tox*": allow
+    "nox*": allow
+    # Rust
     "cargo test*": allow
+    "cargo nextest*": allow
+    # Go
+    "go test*": allow
+    # Java / Kotlin / JVM
+    "gradle test*": allow
+    "gradlew test*": allow
+    "./gradlew test*": allow
+    "mvn test*": allow
+    "mvn verify*": allow
+    # .NET
+    "dotnet test*": allow
+    # Ruby
+    "rspec*": allow
+    "rake test*": allow
+    "bundle exec rspec*": allow
+    "bundle exec rake test*": allow
+    # PHP
+    "phpunit*": allow
+    "vendor/bin/phpunit*": allow
+    "./vendor/bin/phpunit*": allow
+    # Swift
+    "swift test*": allow
+    # Elixir
+    "mix test*": allow
+    # General
+    "make test*": allow
   task:
     "*": deny
     explore: allow
@@ -38,10 +86,11 @@ permission:
 
 | Type | Scope | Tools |
 |------|-------|-------|
-| Unit | Function/module | Jest, Vitest, pytest |
-| Integration | API/service | Supertest, pytest |
+| Unit | Function/module | Jest, Vitest, pytest, go test, cargo test, rspec, phpunit, swift test |
+| Integration | API/service | Supertest, pytest, go test, dotnet test |
 | E2E | Full flow | Playwright, Cypress |
 | Performance | Latency/concurrency | k6, Artillery |
+| Coverage | Code coverage | c8, nyc, coverage.py, go cover |
 
 ## 输出格式
 

@@ -9,6 +9,16 @@ permission:
   bash:
     "*": deny
     "curl*": allow
+    "wget*": allow
+    "python*": allow
+    "python3*": allow
+    "node*": allow
+    "npx*": allow
+    "jq*": allow
+    "wc*": allow
+    "sort*": allow
+    "uniq*": allow
+    "agent-browser*": allow
   task:
     "*": deny
     explore: allow
@@ -26,7 +36,8 @@ permission:
 
 ## 内置工具
 
-- 你可以调用 **@explore** 快速浏览代码库，了解产品现有功能，辅助市场分析和竞品对比。
+- **@explore**：快速浏览代码库，了解产品现有功能，辅助市场分析和竞品对比。
+- **bash**：支持 `curl`/`wget` 抓取公开数据，`python`/`node` 做数据清洗与分析，`agent-browser` 访问网页、截图、提取信息，`jq` 解析 JSON API 响应。
 
 ## 输出格式
 
