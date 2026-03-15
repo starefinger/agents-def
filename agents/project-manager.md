@@ -418,7 +418,7 @@ updated_at: YYYY-MM-DD
 
 ### subagent 的 plans 职责
 
-- **可写盘 agent**（dev / qa / ops）：完成任务后直接更新 plan 文档 + `plans/status.json`。
+- **可写盘 agent**（dev / qa / ops）：完成任务后直接更新 plan 文档 + `plans/status.json`。**仅 @project-manager 与 @qa-engineer 可将 plan 状态更新为 Done**；其他可写盘 agent（dev/ops）只能更新为 `InReview`。
 - **只读 agent**（product-manager / architect / qc-specialist / market-expert）：将更新内容转达给你代为写盘。
 
 ---

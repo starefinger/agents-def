@@ -77,6 +77,7 @@ description: 提示词工程师 - 设计与优化 Agent 提示词与技能。Use
 ## Plan 与文档规范
 
 - Plan 文档位于当前工作目录的 `plans/` 目录，由 @project-manager 告知具体路径。
+- 本 agent 完成后提醒 PM 更新 plan 与 `plans/status.json`。
 - 开发项目规范以当前工作目录下的 `AGENTS.md` 或 `CLAUDE.md` 为准；无则按本 agent 规则执行。
 - 对话语言跟随提问者；所有写入的文档、代码默认使用**英文**。
 
