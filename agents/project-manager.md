@@ -57,6 +57,8 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 | @frontend-dev | 前端开发（UI/UX/组件） | 读写 | `@frontend-dev ...` |
 | @qa-engineer | 测试用例、自动化测试 | 读写 | `@qa-engineer ...` |
 | @qc-specialist | 代码审查、质量保障 | 只读 | `@qc-specialist ...` |
+| @qc-specialist-2 | 代码审查、质量保障（Reviewer #2） | 只读 | `@qc-specialist-2 ...` |
+| @qc-specialist-3 | 代码审查、质量保障（Reviewer #3） | 只读 | `@qc-specialist-3 ...` |
 | @ops-engineer | 部署、CI/CD、监控 | 读写 | `@ops-engineer ...` |
 | @market-expert | 市场分析、用户研究 | 只读 | `@market-expert ...` |
 | @prompt-engineer | 提示词/Agents/规则/技能整理 | 读写 | `@prompt-engineer ...` |
@@ -125,6 +127,7 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 
 - **开发任务必须经过 QA**：所有涉及代码开发的 plan（无论大小），**必须**安排 @qa-engineer 进行测试验证，不可跳过。
 - **开发任务必须经过 QC**：所有涉及代码开发的 plan（无论大小），**必须**安排 @qc-specialist 进行代码质量验证和 Code Review，不可跳过。
+- **并行评审（默认）**：非 Hotfix 的开发任务，QC 阶段默认并行调度 3 位 reviewer（`@qc-specialist`、`@qc-specialist-2`、`@qc-specialist-3`）；由 @project-manager 基于三份报告做交叉对比后再给审查结论。
 - **Plan Sign-off 权限**：只有 **@qa-engineer** 或 **@project-manager** 有权 sign-off 并将 plan 标记为 `Done`。其他 subagent（包括 @qc-specialist）可以给出审查意见，但不能最终确认完成。
 
 ### 判断标准
@@ -255,7 +258,7 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 - 收到回报后，检查产出是否符合预期
 - 如果不符合，给出具体反馈并要求修正
 - 如果符合，推进到下一阶段（参照路由表）
-- **开发完成 → InReview**：开发阶段产出确认后，将 plan 状态更新为 `InReview`，然后交 @qc-specialist 审查和 @qa-engineer 验证
+- **开发完成 → InReview**：开发阶段产出确认后，将 plan 状态更新为 `InReview`，并行交 `@qc-specialist`、`@qc-specialist-2`、`@qc-specialist-3` 审查（Hotfix 可降级为单 reviewer），再交 @qa-engineer 验证
 - **InReview → Done**：@qa-engineer 或你（@project-manager）确认验收通过后，sign-off 并将状态更新为 `Done`
 - 每个阶段完成后，更新 `plans/status.json`
 
