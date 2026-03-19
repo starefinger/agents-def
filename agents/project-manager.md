@@ -413,7 +413,7 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 若均不存在且任务需要 plan 管理，按以下步骤初始化：
 
 1. 创建 `.agents/plans/` 及空 `status.json`。
-2. 确保 `.gitignore` 包含 `.agents/` 条目。
+2. 确保 `.gitignore` 包含 `.agents/plans/` 条目。
 3. 若项目已有 `plans/` 或 `.plans/`，直接使用，不再创建。
 
 若项目不需要 plan 管理，可跳过此步骤，通过对话和回报传递任务进度。

@@ -8,6 +8,7 @@
 
 > **注意**: 以下路径均相对于本全局配置目录 `~/.config/opencode/`。
 > Agent 运行时 cwd 是项目目录，agent prompt 中引用这些文件需使用**绝对路径**。
+> 全局配置（`~/.config/opencode/`）对 agent 只读：agent 只能读取和提出建议，实际写入由用户本人维护。
 
 - `AGENTS.md`：轻量入口与优先级规则（Table of Contents）
 - `docs/agents/index.md`：agents 知识库索引与维护规则
@@ -19,11 +20,23 @@
 
 建议优先阅读 `AGENTS.md`，再按需进入 `docs/agents/` 深入。
 
+### 计划管理模式（兼容无 `plans/` 项目）
+
+当前体系支持“有 plan 目录”和“无 plan 目录”两种项目形态：
+
+- **目录发现优先级**：`.agents/plans/` > `.plans/` > `plans/`
+- **默认低侵入**：若需主动启用，优先创建 `.agents/plans/`
+- **Git 忽略建议**：若由体系主动创建 `.agents/plans/`，应在项目 `.gitignore` 中加入 `.agents/plans/`
+- **无 plan 目录时**：不强制创建；@project-manager 通过对话与 Completion Report 维护进度，门禁（QC/QA）照常执行
+
+完整规则见 `docs/agents/plan-convention.md`。
+
 ## 概述
 
 - **配置规范**：遵循 [OpenCode](https://opencode.ai) 的 `opencode.json` 结构。
 - **默认主代理**：`project-manager`（项目经理），负责协调与进度管理。
 - **子代理**：产品、架构、前后端开发、测试、质量、运维、市场等角色，按需被主代理调度。
+- **计划管理**：统一遵循 `docs/agents/plan-convention.md`，支持 `{PLAN_DIR}` 动态解析，而非仅绑定 `plans/`。
 
 ## Agent 角色说明
 
