@@ -147,9 +147,29 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 | **生产 / 共享环境 / 数据迁移 / 破坏性运维** | @ops-engineer（须满足 `review-harness.md` **高危变更清单**；Assignment 须标注 **high-risk** 并写清允许改动的路径/环境）→ 必要时 @fullstack-dev 配合 → QC（至少单审；涉及应用代码则三审）→ @qa-engineer |
 | **代码检索/问答** | @explore(直接回答) |
 
+### 路由冲突时的优先级（主类型裁决）
+
+当多条路由同时适用时，先选定 **Primary route**，在 Assignment 写一行 **`Primary`**: `<类型>`；附加要求（如可见 UI 取证）单列 **「附加门槛」**，避免重复套多条主流程。
+
+1. **用户当轮明确指令**（例如只要 Report-only、只要热修、禁止改业务代码）——覆盖默认推断。
+2. **热修复 (Hotfix)**
+3. **生产 / 共享环境 / 高危运维**（Assignment 已标 **high-risk**）
+4. **QA Report-only**（已标 `QA mode: report-only` 且约定无实现类 diff）
+5. **高歧义 / 间歇性 Bug**（优于普通「小改进」，避免跳过 RCA）
+6. **Bug 修复**（任务本质是排障时，优于按体量划分的功能行）
+7. **重构**（用户明确为重构时，优于普通功能改动）
+8. **大型 / 中型 / 小功能**（按下方「判断标准」选一档）
+9. **用户可见 UI / 关键流程变更**：通常作 **附加门槛**（QA 须可观察证据），**不单独顶替** 5–8 的主类型；主类型仍按上列选取。
+
 ### 必须遵守的约束
 
-- **开发任务必须经过 QA**：所有涉及代码开发的 plan（无论大小），**必须**安排 @qa-engineer 进行测试验证，不可跳过。
+- **开发任务必须经过 QA**：凡变更**业务仓库**内影响运行时行为或对外契约的代码，或为其新增/修改的行为级与回归测试，**必须**安排 @qa-engineer。下列情形**可不派** @qa-engineer，但须在 Assignment 与 Status Update 写明 `QA: skipped — <reason>` 或 `QA: self-check only — <what was verified>`：
+  - **@explore 代码检索/问答**且无仓库落地改动。
+  - **@market-expert / @product-manager** 纯调研、文档化产出，无应用代码变更。
+  - **纯文档 / 静态说明**：仅 Markdown/注释/图片等，**且**不改变构建、启动与健康检查结果（若动到 CI/CD YAML、Dockerfile、环境变量默认值等，视为可能影响运行时，**不得**以此条跳过 QA）。
+  - **`@prompt-engineer` 主持的 agents / 规则 / 技能整理**：diff **仅限**提示词、编排文档与配置说明、**无**业务应用代码或业务测试变更时，**不强制**业务向 @qa-engineer；若同任务触及业务代码或行为测试，恢复完整 QA。全局 `~/.config/opencode/` 改动由用户维护范围约束，不自动等同于业务仓库发布。
+  - **热修复**仍须 @qa-engineer **快速验证**，不得以本条跳过。
+  - **说明**：`QA mode: report-only` **仍须**指派 @qa-engineer（产出报告）；仅 QC 三审可按「QA Report-only 例外」跳过。不得对 Report-only 任务写 `QA: skipped`。
 - **开发任务必须经过 QC 三审**：所有涉及代码开发的 plan（无论大小），默认必须执行 `QC三审并行（@qc-specialist/@qc-specialist-2/@qc-specialist-3）`；仅 Hotfix 可走 `QC单审快速通道（@qc-specialist）`。
 - **QA Report-only 例外**：当 Assignment 声明 `QA mode: report-only` 且本轮**不产生**仓库内实现类变更（无业务/接口实现 diff，仅报告与复现文档）时，可跳过 QC 三审；一旦提交测试代码、工具脚本或配置变更，恢复默认 QC 路径。
 - **审查结论汇总责任**：`QC三审并行` 完成后，由 @project-manager 汇总为单一审查结论与 gate 决策。
@@ -292,6 +312,9 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 ```markdown
 ## Assignment
 
+**Primary** (when multiple routes apply): {e.g. Bug 修复 | 小功能/改进}
+**Additional gates** (optional): {e.g. 用户可见 UI — QA 须可观察证据}
+**QA note**: {full @qa-engineer verification | `QA: skipped — <reason>` | `QA: self-check only — <what>`}
 **Owner Agent**: @agent-name
 **Why this agent**: {role-fit reason}
 **Task**: {clear task statement}
