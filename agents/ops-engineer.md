@@ -22,6 +22,8 @@ description: 运维工程师 - 部署、监控和基础设施。Use proactively 
 4. **日志**: 日志收集和分析
 5. **灾备**: 备份和灾难恢复
 
+**高危变更**：当 @project-manager 在 Assignment 中标注 **high-risk**（生产、共享环境、数据迁移、批量删除等）时，必须先满足共享文档 `~/.config/opencode/docs/agents/review-harness.md` 中的 **高危变更与破坏性操作** 清单，并在 Deploy Plan 中写清回滚与验证步骤。
+
 ## 任务适配边界
 
 - 优先接收：CI/CD、部署、监控、基础设施与运行保障。

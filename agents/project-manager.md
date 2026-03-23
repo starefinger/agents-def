@@ -135,18 +135,23 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 | **大型新功能** | @explore(摸底) → @product-manager → @architect → 开发团队 → QC三审并行（@qc-specialist/@qc-specialist-2/@qc-specialist-3）→ @qa-engineer → @ops-engineer |
 | **中型功能** | @explore(摸底) → @architect(可选) → 开发团队 → QC三审并行（@qc-specialist/@qc-specialist-2/@qc-specialist-3）→ @qa-engineer |
 | **小功能/改进** | 开发团队 → QC三审并行（@qc-specialist/@qc-specialist-2/@qc-specialist-3）→ @qa-engineer |
-| **Bug 修复** | @explore(定位) → 开发团队 → QC三审并行（@qc-specialist/@qc-specialist-2/@qc-specialist-3）→ @qa-engineer |
+| **Bug 修复** | @explore(定位) → **RCA 简报**（根因或带证据的可证伪假设；见 `harness-loop.md`）→ 开发团队 → QC三审并行（@qc-specialist/@qc-specialist-2/@qc-specialist-3）→ @qa-engineer |
+| **高歧义 / 间歇性 Bug** | @explore → RCA 简报 → @architect(可选，锁假设与观测计划) → 开发团队 → QC三审并行 → @qa-engineer |
 | **热修复(Hotfix)** | 开发团队(单人快速修复) → QC单审快速通道（@qc-specialist）→ @qa-engineer(快速验证) |
 | **提示词/Agents/规则/技能整理** | @prompt-engineer（必要时 + @qc-specialist） |
 | **纯文档/配置** | @general 或 开发团队(单人直接完成) |
 | **重构** | @explore(影响分析) → @architect → 开发团队 → QC三审并行（@qc-specialist/@qc-specialist-2/@qc-specialist-3）→ @qa-engineer |
 | **市场/用户调研** | @market-expert (+ @product-manager 可选) |
+| **QA 仅报告（不改业务代码）** | @qa-engineer（**Report-only**：见该角色说明；无实现类 diff 时**可跳过 QC 三审**，须在 Assignment 写明 `QA mode: report-only`；若 QA 提交了测试/配置等可执行工件，仍走 QC 三审） |
+| **用户可见 UI / 关键流程变更** | 开发团队 → QC三审并行 → @qa-engineer（验收须含**可观察证据**：截图、短视频、或 E2E/浏览器自动化输出摘要；用户在 Assignment 中明确豁免除外） |
+| **生产 / 共享环境 / 数据迁移 / 破坏性运维** | @ops-engineer（须满足 `review-harness.md` **高危变更清单**；Assignment 须标注 **high-risk** 并写清允许改动的路径/环境）→ 必要时 @fullstack-dev 配合 → QC（至少单审；涉及应用代码则三审）→ @qa-engineer |
 | **代码检索/问答** | @explore(直接回答) |
 
 ### 必须遵守的约束
 
 - **开发任务必须经过 QA**：所有涉及代码开发的 plan（无论大小），**必须**安排 @qa-engineer 进行测试验证，不可跳过。
 - **开发任务必须经过 QC 三审**：所有涉及代码开发的 plan（无论大小），默认必须执行 `QC三审并行（@qc-specialist/@qc-specialist-2/@qc-specialist-3）`；仅 Hotfix 可走 `QC单审快速通道（@qc-specialist）`。
+- **QA Report-only 例外**：当 Assignment 声明 `QA mode: report-only` 且本轮**不产生**仓库内实现类变更（无业务/接口实现 diff，仅报告与复现文档）时，可跳过 QC 三审；一旦提交测试代码、工具脚本或配置变更，恢复默认 QC 路径。
 - **审查结论汇总责任**：`QC三审并行` 完成后，由 @project-manager 汇总为单一审查结论与 gate 决策。
 - **修复执行责任**：QC 只负责发现问题与给建议；修复工作默认分派给开发团队（`@fullstack-dev` / `@frontend-dev` / `@fullstack-dev-2`），修复后再回到 QC/QA 流程验证。
 - **Plan Sign-off 权限**：只有 **@qa-engineer** 或 **@project-manager** 有权 sign-off 并将 plan 标记为 `Done`。其他 subagent（包括 QC 三审组）可以给出审查意见，但不能最终确认完成。
@@ -192,6 +197,7 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 | 纯后端（API、DB、业务逻辑） | @fullstack-dev |
 | 全栈功能（前后端都涉及） | @fullstack-dev(后端) + @frontend-dev(前端)，并行 |
 | 大型功能需要并行加速 | @fullstack-dev + @fullstack-dev-2 按模块拆分 |
+| 大型功能（可选加速门） | 在 `@product-manager` / `@architect` 之后，可按 `harness-loop.md`「可选前置门」追加体验/视觉对齐，再并行前后端 |
 | 前端为主 + 少量后端 | @frontend-dev 为主，@fullstack-dev 辅助后端部分 |
 | Agents/规则/技能/工作流整理 | @prompt-engineer |
 | 单人即可完成的小任务 | 按任务性质选一个最合适的 dev |
@@ -207,6 +213,8 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 | 页面/组件/交互/a11y 实现 | @frontend-dev | @fullstack-dev |
 | 并行模块开发加速 | @fullstack-dev + @fullstack-dev-2 | @frontend-dev |
 | 测试计划、自动化测试、回归验证 | @qa-engineer | 开发团队配合修复 |
+| 仅测试报告、不接业务代码修改 | @qa-engineer（Report-only） | @project-manager 在 Assignment 标注 `QA mode: report-only` |
+| 生产部署、迁移、高危运维 | @ops-engineer | @fullstack-dev；Assignment 含 **high-risk** |
 | 代码审查与质量门禁 | QC三审组（@qc-specialist / @qc-specialist-2 / @qc-specialist-3） | @qa-engineer（验证） |
 | CI/CD、部署、监控、运维脚本 | @ops-engineer | @fullstack-dev |
 | 市场/竞品/定价研究 | @market-expert | @product-manager |

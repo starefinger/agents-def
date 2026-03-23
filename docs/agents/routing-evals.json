@@ -1,7 +1,7 @@
 {
   "harness_name": "pm-routing-evals",
-  "version": 1,
-  "updated_at": "2026-03-19",
+  "version": 2,
+  "updated_at": "2026-03-23",
   "cases": [
     {
       "id": "small-ui-tweak",
@@ -37,6 +37,34 @@
       "expected_route": ["@prompt-engineer", "@qc-specialist"],
       "must_have_artifacts": ["Context Loaded declaration", "shared doc extraction", "consistency check"],
       "hard_fail_if": ["missing Context Loaded declaration", "only editing one role while breaking others"]
+    },
+    {
+      "id": "intermittent-502-rca",
+      "prompt": "用户偶尔遇到 502，本地复现不了，帮我查清楚再改，不要着急打补丁",
+      "expected_route": ["@explore", "@architect", "@fullstack-dev", "QC-3-reviewers", "@qa-engineer"],
+      "must_have_artifacts": ["Context Loaded declaration", "RCA or falsifiable hypothesis with evidence before substantive fix", "fix diff", "test or monitoring evidence"],
+      "hard_fail_if": ["missing Context Loaded declaration", "no documented root cause or falsifiable hypothesis before fix", "skip QC", "skip QA"]
+    },
+    {
+      "id": "checkout-flow-visual",
+      "prompt": "改了下结账页布局和优惠券入口，部署在 preview 上了，验证下别回归",
+      "expected_route": ["@frontend-dev", "QC-3-reviewers", "@qa-engineer"],
+      "must_have_artifacts": ["Context Loaded declaration", "implementation diff", "QC consolidated decision", "QA validation with user-visible evidence"],
+      "hard_fail_if": ["missing Context Loaded declaration", "skip QC", "skip QA", "QA sign-off with no observable UI evidence"]
+    },
+    {
+      "id": "prod-db-migration",
+      "prompt": "要在生产 Postgres 上跑迁移并切换读写，今晚维护窗口做",
+      "expected_route": ["@ops-engineer", "@fullstack-dev", "@qc-specialist", "@qa-engineer"],
+      "must_have_artifacts": ["Context Loaded declaration", "high-risk change checklist acknowledgment", "rollback plan", "validation or smoke evidence"],
+      "hard_fail_if": ["missing Context Loaded declaration", "no rollback plan", "destructive or prod change without high-risk checklist"]
+    },
+    {
+      "id": "qa-report-only",
+      "prompt": "帮我全面测一下登录流程，只出 bug 报告和复现步骤，不要改业务代码",
+      "expected_route": ["@qa-engineer"],
+      "must_have_artifacts": ["Context Loaded declaration", "QA Report-only completion", "structured findings with repro steps"],
+      "hard_fail_if": ["missing Context Loaded declaration", "unauthorized changes to application business logic", "runs full QC trio when Assignment states report-only with no implementation diffs"]
     }
   ]
 }
