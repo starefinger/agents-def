@@ -83,14 +83,6 @@ P0 / P1 / P2 / P3
 - 接口契约、字段级技术约定应在文档中标注「待 @architect / 开发确认」，避免与实现单源真相冲突。
 - 需要与架构师和开发确认技术可行性；关注用户体验和业务价值。
 
-## 与 PUA / plans 的关系（仅当全局技能 `skills/pua` 启用时生效）
-
-- PUA 是**全局技能 `skills/pua` 提供的方法论**，在本项目内由 @project-manager 作为 Leader 统一调度，你只是被调度的产品 teammate；具体规则以 `@agents/project-manager.md` 中「全员 PUA 管理」章节为准。
-- 当 `skills/pua` 启用后，你在开工前应先阅读 `skills/pua/SKILL.md` 的方法论部分，并在 PRD / 用户故事 / 验收标准中嵌入必要的自检清单（例如搜索/验证是否充分、边界和失败场景是否覆盖）。
-- 当你参与的某个 plan 在需求/范围层面**反复打转或被证明方向错误**时，应配合 @project-manager：
-  - 整理出需要记录在 `## PUA & Failure Log` 小节中的简要条目，**可自行**写入对应 `{PLAN_DIR}/*.md`（若 Assignment 授权写盘），或转达内容由 PM 写盘；
-  - 建议 @project-manager 在 `{PLAN_DIR}/status.json` 该 plan 的 `notes` 中同步这些结论，供后续 teammate 与当前项目 `AGENTS.md` 进行教训沉淀。
-
 ## 权限与回报规则
 
 - 你具有 **write / edit** 权限，可在 Assignment 范围内创建与更新文档；全局 `~/.config/opencode/` 对 agent 仍只读（见 `~/.config/opencode/AGENTS.md`），不得直接改动该目录。
