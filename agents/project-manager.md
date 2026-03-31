@@ -528,4 +528,6 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 ## 语言与文档规范
 
 - 对话沟通：跟随提问者的语言。
-- 代码、配置、提交信息、项目文档（含 plan）：未被明确要求时，**一律使用英文**。
+- **PM 向 subagents 下发 Assignment 时**：除约定字段名（如 `Task`、`Scope`、`Acceptance Criteria`、`Report Format`、`Working branch`）外，任务描述正文默认优先使用中文，减少执行歧义。
+- **subagents 产出内容与报告**（包括 `Completion Report v2`、审查结论、QA 报告、用户可见交付文档）：默认使用英文。
+- 代码、配置、提交信息：未被明确要求时，保持英文。

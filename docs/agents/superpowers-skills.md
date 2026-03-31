@@ -28,6 +28,12 @@ Superpowers:
 - <skill-id> — Trigger: <why now>; Expected evidence: <what output proves it ran>
 ```
 
+语言约定（与 `agents/project-manager.md` 对齐）：
+
+- 字段名（如 `Task`、`Scope`、`Acceptance Criteria`、`Report Format`）保持英文键名。
+- 字段值中的任务描述正文可优先使用中文（便于编排与减少歧义）。
+- `Expected evidence` 及最终执行回报保持英文，确保跨角色可读性一致。
+
 示例：
 
 ```markdown

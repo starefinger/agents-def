@@ -1,70 +1,70 @@
 {
   "harness_name": "pm-routing-evals",
-  "version": 2,
-  "updated_at": "2026-03-23",
+  "version": 3,
+  "updated_at": "2026-03-31",
   "cases": [
     {
       "id": "small-ui-tweak",
       "prompt": "把设置页的按钮间距调一下并修复 hover 色值不一致问题",
       "expected_route": ["@frontend-dev", "QC-3-reviewers", "@qa-engineer"],
-      "must_have_artifacts": ["Context Loaded declaration", "implementation diff", "QC consolidated decision", "QA validation"],
-      "hard_fail_if": ["missing Context Loaded declaration", "skip QC", "skip QA"]
+      "must_have_artifacts": ["Context Loaded declaration", "assignment language contract (EN keys + CN task body)", "implementation diff", "QC consolidated decision", "QA validation in English"],
+      "hard_fail_if": ["missing Context Loaded declaration", "skip QC", "skip QA", "assignment uses non-English field keys", "report is non-English without user override"]
     },
     {
       "id": "bug-backend-validation",
       "prompt": "用户创建订单时报 500，帮我定位并修复，顺便补测试",
       "expected_route": ["@explore", "@fullstack-dev", "QC-3-reviewers", "@qa-engineer"],
-      "must_have_artifacts": ["Context Loaded declaration", "root cause", "fix diff", "test evidence"],
-      "hard_fail_if": ["missing Context Loaded declaration", "no root cause", "no regression test"]
+      "must_have_artifacts": ["Context Loaded declaration", "assignment language contract (EN keys + CN task body)", "root cause", "fix diff", "test evidence in English"],
+      "hard_fail_if": ["missing Context Loaded declaration", "no root cause", "no regression test", "assignment uses non-English field keys", "report is non-English without user override"]
     },
     {
       "id": "cross-module-feature",
       "prompt": "新增一个订单导出功能，前端加入口，后端提供下载 API",
       "expected_route": ["@explore", "@architect", "@fullstack-dev", "@frontend-dev", "QC-3-reviewers", "@qa-engineer"],
-      "must_have_artifacts": ["Context Loaded declaration", "plan file path in Context Loaded", "API contract", "parallel scope split", "QA evidence"],
-      "hard_fail_if": ["missing Context Loaded declaration", "missing plan file path in Context Loaded", "no architecture boundary", "front-back mismatch"]
+      "must_have_artifacts": ["Context Loaded declaration", "assignment language contract (EN keys + CN task body)", "plan file path in Context Loaded", "API contract", "parallel scope split", "QA evidence in English"],
+      "hard_fail_if": ["missing Context Loaded declaration", "missing plan file path in Context Loaded", "no architecture boundary", "front-back mismatch", "assignment uses non-English field keys", "report is non-English without user override"]
     },
     {
       "id": "hotfix-prod",
       "prompt": "线上支付回调挂了，先快速修复恢复服务",
       "expected_route": ["@fullstack-dev", "@qc-specialist", "@qa-engineer"],
-      "must_have_artifacts": ["Context Loaded declaration", "hotfix scope", "single-review gate", "quick validation"],
-      "hard_fail_if": ["missing Context Loaded declaration", "uses full 3-review path without reason", "no rollback note"]
+      "must_have_artifacts": ["Context Loaded declaration", "assignment language contract (EN keys + CN task body)", "hotfix scope", "single-review gate", "quick validation in English"],
+      "hard_fail_if": ["missing Context Loaded declaration", "uses full 3-review path without reason", "no rollback note", "assignment uses non-English field keys", "report is non-English without user override"]
     },
     {
       "id": "agent-rules-refactor",
       "prompt": "整理一下 agents 规则，减少重复并提高可维护性",
       "expected_route": ["@prompt-engineer", "@qc-specialist"],
-      "must_have_artifacts": ["Context Loaded declaration", "shared doc extraction", "consistency check"],
-      "hard_fail_if": ["missing Context Loaded declaration", "only editing one role while breaking others"]
+      "must_have_artifacts": ["Context Loaded declaration", "assignment language contract (EN keys + CN task body)", "shared doc extraction", "consistency check in English"],
+      "hard_fail_if": ["missing Context Loaded declaration", "only editing one role while breaking others", "assignment uses non-English field keys", "report is non-English without user override"]
     },
     {
       "id": "intermittent-502-rca",
       "prompt": "用户偶尔遇到 502，本地复现不了，帮我查清楚再改，不要着急打补丁",
       "expected_route": ["@explore", "@architect", "@fullstack-dev", "QC-3-reviewers", "@qa-engineer"],
-      "must_have_artifacts": ["Context Loaded declaration", "RCA or falsifiable hypothesis with evidence before substantive fix", "fix diff", "test or monitoring evidence"],
-      "hard_fail_if": ["missing Context Loaded declaration", "no documented root cause or falsifiable hypothesis before fix", "skip QC", "skip QA"]
+      "must_have_artifacts": ["Context Loaded declaration", "assignment language contract (EN keys + CN task body)", "RCA or falsifiable hypothesis with evidence before substantive fix", "fix diff", "test or monitoring evidence in English"],
+      "hard_fail_if": ["missing Context Loaded declaration", "no documented root cause or falsifiable hypothesis before fix", "skip QC", "skip QA", "assignment uses non-English field keys", "report is non-English without user override"]
     },
     {
       "id": "checkout-flow-visual",
       "prompt": "改了下结账页布局和优惠券入口，部署在 preview 上了，验证下别回归",
       "expected_route": ["@frontend-dev", "QC-3-reviewers", "@qa-engineer"],
-      "must_have_artifacts": ["Context Loaded declaration", "implementation diff", "QC consolidated decision", "QA validation with user-visible evidence"],
-      "hard_fail_if": ["missing Context Loaded declaration", "skip QC", "skip QA", "QA sign-off with no observable UI evidence"]
+      "must_have_artifacts": ["Context Loaded declaration", "assignment language contract (EN keys + CN task body)", "implementation diff", "QC consolidated decision", "QA validation with user-visible evidence in English"],
+      "hard_fail_if": ["missing Context Loaded declaration", "skip QC", "skip QA", "QA sign-off with no observable UI evidence", "assignment uses non-English field keys", "report is non-English without user override"]
     },
     {
       "id": "prod-db-migration",
       "prompt": "要在生产 Postgres 上跑迁移并切换读写，今晚维护窗口做",
       "expected_route": ["@ops-engineer", "@fullstack-dev", "@qc-specialist", "@qa-engineer"],
-      "must_have_artifacts": ["Context Loaded declaration", "high-risk change checklist acknowledgment", "rollback plan", "validation or smoke evidence"],
-      "hard_fail_if": ["missing Context Loaded declaration", "no rollback plan", "destructive or prod change without high-risk checklist"]
+      "must_have_artifacts": ["Context Loaded declaration", "assignment language contract (EN keys + CN task body)", "high-risk change checklist acknowledgment", "rollback plan", "validation or smoke evidence in English"],
+      "hard_fail_if": ["missing Context Loaded declaration", "no rollback plan", "destructive or prod change without high-risk checklist", "assignment uses non-English field keys", "report is non-English without user override"]
     },
     {
       "id": "qa-report-only",
       "prompt": "帮我全面测一下登录流程，只出 bug 报告和复现步骤，不要改业务代码",
       "expected_route": ["@qa-engineer"],
-      "must_have_artifacts": ["Context Loaded declaration", "QA Report-only completion", "structured findings with repro steps"],
-      "hard_fail_if": ["missing Context Loaded declaration", "unauthorized changes to application business logic", "runs full QC trio when Assignment states report-only with no implementation diffs"]
+      "must_have_artifacts": ["Context Loaded declaration", "assignment language contract (EN keys + CN task body)", "QA Report-only completion", "structured findings with repro steps in English"],
+      "hard_fail_if": ["missing Context Loaded declaration", "unauthorized changes to application business logic", "runs full QC trio when Assignment states report-only with no implementation diffs", "assignment uses non-English field keys", "report is non-English without user override"]
     }
   ]
 }
