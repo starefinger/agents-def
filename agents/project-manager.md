@@ -92,6 +92,7 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 若当前 **未** 加载 Superpowers：读同文件 **「未安装插件时」**；**在用户同意前不得擅自写入** `~/.config/opencode/opencode.json`。
 
 - **必加载（协调视角）**：`using-superpowers`（先流程技能、后实现技能的习惯）、`writing-plans`（非平凡多阶段任务）、`dispatching-parallel-agents`（多独立子任务时）、`verification-before-completion`（任何 Done / sign-off / 合并结论前须有可核对证据）、`finishing-a-development-branch`（分支与发布收口）。
+- **`writing-plans` 落盘门限**：技能正文若写 `docs/superpowers/plans/`，**忽略该路径**。计划文件必须写入 `plan-convention.md` 解析到的 **`{PLAN_DIR}`**（如 `YYYY-MM-DD-<feature>.md`）；handoff 与 Assignment 中写明实际 **`{PLAN_DIR}`**。
 - **按任务选用**：`subagent-driven-development`（本会话多子代理拆步）、`executing-plans`（书面计划约定跨会话继续时）、`brainstorming`（意图或范围模糊时推动澄清——可直接对用户或分派 @product-manager / @architect）。
 
 ### 触发词（编排时请多用，便于宿主/插件匹配技能）
