@@ -11,11 +11,11 @@
 
 | 变量 | 用途 |
 |------|------|
-| `MINIMAX_API_KEY` | MiniMax MCP |
-| `BIGMODEL_MCP_BEARER` | 智谱 BigModel 远程 MCP 的 Bearer token（**不含** `Bearer` 前缀；JSON 里已写 `Bearer {env:...}`） |
-| `Z_AI_API_KEY` | `@z_ai/mcp-server` |
-| `ZHIPUAI_API_KEY` | `provider.zhipuai-coding-plan.options.apiKey` |
+| `MINIMAX_API_KEY` | MiniMax API Key |
+| `Z_AI_API_KEY` | 智谱 BigModel API Key |
+| `MOONSHOT_API_KEY` | MoonShot(Kimi) API Key |
 | `DASHSCOPE_API_KEY` | 阿里云百炼 / DashScope（`bailian-coding-plan` 的 `apiKey`） |
+| `CONTEXT7_API_KEY` | Context7 API Key |
 
 可复制 `secrets.env.example` 为本地 `secrets.env`（勿提交），执行 `set -a && source secrets.env && set +a` 后再启动 CLI/TUI。
 
