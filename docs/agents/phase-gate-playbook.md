@@ -39,6 +39,7 @@
   - 目标：按任务执行并提交证据，进入审查。
   - 最小产物：实现 diff、自检证据、回报与 handoff。
   - **编辑纪律**：改文件前以磁盘为准重读；Patch 失败则重读、缩小步长，禁止盲试（见 `harness-loop.md`「可验证编辑与上下文纪律」）。
+  - **知识库**：若项目启用 `{PLAN_DIR}/knowledge/` 且当前计划在 `status.json` 的 `plans[].metadata` 中登记了 `primary_spec` / `spec_refs`，**开工前**须阅读并在回报中说明已对齐；规则见 `plan-convention.md`「`{PLAN_DIR}/knowledge/` 开发过程知识库」。
 
 ## 角色职责
 

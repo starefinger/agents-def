@@ -127,6 +127,8 @@
 - 自检证据
 - 已更新的计划清单（主 plan 与 `status.json`）
 
+若项目使用 **`{PLAN_DIR}/knowledge/`**：实现前须阅读 `plans[].metadata` 中的 **`primary_spec` / `spec_refs`**（若存在），不得在未对齐知识库设计输入的情况下静默偏离；见 `plan-convention.md`。
+
 ### 4) 审查门禁
 
 负责人：QC 审查员 + QA

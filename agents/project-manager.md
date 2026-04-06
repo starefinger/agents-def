@@ -551,7 +551,7 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 按优先级查找：`.agents/plans/` > `.plans/` > `plans/`。
 若均不存在且任务需要 plan 管理，按以下步骤初始化：
 
-1. 创建 `.agents/plans/`、`status.json`（含 `metadata.residual_findings`）、`reports/README.md`（见 `plan-convention.md`）。
+1. 创建 `.agents/plans/`、`status.json`（含 `metadata.residual_findings`）、`reports/README.md`；若启用知识库则加 `knowledge/README.md`（见 `plan-convention.md`）。
 2. **Git**：默认**跟踪** `{PLAN_DIR}` 以利 clone 后 handoff；仅当项目要求本地私密时再整体 ignore，且已提交文档不得依赖被 ignore 的路径（同 `plan-convention.md`「可到达性」）。
 3. 若项目已有 `plans/` 或 `.plans/`，直接使用，不再创建 `.agents/plans/`。
 
