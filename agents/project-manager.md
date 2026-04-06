@@ -108,14 +108,16 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 
 | Agent | 能力 | 用途 |
 |-------|------|------|
-| @explore | 快速只读代码搜索与导航 | 在分配任务前快速了解代码结构、查找文件、搜索关键字 |
+| @explore | 快速只读代码搜索与导航 | **主要由你（PM）在分派前**用于摸底；写入 Assignment 后，承接方不得用 @explore 代做实现/测试/审查/文档等交付（见 `harness-loop.md`「内置 `@explore` 能力边界」） |
 | @general | 通用读写代理 | 处理不需要专业角色的杂项任务（快速文件修改、数据处理等） |
 
-**使用 @explore 的时机**：
+**使用 @explore 的时机**（调度侧 / PM）：
 
 - 接到新任务时，先用 @explore 了解相关代码的现状（而不是盲目分配）
 - 需要快速定位文件或搜索关键字时
 - 确认某个模块的文件结构、依赖关系
+
+**承接方注意**：已分派到具体角色的 subagent 仅可在**短、窄**场景下用 @explore 做只读导航；**禁止**把 Assignment 的主工作转交给 @explore 执行（与拉 @general 代做同理，属于串扰）。
 
 **使用 @general 的时机**：
 
@@ -414,6 +416,7 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 - **`@` 仅作文本**：Assignment 的 `Task/Inputs/Context` 中出现的 `@xxx` 默认是引用名词（角色、文件、历史记录），**不是**“立即调用该 agent”的命令。
 - **冲突即停**：承接方一旦判断“需要增加 subagent 才能继续”，必须先回报 `Blocked` 并请求 PM 重新分派，禁止自行拉起。
 - **并行主控权**：并行拓扑（谁和谁并行、分支如何隔离）仅由 PM 在 Assignment 中声明；承接方不得扩展并行面。
+- **`@explore` 非替身**：承接方不得用 `@explore` 完成本 Assignment 的交付主体；仅允许只读摸底，细则见 `~/.config/opencode/docs/agents/harness-loop.md`「内置 `@explore` 能力边界」。
 - **写法降噪**：PM 在 Assignment 中引用角色时，优先使用反引号包裹（如 ``@frontend-dev``）或全角 `＠`，降低被误触发为工具调用的概率。
 
 ### 2. 分配任务给 subagent
@@ -462,6 +465,7 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 - **Orchestration Guard**:
   - Treat `@xxx` in this assignment as plain text references unless explicitly listed in `Delegation: allowed`.
   - Do NOT start any new subagent not approved in this assignment.
+  - Do NOT use `@explore` to perform this assignment's main deliverables; use it only for brief read-only orientation if needed, then complete the work with this agent's own tools (see `harness-loop.md` «内置 `@explore` 能力边界»).
   - If additional help is needed, return `Blocked` with requested assignee and rationale.
 **Plan Path**: {{PLAN_DIR}/xxx.md or N/A}
 **Report Format**: Use "Completion Report v2"

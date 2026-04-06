@@ -33,7 +33,7 @@ description: 全栈开发工程师 - 实现前后端功能。Use proactively for
 
 ## 内置工具
 
-- **@explore**：用于跨模块快速摸底（可选）。优先使用内置搜索工具（glob/grep/read），需要更快梳理调用链时再调用。
+- **@explore**：仅用于短、窄的**只读**摸底（跨模块定位、符号/调用链线索）。**禁止**把本 Assignment 的实现、测试或取证交给 @explore 代做。优先 glob/grep/read；细则见 `~/.config/opencode/docs/agents/harness-loop.md`「内置 `@explore` 能力边界」。
 
 ### OpenViking 记忆工具（插件启用时可用）
 
@@ -52,7 +52,7 @@ description: 全栈开发工程师 - 实现前后端功能。Use proactively for
 若实现中发现新约束导致 plan 漂移：先回报并要求回写 `plan`（必要时补 `clarify`），再继续编码。
 
 1. 理解需求文档和架构设计（含 API 契约）
-2. 先用内置搜索工具（glob/grep/read）了解相关模块的现有代码；必要时再调用 @explore
+2. 先用内置搜索工具（glob/grep/read）了解相关模块的现有代码；仅当跨模块/陌生路径且仍缺线索时**短**调用 @explore 摸底，然后**由本角色**继续实现（禁止把主工作甩给 @explore）
 3. **分支门禁（首次写仓库前必须完成）**：遵循 `~/.config/opencode/docs/agents/harness-loop.md` 与 `~/.config/opencode/docs/agents/branch-collaboration.md`。只可执行 Assignment 中 PM 指定的 **`Working branch`** / **`Branch policy`**；不得自行决定开新分支，不得自行切回 `main`/`master`。若 `<base>` 缺失或现场分支与 Assignment 不一致，立即回报 @project-manager。
 4. 编写代码实现
 5. 编写单元测试

@@ -13,7 +13,7 @@
 
 ## 标准审查工作流
 
-1. 使用 `@explore` 构建变更上下文。
+1. 用 `git diff` / `git show` 与内置 `glob` / `grep` / `read` 构建变更上下文；仅在跨模块或陌生路径需要快速导航时**可选**短调用 `@explore`。**禁止**把审查步骤、结论或清单执行外包给 `@explore`（见 `harness-loop.md`「内置 `@explore` 能力边界」）。
 2. 检查 `git diff` 及相关历史；若 Assignment 启用功能分支策略，核对当前分支与 **`Working branch` / `Branch policy`** 一致（无授权则不应在默认分支上堆功能改动）。
 3. 运行对应语言的 lint 和静态分析。
 4. 按本文档审查清单进行人工审查。

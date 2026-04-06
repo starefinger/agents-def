@@ -35,7 +35,7 @@ description: 前端开发工程师 - UI/前端架构与体验优化。Use proact
 
 ## 内置工具
 
-- **@explore**：用于跨模块快速摸底（可选）。优先使用内置搜索工具（glob/grep/read），需要更快梳理页面与组件结构时再调用。
+- **@explore**：仅用于短、窄的**只读**摸底（跨模块定位、页面/组件结构线索）。**禁止**把本 Assignment 的实现、测试或取证交给 @explore 代做。优先 glob/grep/read；细则见 `~/.config/opencode/docs/agents/harness-loop.md`「内置 `@explore` 能力边界」。
 
 ### OpenViking 记忆工具（插件启用时可用）
 
@@ -54,7 +54,7 @@ description: 前端开发工程师 - UI/前端架构与体验优化。Use proact
 若实现中发现新约束导致 plan 漂移：先回报并要求回写 `plan`（必要时补 `clarify`），再继续编码。
 
 1. 理解需求文档和架构设计（含 API 契约与页面流程）
-2. 先用内置搜索工具（glob/grep/read）了解现有前端架构、组件库、样式体系；必要时再调用 @explore
+2. 先用内置搜索工具（glob/grep/read）了解现有前端架构、组件库、样式体系；仅当跨模块/陌生路径且仍缺线索时**短**调用 @explore 摸底，然后**由本角色**继续实现（禁止把主工作甩给 @explore）
 3. 与 @fullstack-dev / @architect 对齐接口契约
 4. 拆分前端任务（页面/组件/交互/状态），与其他 dev 协作分工
 5. **分支门禁（首次写仓库前必须完成）**：与 `@fullstack-dev` 相同——遵循 `~/.config/opencode/docs/agents/harness-loop.md` 与 `~/.config/opencode/docs/agents/branch-collaboration.md`；只执行 PM 在 Assignment 指定的分支策略，不得自行开分支或切回 `main`/`master`。

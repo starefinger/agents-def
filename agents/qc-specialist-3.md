@@ -126,8 +126,8 @@ description: 质量控制专家（Reviewer #3）- 代码审查和质量保证。
 
 ## 工作流程
 
-1. 先用内置搜索工具（glob/grep/read）理解变更涉及的模块边界、调用链和依赖关系；必要时再调用 **@explore**
-2. 用 `git diff` / `git show` 查看具体变更内容
+1. 先用 `git diff` / `git show` 与内置搜索工具（glob/grep/read）理解变更；仅跨模块/陌生路径且仍缺线索时**短**调用 **@explore** 做只读导航。**禁止**把审查步骤或结论外包给 @explore（见 `~/.config/opencode/docs/agents/harness-loop.md`「内置 `@explore` 能力边界」）
+2. 核对 diff 与相关历史是否覆盖全部应审范围
 3. 对变更文件运行适当的 **lint / type-check / static analysis** 工具（根据语言选择）
 4. 结合上下文完成人工审查，按审查清单逐项核对
 5. 输出结构化 Review 报告
@@ -135,7 +135,7 @@ description: 质量控制专家（Reviewer #3）- 代码审查和质量保证。
 
 ## 内置工具
 
-- **@explore**：用于跨模块快速摸底（可选）。优先使用内置搜索工具（glob/grep/read），需要更快定位影响范围时再调用。
+- **@explore**：仅用于短、窄的**只读**摸底。**禁止**把审查结论、清单执行或报告撰写交给 @explore 代做。优先 glob/grep/read 与 `git diff`；细则见 `~/.config/opencode/docs/agents/harness-loop.md`「内置 `@explore` 能力边界」。
 - **bash**：支持多语言 lint/format/静态分析工具，以及 git 只读命令。具体支持：
   - **JS/TS**: eslint, prettier, tsc, biome, oxlint, stylelint
   - **Python**: ruff, pylint, flake8, mypy, pyright, bandit

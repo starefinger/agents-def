@@ -47,7 +47,7 @@ readonly: true
 
 ## 内置工具
 
-- **@explore**：用于跨模块快速摸底（可选）。优先使用内置搜索工具（glob/grep/read）了解产品现有功能，需要更快梳理代码结构时再调用。
+- **@explore**：仅用于短、窄的**只读**摸底（代码侧功能边界线索）。**禁止**把本 Assignment 的市场/用户研究结论与主报告交给 @explore 代做。优先 glob/grep/read；细则见 `~/.config/opencode/docs/agents/harness-loop.md`「内置 `@explore` 能力边界」。
 - **bash**：支持 `curl`/`wget` 抓取公开数据，`python`/`node` 做数据清洗与分析，`agent-browser` 访问网页、截图、提取信息，`jq` 解析 JSON API 响应。
 
 ### OpenViking 记忆工具（插件启用时可用）

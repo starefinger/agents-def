@@ -174,7 +174,7 @@ Superpowers:
 
 ## 与 OpenCode 内置 @explore 的关系
 
-- **摸底**仍优先由 Assignment 与 `@explore` 承担；Superpowers 不改变路由表。
+- **摸底**：由 `@project-manager` 在分派前调用 `@explore` 并写入 Assignment 为推荐模式；**已分派的承接方**不得用 `@explore` 代做实现/测试/审查/文档等交付，仅可短只读导航（见 `harness-loop.md`「内置 `@explore` 能力边界」）。Superpowers 不改变路由表。
 - `dispatching-parallel-agents` / `subagent-driven-development` 用于 **PM 拆分子任务** 或 **多代理并行**，与 `@explore` 可并列使用。
 
 ## 与 `docs/agents` 流程：张力与消解

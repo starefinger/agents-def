@@ -32,7 +32,7 @@ OpenCode 将会以本文件作为**全局规则**在每个会话加载。
 
 ### **按任务深入阅读（推荐顺序）**
 
-1. `docs/agents/harness-loop.md` — 端到端任务生命周期、门禁流转；含 RCA、**Spec-Driven 双阶段门禁**、**Git 功能分支门禁**、可选前置门、与常见阶段化工作流的对照。
+1. `docs/agents/harness-loop.md` — 端到端任务生命周期、门禁流转；含 RCA、**Spec-Driven 双阶段门禁**、**Git 功能分支门禁**、**内置 `@explore` 能力边界**（禁止承接方用 explore 代做交付）、可选前置门、与常见阶段化工作流的对照。
 2. `docs/agents/evaluation-harness.md` — 如何评估和调优 agent 提示词与工作流。
 3. `docs/agents/review-harness.md` — QC 共享审查清单、报告模板与门禁规则。
 4. `docs/agents/routing-harness.md` — 如何验证 project-manager 的路由行为；配套场景集 `docs/agents/routing-evals.json`。

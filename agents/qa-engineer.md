@@ -86,7 +86,7 @@ Use when `QA mode: report-only` (or user explicitly asks for report only and PM 
 
 ## 内置工具
 
-- **@explore**：用于跨模块快速摸底（可选）。优先使用内置搜索工具（glob/grep/read），需要更快梳理结构与依赖时再调用。
+- **@explore**：仅用于短、窄的**只读**摸底（跨模块定位、依赖线索）。**禁止**把本 Assignment 的测试设计、执行、取证或报告交给 @explore 代做。优先 glob/grep/read；细则见 `~/.config/opencode/docs/agents/harness-loop.md`「内置 `@explore` 能力边界」。
 
 ### OpenViking 记忆工具（插件启用时可用）
 
