@@ -52,6 +52,8 @@
 
 ## 标准输出模板
 
+落盘到 **`{PLAN_DIR}/reports/<plan-id>/<plan-id>-qc#.md`** 时：文件**最上方**须为 YAML frontmatter（`report_kind`、`reviewer`、`reviewer_index`、`plan_id`、`verdict`、`generated_at` 等，见 `agents/qc-specialist*.md`），**紧接着**再写下列 Markdown 正文（可将 **Reviewer Metadata** 与 frontmatter 对齐，避免矛盾）。
+
 ```markdown
 # Code Review Report
 

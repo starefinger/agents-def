@@ -304,6 +304,8 @@ jq '.metadata.residual_findings["01-data-infrastructure"]' .agents/plans/status.
 | QC 并行报告 | `<plan-id>-qc1.md`、`-qc2.md`、`-qc3.md` |
 | QC 汇总结论 | `<plan-id>-qc-consolidated.md` |
 
+**QC 落盘与宿主权限**：`@qc-specialist` / `@qc-specialist-2` / `@qc-specialist-3` 使用 OpenCode **`permission.edit`** 路径白名单，**仅可** Write/Edit **`{PLAN_DIR}/reports/`** 下 **`.md`**（全局 agent 提示词中已配置 `.agents/plans/reports/**`、`.plans/reports/**`、`plans/reports/**` 相对路径）。报告文件**必须**以 YAML **frontmatter** 开头（键见各 QC agent 提示词）。**若** 项目的 `{PLAN_DIR}` 不落在上述三种根下，须在**项目级** OpenCode 配置中为 QC 角色追加对应的 `edit` allow 规则。
+
 Plan 正文与 `status.json` 必须保持一致；不一致时以 `status.json` 的条目状态为准并尽快纠正正文或登记 notes。
 
 ### Done 标记方式
@@ -336,7 +338,8 @@ Plan 正文与 `status.json` 必须保持一致；不一致时以 `status.json` 
 - **Done** 只能由 @project-manager 或 @qa-engineer 设置。
 - 可写盘 agent（dev / qa / ops）完成任务后可将状态更新为 `InReview`。
 - **@product-manager**、**@architect** 可写 plan 文档中各自负责部分，但**不**应擅自将整条计划在 `status.json` 中改为 `InReview` 或 `Done`（除非 Assignment 明确授权且与 PM 对齐）； **`Done` 仍仅限** PM/QA。
-- 只读 agent（qc-specialist / market-expert）将更新内容转达 @project-manager 代为写盘。
+- **@qc-specialist** / **@qc-specialist-2** / **@qc-specialist-3**：可按宿主白名单**直接写入** `{PLAN_DIR}/reports/**/*.md`；**其它路径**仍转达 @project-manager。
+- **@market-expert** 等只读角色：将更新内容转达 @project-manager 代为写盘。
 
 ## 未启用 Plan 管理时的工作方式
 
@@ -354,5 +357,6 @@ Plan 正文与 `status.json` 必须保持一致；不一致时以 `status.json` 
 - **可写盘 agent**（dev / qa / ops）：完成任务后直接更新 plan 文档 + `status.json`。**实现前**若 `plans[].metadata` 含 `primary_spec` / `spec_refs`，须先阅读对应文件（见上文「knowledge 专节」）。
 - **@product-manager**：可更新 plan 文档中需求/验收/用户故事等产品负责部分；**不得**将 `status.json` 中计划状态设为 `Done`；如需改 `progress`/`notes`，以 Assignment 为准或交由 PM 收口。
 - **@architect**：可更新 plan 文档中架构、接口契约、技术里程碑等章节；**不得**将 `status.json` 中计划状态设为 `Done`；一般不擅自将整条计划改为 `InReview`（与 PM 对齐）。
-- **只读 agent**（qc-specialist / market-expert）：将更新内容转达 @project-manager 代为写盘。
+- **@qc-specialist\***：仅可写 **`{PLAN_DIR}/reports/**/*.md`**（见「状态更新权限」）；其它落盘转达 @project-manager。
+- **@market-expert**（只读）：将更新内容转达 @project-manager 代为写盘。
 - **所有 agent**：完成后提醒 @project-manager 同步 plan 状态。

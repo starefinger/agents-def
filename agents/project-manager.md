@@ -147,9 +147,9 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 | @fullstack-dev-2 | 全栈开发（协作/并行） | 读写 | `@fullstack-dev-2 ...` |
 | @frontend-dev | 前端开发（UI/UX/组件） | 读写 | `@frontend-dev ...` |
 | @qa-engineer | 测试用例、自动化测试 | 读写 | `@qa-engineer ...` |
-| @qc-specialist | 代码审查、质量保障 | 只读 | `@qc-specialist ...` |
-| @qc-specialist-2 | 代码审查、质量保障（Reviewer #2） | 只读 | `@qc-specialist-2 ...` |
-| @qc-specialist-3 | 代码审查、质量保障（Reviewer #3） | 只读 | `@qc-specialist-3 ...` |
+| @qc-specialist | 代码审查、质量保障 | 仅可写 `{PLAN_DIR}/reports/**/*.md`（QC 报告 + frontmatter） | `@qc-specialist ...` |
+| @qc-specialist-2 | 代码审查、质量保障（Reviewer #2） | 同上 | `@qc-specialist-2 ...` |
+| @qc-specialist-3 | 代码审查、质量保障（Reviewer #3） | 同上 | `@qc-specialist-3 ...` |
 | @ops-engineer | 部署、CI/CD、监控 | 读写 | `@ops-engineer ...` |
 | @market-expert | 市场分析、用户研究 | 只读 | `@market-expert ...` |
 | @prompt-engineer | 提示词/Agents/规则/技能整理 | 读写 | `@prompt-engineer ...` |
