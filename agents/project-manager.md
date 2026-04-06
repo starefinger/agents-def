@@ -501,8 +501,8 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
   - 若实现中发现新约束，先回写 plan（并必要时补 clarify）再继续 implement。
 - **开发完成 → InReview**：开发阶段产出确认后，将 plan 状态更新为 `InReview`，默认进入 `QC三审并行（@qc-specialist/@qc-specialist-2/@qc-specialist-3）`；Hotfix 可走 `QC单审快速通道（@qc-specialist）`。随后由 @project-manager 按“QC 三审轻量汇总”输出统一 `QC Consolidated Decision`，再交 @qa-engineer 验证
 - **QC 发现问题 → Dev 修复闭环**：若统一结论为 `Request Changes` 或包含必须修复项，PM 需立即按模块指派给对应 dev owner 修复（前端给 `@frontend-dev`，后端给 `@fullstack-dev`，跨模块可并行给 `@fullstack-dev-2`）；修复完成后回流 QC/QA 复验
-- **残留问题归档闭环（强制）**：阻断项修复后，若仍有非阻断 finding，PM 必须登记 Residual Findings（**优先** `{PLAN_DIR}/status.json` 的 `metadata.residual_findings[<plan-id>]`，见 `plan-convention.md`）；亦可辅以主 plan 小节；未完成留档不得宣告最终收口
-- **Residual 关闭与归档**：当 R# 已修复并经验证（或已豁免/被替代），由你或 @qa-engineer 写全关闭字段后，**追加**至 **`{PLAN_DIR}/archived/residuals/<plan-id>.json`**（`schema_version` + `entries[]`，每条含 `archived_at`），并从 **`metadata.residual_findings[<plan-id>]`** 中**删除**该条，使 `status.json` 仅保留 **open**；**禁止**硬删 open 项（细则见 `plan-convention.md`「Residual findings 生命周期」）
+- **残留问题归档闭环（强制）**：阻断项修复后，若仍有非阻断 finding，PM 必须登记 Residual Findings（**优先** `{PLAN_DIR}/status.json` 的 `metadata.residual_findings[<plan-id>]`，见 `plan-convention.md`）；亦可辅以主 plan 小节；未完成留档不得宣告最终收口。**语义**：未登记等于**未向仓库声明**已知债与跟踪约定；下一会话无法把 QC 聊天当权威来源。
+- **Residual 关闭与归档**：当 R# 已修复并经验证（或已豁免/被替代），由你或 @qa-engineer 写全关闭字段后，**追加**至 **`{PLAN_DIR}/archived/residuals/<plan-id>.json`**（`schema_version` + `entries[]`，每条含 `archived_at`），并从 **`metadata.residual_findings[<plan-id>]`** 中**删除**该条，使 `status.json` 仅保留 **open**；**禁止**硬删 open 项（细则见 `plan-convention.md`「Residual findings 生命周期」）。**语义**：拖延归档会让 SSOT 与真实关闭状态长期错位，损害跨 agent handoff 与复盘时的**可引用性**。
 - **技术债一览**：若项目启用 **`metadata.tech_debt_summary`**，在批量变更 open R# 或里程碑收口时**同步刷新**（与 `residual_findings` 对齐口径），见 `plan-convention.md`「`metadata.tech_debt_summary`」
 - **InReview → Done**：@qa-engineer 或你（@project-manager）确认验收通过后，sign-off 并将状态更新为 `Done`；收口叙述中显式包含 **`verification before completion`**（或 `verification-before-completion`），即：结论须能指向**已运行的命令、输出、或可追溯的取证**（与 `harness-loop.md` 反模式一致）。
 - **合并 / 删枝 / 发布策略**：需要拍板分支生命周期时，对用户或内部记录使用 **`finishing a development branch`**（或 `finishing-a-development-branch`），并按 `superpowers-skills.md` 与运维/开发交接。
@@ -569,7 +569,7 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 - **可选元数据**：在 `plans[].metadata` 中同步 **`working_branch` / `branch_policy` / `gates` / `phase` / `priority`** 等与 Assignment、程序路线图一致的字段，便于 `jq` 过滤与跨会话 handoff（键名与语义见 `plan-convention.md`「plans[].metadata 标准可选字段」）；根级 `metadata.notes` 数组可作程序里程碑日志。
 - **分配**：按任务路由表 + 开发分配规则分配给合适的 subagent。
 - **推进**：每阶段完成后更新 progress/status。
-- **Done 收口**：确保 Done 标记与 `status.json` 同步；若 Done 的前置条件包含「关闭某批 R#」，核对对应条目已**归档**至 **`archived/residuals/<plan-id>.json`** 且主列表中已无该项（或仍为 open 的已明确豁免并留档）。
+- **Done 收口**：确保 Done 标记与 `status.json` 同步；若 Done 的前置条件包含「关闭某批 R#」，核对对应条目已**归档**至 **`archived/residuals/<plan-id>.json`** 且主列表中已无该项（或仍为 open 的已明确豁免并留档）。在关键节点（如进入 `Done`、重大 Status Update）若存在 open R#，应用一两句话点明**仍跟踪项与存放位置**（或 `metadata.residual_findings` 指针），避免「状态 Done 但债不可见」。
 - **分配时告知 subagent**：plan 目录的实际路径、完成后需更新 plan + `status.json`。
 
 ### PM 补充说明
