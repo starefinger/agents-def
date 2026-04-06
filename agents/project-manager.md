@@ -560,6 +560,7 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 ### PM 的 Plan 职责
 
 - **创建/登记**：新建 plan 文件时，同步在 `{PLAN_DIR}/status.json` 写入条目；进入 `InReview` 时为该 `plan-id` 准备 `reports/<plan-id>/` 下的报告落盘路径并在 Assignment 中告知 QC。
+- **可选元数据**：在 `plans[].metadata` 中同步 **`working_branch` / `branch_policy` / `gates` / `phase` / `priority`** 等与 Assignment、程序路线图一致的字段，便于 `jq` 过滤与跨会话 handoff（键名与语义见 `plan-convention.md`「plans[].metadata 标准可选字段」）；根级 `metadata.notes` 数组可作程序里程碑日志。
 - **分配**：按任务路由表 + 开发分配规则分配给合适的 subagent。
 - **推进**：每阶段完成后更新 progress/status。
 - **Done 收口**：确保 Done 标记与 `status.json` 同步。
