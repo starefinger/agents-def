@@ -20,7 +20,8 @@ alwaysApply: true
 
 | 路径 | 用途 |
 |------|------|
-| `AGENTS.md` | OpenCode 每会话加载；执行向优先级、不变量、专题索引、角色归属；官方说明见 [OpenCode Rules — Global](https://opencode.ai/docs/rules/#global) |
+| `AGENTS.md` | **Code agent harness** 全局入口（执行向优先级、不变量、专题索引、角色归属）；OpenCode 每会话加载见 [Global Rules](https://opencode.ai/docs/rules/#global)；Cursor 等见 `docs/agents/host-cursor.md` |
+| `docs/agents/host-opencode.md`、`host-cursor.md` | 宿主适配层（与 harness 正文解耦） |
 | `docs/agents/AGENTS.md`、`docs/agents/index.md` | 重定向存根；勿写长文正文（避免漂移） |
 | `docs/agents/*.md`（上列除外） | 编排骨架专题正文 |
 | `agents/*.md` | 角色提示词 |

@@ -16,7 +16,7 @@ description: 提示词工程师 - 设计与优化 Agent 提示词与技能。Use
 
 ## 路径约定（重要）
 
-本 agent prompt 位于 OpenCode **全局配置目录** `~/.config/opencode/agents/`。
+本 agent prompt 位于本仓库 **全局配置目录** `~/.config/opencode/agents/`（宿主加载方式见 `docs/agents/host-opencode.md` / `host-cursor.md`）。
 运行时 cwd 是**项目工作目录**，不是本配置目录。
 
 - 全局配置内文件 → 使用绝对路径 `~/.config/opencode/...`

@@ -1,17 +1,25 @@
-# OpenCode Agents 配置
+# Code agent harness 配置（OpenCode / Cursor）
 
-本仓库是一套面向 **OpenCode** 的多智能体（Agents）配置，可复用于日常开发与协作。配置以「虚拟团队」方式组织：一名主代理协调多个子角色，按职责分工完成任务。
+本仓库是一套 **代码智能体（code agent）多角色**流程与提示词配置，**以中性 harness 正文为主**，再按宿主拆分适配说明。配置以「虚拟团队」方式组织：一名主代理协调多个子角色，按职责分工完成任务。
+
+## 两条使用入口
+
+| 场景 | 入口 |
+|------|------|
+| **OpenCode** | 根目录 `AGENTS.md` 每会话自动加载；专属能力与 `opencode.json` 见 `docs/agents/host-opencode.md` |
+| **Cursor** | 根目录 `AGENTS.md` + `docs/agents/host-cursor.md`（含 `/pm`、**无真实 subagent 时的降级模式**）；项目级规则优先 |
 
 ## Harness Engineering 结构
 
-为支持可持续迭代，本仓库采用「**全局单一入口**（根目录 `AGENTS.md`，OpenCode 每会话加载）+ **`docs/agents/` 结构化专题知识库**」：
+为支持可持续迭代，本仓库采用「**全局单一入口**（根目录 `AGENTS.md`：code agent harness）+ **`docs/agents/` 结构化专题知识库**」：
 
 > **注意**: 以下路径均相对于本全局配置目录 `~/.config/opencode/`。
 > Agent 运行时 cwd 是项目目录，agent prompt 中引用这些文件需使用**绝对路径**。
 > 全局配置（`~/.config/opencode/`）对 agent 只读：agent 只能读取和提出建议，实际写入由用户本人执行。
 
-- `AGENTS.md`：OpenCode **全局 Rules**（每会话加载；含 harness 优先级、不变量、专题文档与角色索引）；**本仓库**的结构说明、变更约定与审查清单仅见 `.cursor/rules/opencode-config-repo-maintenance.mdc`（不在 `AGENTS.md` 重复）
-- `agents/*.md`：各角色 OpenCode agent 提示词（frontmatter + 正文），由 `opencode.json` 的 `agent` 引用加载
+- `AGENTS.md`：**code agent harness**（优先级、不变量、专题索引；OpenCode 每会话加载，Cursor 等见 `host-cursor.md`）；**本仓库**维护约定仅见 `.cursor/rules/opencode-config-repo-maintenance.mdc`
+- `docs/agents/host-opencode.md` / `host-cursor.md`：宿主适配（加载方式、`question` / subagent、Cursor 单会话多帽等）
+- `agents/*.md`：各角色提示词（frontmatter + 正文）；OpenCode 下由 `opencode.json` 的 `agent` 引用加载
 - `docs/agents/harness-loop.md`：任务生命周期与门禁流转（含 RCA、Git 功能分支门禁）
 - `docs/agents/branch-collaboration.md`：分支协作契约（仅 PM 决策开枝、Assignment 话术）
 - `docs/agents/evaluation-harness.md`：prompt / 流程迭代评估方法
@@ -23,7 +31,7 @@
 - `docs/agents/library-docs-and-hosts.md`：库文档检索单一协议（Context7 MCP / ctx7 CLI、禁止双跑）、OpenCode 与 Cursor 宿主差异、大型插件注入降噪
 - `docs/agents/opencode-config-secrets.md`：`opencode.json` 密钥占位 `{env:}` / `{file:}` 说明；配合根目录 `secrets.env.example`
 
-建议：根目录 `AGENTS.md` 已在每会话加载（含入口与索引）；需要深度细节时再读 `docs/agents/` 下专题文档。Cursor 工作区会加载 `.cursor/rules/` 下与本仓库相关的约定（见上条路径）。
+建议：OpenCode 下根目录 `AGENTS.md` 已注入；Cursor 下请先 Read `AGENTS.md` 与 `host-cursor.md`。需要深度细节时再读 `docs/agents/` 下专题文档。
 
 本仓库根目录还有 `opencode.json`（主配置；**密钥请用环境变量**，见 `opencode-config-secrets.md`）、`secrets.env.example`、`plugins/`（可选插件，如 OpenViking）、`package.json`（`@opencode-ai/plugin` 等本地依赖，按需安装）。
 

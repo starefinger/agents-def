@@ -1,6 +1,6 @@
 # 库文档检索与宿主差异（单一事实来源）
 
-本文件统一说明：**第三方库 / API / CLI 文档如何查**，以及 **OpenCode 与 Cursor 等宿主**在技能与上下文上的差异，避免 `AGENTS.md`、Cursor 规则与 harness 文档各写一套。
+本文件统一说明：**第三方库 / API / CLI 文档如何查**，以及 **不同宿主**（OpenCode、Cursor 等）在技能与上下文上的差异，避免 `AGENTS.md`、Cursor 规则与 harness 文档各写一套。**入口级差异**（文件谁注入、有无 subagent）以 **`host-opencode.md`**、**`host-cursor.md`** 为准。
 
 ## 库文档检索（Context7）
 
@@ -31,7 +31,7 @@
 |------|----------|-------------------|
 | 角色加载 | `opencode.json` + `~/.config/opencode/agents/*.md` | 依赖项目规则与 Composer 配置；未必加载 OpenCode 的 PM |
 | Superpowers | `plugin` 启用后注册技能；按名称/短语触发 | 无 Claude Code `Skill` 工具时：**用 Read 读取技能文件**或宿主自带的 skill 机制；`using-superpowers` 中的「先 invoke Skill」**映射为「先读取对应 SKILL.md 再执行」** |
-| 流程权威 | 根目录 `AGENTS.md`（全局）与 `harness-loop.md` 等专题不变 | 与项目 `AGENTS.md` / `CLAUDE.md` 冲突时：**用户与项目规则优先**（见根目录 `AGENTS.md`「信息源优先级」） |
+| 流程权威 | 根目录 `AGENTS.md`（全局 harness）与 `harness-loop.md` 等专题不变 | 与项目 `AGENTS.md` / `CLAUDE.md` 冲突时：**用户与项目规则优先**（见根目录 `AGENTS.md`「信息源优先级」）；Cursor 显式加载见 `host-cursor.md` |
 
 ---
 
