@@ -1,6 +1,6 @@
 {
   "harness_name": "pm-routing-evals",
-  "version": 4,
+  "version": 5,
   "updated_at": "2026-04-08",
   "cases": [
     {
@@ -91,15 +91,15 @@
       "id": "fullstack-board-api-and-ui",
       "prompt": "做项目看板：后端加分页列表 API，前端新页面表格+筛选，和现有设计系统对齐",
       "expected_route": ["@explore", "@architect", "@fullstack-dev", "@frontend-dev", "QC-3-reviewers", "@qa-engineer"],
-      "must_have_artifacts": ["Context Loaded declaration", "assignment language contract (EN keys + CN task body)", "Dev routing or explicit parallel Assignments splitting API vs UI", "API contract alignment", "QA evidence in English"],
-      "hard_fail_if": ["missing Context Loaded declaration", "only @fullstack-dev assigned for both substantial API and new UI with no single-stream reason", "assignment uses non-English field keys", "report is non-English without user override"]
+      "must_have_artifacts": ["Context Loaded declaration", "assignment language contract (EN keys + CN task body)", "Dev routing or explicit parallel Assignments splitting API vs UI", "when both implementers may run concurrently on same business repo: dispatching-parallel-agents (or synonym) plus using-git-worktrees (or synonym) and checkout convention in Assignments", "API contract alignment", "QA evidence in English"],
+      "hard_fail_if": ["missing Context Loaded declaration", "only @fullstack-dev assigned for both substantial API and new UI with no single-stream reason", "concurrent @fullstack-dev + @frontend-dev on same repo without dispatching-parallel-agents (or synonym) in Superpowers/Status Update when plugin workflow applies", "concurrent writers same repo without worktree/checkout isolation called out when applicable", "assignment uses non-English field keys", "report is non-English without user override"]
     },
     {
       "id": "two-parallel-backend-modules",
       "prompt": "并行开发两块独立功能：用户通知 API 和活动审计日志 API，模块之间无共享状态",
       "expected_route": ["@explore", "@architect", "@fullstack-dev", "@fullstack-dev-2", "QC-3-reviewers", "@qa-engineer"],
-      "must_have_artifacts": ["Context Loaded declaration", "assignment language contract (EN keys + CN task body)", "parallel split across two implementers or explicit single-stream reason", "distinct Working branch or worktree per concurrent writer if same repo", "QA evidence in English"],
-      "hard_fail_if": ["missing Context Loaded declaration", "two parallel modules collapsed into one dev without single-stream justification", "assignment uses non-English field keys", "report is non-English without user override"]
+      "must_have_artifacts": ["Context Loaded declaration", "assignment language contract (EN keys + CN task body)", "parallel split across two implementers or explicit single-stream reason", "Status Update or implement Assignments include dispatching-parallel-agents skill ID or synonym phrase when Superpowers workflow applies", "using-git-worktrees or synonym plus checkout path convention when two concurrent writers same business repo", "distinct Working branch or worktree per concurrent writer if same repo", "QA evidence in English"],
+      "hard_fail_if": ["missing Context Loaded declaration", "two parallel modules collapsed into one dev without single-stream justification", "parallel implement round without explicit dispatching-parallel-agents (or synonym) in Superpowers/Status Update when plugin workflow applies", "two concurrent writers on same business repo without worktree or equivalent checkout isolation called out in Assignments", "assignment uses non-English field keys", "report is non-English without user override"]
     },
     {
       "id": "hotfix-exception-with-post-rca",

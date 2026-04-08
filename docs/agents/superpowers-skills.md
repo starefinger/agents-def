@@ -98,8 +98,8 @@ Superpowers:
 | 场景 | 技能 |
 |------|------|
 | 必用（协调） | `using-superpowers` |
-| 必用（并行拆分） | `dispatching-parallel-agents`（多独立子任务）；复杂本会话编排 `subagent-driven-development` |
-| 必用（同仓多可写并发） | **`using-git-worktrees`**（与上项叠用）：≥2 个可写 subagent 可能同时改同一仓库时，禁止共用同一 cwd 检出；Assignment 须含各流 **`Working branch`** + **worktree/检出约定** |
+| 必用（并行拆分） | `dispatching-parallel-agents`（**仅当** PM 本轮 **≥2 条实现轨并行** 下发；与下项 `using-git-worktrees` 按条件叠用）；**本会话内顺序多步**用 `subagent-driven-development`，**勿**与「多轨并行 implement」混淆 |
+| 必用（同仓多可写并发） | **`using-git-worktrees`**（**仅当** 与上项同时成立且 ≥2 可写流改**同一仓库**时叠用）：禁止共用同一 cwd 检出；Assignment 须含各流 **`Working branch`** + **worktree/检出约定** |
 | 必用（书面计划跨会话） | `executing-plans`（当存在书面实现计划且约定下次继续时） |
 | 必用（登记/拆 plan） | `writing-plans`（非平凡任务、多阶段交付） |
 | 必用（收口） | `verification-before-completion`（汇总 Done、sign-off、merge 前须有 QA/命令证据）；`finishing-a-development-branch`（分支收尾策略） |
@@ -189,6 +189,7 @@ Superpowers:
 
 - **摸底**：由 `@project-manager` 在分派前调用 `@explore` 并写入 Assignment 为推荐模式；**已分派的承接方**不得用 `@explore` 代做实现/测试/审查/文档等交付，仅可短只读导航（见 `harness-loop.md`「内置 `@explore` 能力边界」）。Superpowers 不改变路由表。
 - `dispatching-parallel-agents` / `subagent-driven-development` 用于 **PM 拆分子任务** 或 **多代理并行**，与 `@explore` 可并列使用。
+- **`dispatching-parallel-agents` 与 informal 复查**：上游技能是 **多独立域并行 investig/fix** 与 **Review and Integrate**（读各轨摘要、核对是否冲突），**不**附带 `implementer-prompt` 的 **per-task spec + code-quality 双模板**。若 PM/承接方仍给**某一并行轨**加「会话内快速过一遍」子步，**同样禁止**用 **`@qc-specialist*`**，适用下文 **「per-task 双审（spec + code quality）用谁」** 中的 **`@general` / `generalPurpose` / informal `@qa-engineer`** 约定；**正式 QC/QA** 仍在 feature / plan 完成后按 harness。
 
 ## `subagent-driven-development` 与上游 `implementer-prompt` / reviewer 模板
 

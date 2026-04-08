@@ -57,6 +57,7 @@
 - `tasks`（任务拆解）
   - 产出：按用户故事/模块拆解的可执行任务，包含依赖顺序、并行标记、完成判据。
   - 质量门：每个任务必须映射到 plan 条目与验收标准（可追踪）。
+  - **与 Superpowers 对齐**：凡 `tasks` 中标记为 **可并行** 且 **无串行依赖** 的实现项，且 PM 将 **多轨同时** 分派时，须在 **Status Update / Assignment** 中显式带上 **`dispatching-parallel-agents`**（或表中同义短语）；**同仓 ≥2 可写并发** 时还须叠 **`using-git-worktrees`** 与检出约定（见 `superpowers-skills.md`、`agents/project-manager.md`「条件加载」）。
 - `implement`（开发执行）
   - 要求：开发角色按 tasks 顺序执行并提交自检证据；完成后进入 `InReview`，不得直接置 `Done`。
 

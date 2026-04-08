@@ -36,6 +36,7 @@
 - `tasks`
   - 目标：把 plan 拆成可执行任务与依赖顺序。
   - 最小产物：任务列表、并行标记、完成判据、映射到验收标准。
+  - **PM**：若并行标记对应「多轨同时 implement」，在对外 **Status Update** 与实现 Assignment 的 **`Superpowers`** 中写入 **`dispatching-parallel-agents`**（或同义短语）；同仓多可写并发时叠 **`using-git-worktrees`**（见 `superpowers-skills.md`）。
 - `implement`
   - 目标：按任务执行并提交证据，进入审查。
   - 最小产物：实现 diff、自检证据、回报与 handoff。

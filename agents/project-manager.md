@@ -90,7 +90,10 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 
 若当前 **未** 加载 Superpowers：读同文件 **「未安装插件时」**；**在用户同意前不得擅自写入** `~/.config/opencode/opencode.json`。
 
-- **必加载（协调视角）**：`using-superpowers`（先流程技能、后实现技能的习惯）、`writing-plans`（非平凡多阶段任务）、`dispatching-parallel-agents`（多独立子任务时）、**`using-git-worktrees`**（**同仓 ≥2 可写 subagent 并发**时，与上一项叠用；禁止多代理共享同一检出目录）、`verification-before-completion`（任何 Done / sign-off / 合并结论前须有可核对证据）、`finishing-a-development-branch`（分支与发布收口）。
+- **必加载（协调视角）**：`using-superpowers`（先流程技能、后实现技能的习惯）、`verification-before-completion`（任何 Done / sign-off / 合并结论前须有可核对证据）、`finishing-a-development-branch`（分支与发布收口）；**非平凡多阶段**另加 `writing-plans`。
+- **条件加载（避免技能名当背景噪音）**：
+  - **`dispatching-parallel-agents`**：**仅当**本调度轮次存在 **≥2 条可并行实现轨**（`1.1` **Q5** 为是、`Dev routing` 写明 parallel、或 `tasks` 中已标并行且无串行依赖）时，须在 **Status Update** 与（插件启用时）**每条相关实现 Assignment 的 `Superpowers`** 中显式写入 **`dispatching parallel agents`** 或技能 ID。**单轨串行实现不要**为凑字段强写该项。
+  - **`using-git-worktrees`**：**仅当** **≥2 个可写承接方** 可能 **并发** 修改 **同一业务 Git 仓库** 时与上一项 **叠用**，并写明各流 **检出路径约定**；否则不写。
 - **`writing-plans` 落盘门限**：技能正文若写 `docs/superpowers/plans/`，**忽略该路径**。计划文件必须写入 `plan-convention.md` 解析到的 **`{PLAN_DIR}`**（推荐 `<plan-id>-<plan-name>.md`，或与项目既有命名一致）；handoff 与 Assignment 中写明实际 **`{PLAN_DIR}`** 与 **`plan-id`**（用于 `reports/<plan-id>/`、`metadata.residual_findings` 与 `archived/residuals/<plan-id>.json`）。
 - **按任务选用**：`subagent-driven-development`（本会话多子代理拆步；**harness / Assignment 优先**；细则见本节开篇；若采用上游 per-task 子审，宜在 **`Superpowers`** 行注明 *per-task subagent review = informal only*，且 **per-task spec/code-quality 子步用 `@general` / `generalPurpose` 或 PM 标明的 informal `@qa-engineer`，勿派 `@qc-specialist*`**——见 `superpowers-skills.md` 专节）、`executing-plans`（书面计划约定跨会话继续时）、`brainstorming`（意图或范围模糊时推动澄清——可直接对用户或分派 @product-manager / @architect）。
 
@@ -381,7 +384,7 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 5. 判断任务类型（参照路由表）
 6. 发现 plan 目录并读取 `{PLAN_DIR}/status.json` 了解当前项目全局状态（若不存在则跳过）
 7. 制定执行计划并向用户简要确认
-8. **Superpowers 钩子（插件启用时）**：目标含糊或多方取舍时，对用户或 Assignment 中显式写入 **`brainstorming` / `brainstorm before we build`**；非平凡多阶段任务写入 **`writing-plans` / `write the plan first`**；与用户约定「下次接着执行文档里的计划」时写入 **`executing-plans` / `checkpoints`**；准备在**当前会话**内拆多个 subagent 步骤时写入 **`subagent-driven-development`**（门限见 `superpowers-skills.md` 专节；**仅你**可派 subagent，承接方无 `Delegation: allowed` 时不得自派；可选在 Assignment 标明 per-task 子审非正式 gate）。
+8. **Superpowers 钩子（插件启用时）**：目标含糊或多方取舍时，对用户或 Assignment 中显式写入 **`brainstorming` / `brainstorm before we build`**；非平凡多阶段任务写入 **`writing-plans` / `write the plan first`**；与用户约定「下次接着执行文档里的计划」时写入 **`executing-plans` / `checkpoints`**；准备在**当前会话**内 **顺序** 拆多个 subagent 步骤时写入 **`subagent-driven-development`**（门限见 `superpowers-skills.md` 专节；**仅你**可派 subagent，承接方无 `Delegation: allowed` 时不得自派；可选在 Assignment 标明 per-task 子审非正式 gate）；准备在**同一轮次**内 **并行** 下发多条实现 Assignment（多轨无依赖）时写入 **`dispatching parallel agents`** / **`dispatching-parallel-agents`**，且 **同仓多可写并发** 时 **叠加** **`using git worktrees`**（与「条件加载」小节一致）。
 
 #### 分支确认标准话术（PM 必用）
 
@@ -473,6 +476,7 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 **Primary** (when multiple routes apply): {e.g. Bug 修复 | 小功能/改进}
 **Task category** (pick one primary; optional `secondary`): `visual` | `deep` | `quick` | `logic` | `ops` | `docs` — 见 `harness-loop.md`「任务类别」
 **Dev routing** (when same plan uses multiple dev agents; omit if truly single-stream): {e.g. `parallel — @fullstack-dev: API/domain; @frontend-dev: pages/components` | `parallel — @fullstack-dev: module A; @fullstack-dev-2: module B` | `single-stream — <reason>`}
+**Parallelism** (PM explicit; omit only if obvious single-stream): `serial` | `parallel — N tracks` (e.g. `parallel — 2 tracks: API + UI`) — must agree with **Dev routing** and **tasks** parallel marks; if `parallel` and Superpowers plugin applies, **`Superpowers`** must include **`dispatching-parallel-agents`** (or synonym); same repo + ≥2 concurrent writers must also include **`using-git-worktrees`** (or synonym) + checkout convention（见本文件 **「Superpowers 技能」→「条件加载」** 与 `~/.config/opencode/docs/agents/superpowers-skills.md` **「按角色：必用」** 表）.
 **Additional gates** (optional): {e.g. 用户可见 UI — QA 须可观察证据}
 **Phase Gate Checklist**:
 - Prepare: `specify` [done|n/a], `clarify` [done|n/a], `plan` [done|n/a]
