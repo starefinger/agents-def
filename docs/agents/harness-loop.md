@@ -260,7 +260,7 @@ OpenCode 的 **`@explore`** 是**只读**、偏快速的代码库导航 subagent
 - 承接方若判断必须增加 subagent 才能继续，应先回报 `Blocked` 并向 PM 申请重分派，禁止自行拉起。
 - 并行拓扑与分支隔离只能由 PM 在 Assignment 明确声明；承接方不得自行扩展并行面。
 - **`@explore` 不得代劳交付**：承接方不得用 `@explore` 执行本 Assignment 的主工作；仅允许短只读摸底，细则见上文「内置 `@explore` 能力边界」。
-- **Superpowers `subagent-driven-development` 的 per-task spec / code-quality 子步**：会话内快速自检，**勿**用 **`@qc-specialist*`** 承接（易按 `review-harness.md` 误产 `{PLAN_DIR}/reports/` 正式产出）；用 **`@general` / `generalPurpose` 或 PM 标明的 informal `@qa-engineer`**，细则见 **`superpowers-skills.md`**「`subagent-driven-development` 与上游 … 模板」。
+- **Superpowers `subagent-driven-development`**：per-task 子步 **勿**用 **`@qc-specialist*`**；用 **`@general` / `generalPurpose` 或 PM 标明的 informal `@qa-engineer`**。默认 **`Delegation: forbidden`** 时承接方**不得**因钩子去 **Task** 完成主交付；PM 勿同条混写该技能（大单轨用 **`executing-plans` + `verification-before-completion`**）。见 **`superpowers-skills.md`** 同主题两小节。
 
 ## 升级触发条件
 
