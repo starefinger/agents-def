@@ -24,7 +24,7 @@
 3. 检查 `git diff` 及相关历史；若 Assignment 启用功能分支策略，再次核对当前分支与 **`Working branch` / `Branch policy`** 一致（无授权则不应在默认分支上堆功能改动）。
 4. 运行对应语言的 lint 和静态分析。
 5. 按本文档审查清单进行人工审查。
-6. 产出带严重等级和证据的结构化发现。
+6. 产出带严重等级和证据的结构化发现。写入 `status.json` 的 **`metadata.residual_findings[].severity` 时**，**仅允许** `plan-convention.md` 小节 **「Residual findings：severity（SSOT，机器字段）」** 中的枚举与映射表（报告小节 **Critical / Warning / Suggestion** → JSON 档位）；**不要**把报告标题字符串直接当作 `severity`。
 
 ## 共享审查清单
 
@@ -59,7 +59,7 @@
 
 ## 标准输出模板
 
-落盘到 **`{PLAN_DIR}/reports/<plan-id>/<plan-id>-qc#.md`** 时：文件**最上方**须为 YAML frontmatter（`report_kind`、`reviewer`、`reviewer_index`、`plan_id`、`verdict`、`generated_at` 等，见 `agents/qc-specialist*.md`），**紧接着**再写下列 Markdown 正文（可将 **Reviewer Metadata** 与 frontmatter 对齐，避免矛盾）。
+落盘到 **`{PLAN_DIR}/reports/<plan-id>/<plan-id>-qc#.md`** 时：文件**最上方**须为 YAML frontmatter（`report_kind`、`reviewer`、`reviewer_index`、`plan_id`、`verdict`、`generated_at` 等，见 `agents/qc-specialist*.md`），**紧接着**再写下列 Markdown 正文（可将 **Reviewer Metadata** 与 frontmatter 对齐，避免矛盾）。**Findings 下三节标题**（Critical / Warning / Suggestion）为**人类可读分类**；PM 将条目写入 `metadata.residual_findings` 时的 **`severity` 机器字段**以 **`plan-convention.md` 小节「Residual findings：severity（SSOT，机器字段）」** 为准。
 
 ```markdown
 # Code Review Report
@@ -124,7 +124,7 @@
 
 ## Residual Findings 留档门禁
 
-- 当阻断项（`Critical`）修复后仍有未关闭 `Warning`/`Suggestion`/技术债，不得仅在对话中口头说明，必须留档。
+- 当阻断项（`Critical`）修复后仍有未关闭 **Warning / Suggestion** 类问题或技术债，不得仅在对话中口头说明，必须留档；登记 **`severity`** 时遵守 **`plan-convention.md` 小节「Residual findings：severity（SSOT，机器字段）」**。
 - **启用 plan 管理且存在 `plan-id` 时**：**待跟踪（open）** residual 的 **SSOT** 为 **`status.json`** → **`metadata.residual_findings[<plan-id>]`**；PM 在 consolidated 决策中分配 **稳定 `id`（R1…）** 后须**写入该数组**（`source` 指回 `-qc*.md` 等）。**已关闭**条目归档至 **`{PLAN_DIR}/archived/residuals/<plan-id>.json`**（字段与严重等级见 `plan-convention.md`），与 **`{PLAN_DIR}/reports/<plan-id>/`** 交叉引用。
 - **主 plan**：仅作**人类可读索引**（可选）——复述 `id` 与摘要并指向 `status.json`；**不得**作为与 SSOT 脱钩的唯一登记处（见 `plan-convention.md`「Residual findings：权威在哪」）。
 - 可选：@project-manager 维护 **`metadata.tech_debt_summary`** 作为跨 plan 聚合视图（与 `residual_findings` 互补，见 `plan-convention.md`）。

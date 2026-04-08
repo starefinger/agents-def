@@ -140,7 +140,7 @@
 - QA 验证证据
 - `@project-manager` 的合并决定
 
-**Plan 留档（启用 `{PLAN_DIR}` 时）**：架构评审与并行 QC 的**书面报告**默认写入 `{PLAN_DIR}/reports/<plan-id>/`（命名与只读约定见 `plan-convention.md`）；**open** residual 登记在 **`status.json`** 的 **`metadata.residual_findings`**，**已关闭**项归档至 **`{PLAN_DIR}/archived/residuals/<plan-id>.json`**，由 PM/QA 与 `review-harness.md` 对齐。
+**Plan 留档（启用 `{PLAN_DIR}` 时）**：架构评审与并行 QC 的**书面报告**默认写入 `{PLAN_DIR}/reports/<plan-id>/`（命名与只读约定见 `plan-convention.md`）；**open** residual 登记在 **`status.json`** 的 **`metadata.residual_findings`**，**已关闭**项归档至 **`{PLAN_DIR}/archived/residuals/<plan-id>.json`**，由 PM/QA 与 `review-harness.md` 对齐。**`severity` 合法取值与 QC 报告节映射**以 **`plan-convention.md` 小节「Residual findings：severity（SSOT，机器字段）」** 为唯一权威。
 
 ### 5) 经验沉淀
 

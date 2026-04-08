@@ -237,7 +237,7 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 
 #### Residual Findings 留档（强制）
 
-- 当 `Critical`/阻断项修复后，仍存在 `Warning`/`Suggestion`/技术债等**非阻断问题**时，不得口头带过，必须留档。
+- 当 `Critical`/阻断项修复后，仍存在 QC 报告 **Warning / Suggestion** 节中的发现或技术债等**非阻断问题**时，不得口头带过，必须留档。每条 **`severity`** **仅允许** `plan-convention.md` 小节 **「Residual findings：severity（SSOT，机器字段）」** 中的五档枚举；**Warning 节 → `high`/`medium`、Suggestion 节 → `low`/`nit`** 按该节表格执行，**禁止**写入 `warning` 等非法值。
 - **权威落盘（与 `plan-convention.md` / `review-harness.md` 一致）**：**优先**写入 **`{PLAN_DIR}/status.json`** 的 **`metadata.residual_findings[<plan-id>]`**（open 列表 SSOT）。在汇总中**分配稳定 `id`（R1…）后，同一轮次内写入该 JSON**，`source` 须能指回具体 QC 报告文件名或 reviewer。
 - **主 plan 文档**：**可选**——在 `Plan Path` 对应主 plan 增加「Residual findings（索引）」小节，**复述** `id` + 标题 + 一句摘要，并**显式指向** `status.json` 中的同键；**禁止**仅写 plan、不写 `metadata.residual_findings`（会导致 SSOT 缺失）。若无结构化 `{PLAN_DIR}`，再退化为项目认可的进度载体或根级 `notes`（仍须含同等字段意图）。
 - 每条留档至少包含：`id`、`title`、`severity`、`source`（哪位 QC/哪轮）、`scope`（影响范围）、`decision`（defer/accept/risk-accepted）、`owner`、`target milestone/date`、`tracking link`（issue/plan section）。
@@ -247,7 +247,7 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 #### 快速判定规则
 
 - 任一未关闭 `Critical` => `Request Changes`
-- 无 `Critical` 但有高影响 `Warning` 且存在分歧 => `Needs Discussion`
+- 无 `Critical` 但 **Warning** 节中存在**高影响**未决项且各方对处理方案有分歧 => `Needs Discussion`（登记 residual 时 `severity` 多为 `high` 或 `medium`，定义见 `plan-convention.md` 同上节）
 - 其余 => `Approve`
 
 #### PM 统一输出（简版）
