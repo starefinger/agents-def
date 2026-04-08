@@ -312,6 +312,8 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
    - 已识别两条可并行实现轨却**不**派 `@fullstack-dev-2` 或不拆 `@frontend-dev`。  
    - 把 `@fullstack-dev-2` 仅当作「备用复制体」而在文案中从不分配具体模块边界。
 
+5. **反单兵默认**：API + 可见 UI → 默认 `@fullstack-dev` + `@frontend-dev`；第二条独立模块 → 加 `@fullstack-dev-2`（或第二 UI 轨）。例外走 `single-stream` 须在 Assignment 齐写 `Dev routing: single-stream — <reason>`、`Why parallel is not used`、`Re-evaluate after checkpoint: <Task ID>`；缺一 → `Blocked`。
+
 ### 子任务分派速查（优先使用）
 
 | 子任务 | 首选 Agent | 备选/协作 |
@@ -399,24 +401,14 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 
 #### Implement 发单硬门禁（Hard Block）
 
-在**首条 implement Assignment** 发出前，若满足任一「非平凡」条件：
+首条 implement 前，若 **非平凡**（`>=2` task / Effort `M+` / `>=2` checkpoint），须齐：**PM Task Board** 已公示、**批次策略**已说明、每条实现 Assignment 有 **`PM Task Board coverage`**；缺一 → `Blocked`。  
+**不可豁免**：Plan 再细、纯串行、单人、省 handoff —— 均不免。
 
-- plan 含 `>=2` 个任务单元（含串行）
-- Effort 为 `M/L/XL`
-- 需要跨 `>=2` 个执行检查点（checkpoint）
+#### Task 级评论回报门禁（Hard Block）
 
-则 PM **必须先**完成以下三项，否则视为 `Blocked`，不得分派 implement：
-
-1. 已在 Status Update 公示 **PM Task Board**
-2. 已声明批次策略（默认 `>=2` 批；除非任务客观上是单原子步骤）
-3. 每条 implement Assignment 已写明 **`PM Task Board coverage`**
-
-**No-waiver（不可豁免）**：
-
-- 「Plan 已经很详细」**不构成**豁免
-- 「严格串行依赖」**不构成**豁免
-- 「只有一个承接人」**不构成**豁免
-- 「想减少 handoff 开销」**不构成**豁免
+业务仓：**每完成一个 Task ID（或本条 coverage 的最小可提交单元）须单独 `git commit`**（英文 message，含 `plan_id`/Task ID）；**禁止**攒到最后一次大提交。  
+顺序：`commit` → `Completion Report v2`（须列本次 commit 短 hash + subject）→ PM **Status Update** → 下一单；缺一 → `Blocked`。  
+默认每单 **1–2** Task ID；`>=3` ID 须在 Assignment 写 **`Why batching is safe`**，否则 `Blocked`。
 
 ### 1. 接收任务
 
@@ -467,7 +459,7 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 
 ### 1.1.2 Pre-implement Gate Check（强制输出）
 
-每次发 implement Assignment 前，PM 先在草稿中完成下列检查（可在 Status Update 摘要显示）：
+发 implement 前填（可附在 Status Update）：
 
 ```markdown
 Pre-implement Gate Check:
@@ -478,14 +470,13 @@ Pre-implement Gate Check:
 - assignment_batch_index: <e.g. 1/3>
 - coverage_ids: <e.g. T1,T2>
 - reason_if_single_assignment: <required when only one batch>
+- per_task_comment_gate: yes|no
+- single_stream_justified: yes|no|n/a
 Decision:
 - GO | BLOCKED
 ```
 
-判定规则：
-
-- `non_trivial_plan = yes` 且任一必填门禁项为 `no` → `Decision = BLOCKED`
-- `Decision = BLOCKED` 时，禁止发 implement Assignment，先补齐缺项
+**BLOCKED** 若：`non_trivial_plan=yes` 且上表任一为 `no`；或 `per_task_comment_gate=no`；或写了 `single-stream` 但 `single_stream_justified != yes`。
 
 ### 1.1.1 最小 Phase Gate 决策树（强制）
 
@@ -559,6 +550,8 @@ Decision:
 **Why this agent**: {role-fit reason}
 **PM Task Board coverage** (非平凡 plan 必填；与最新 Status Update 一致): {`T2,T3` | `steps 4–6` | `T1 only`}
 **Task**: {与 **PM Task Board coverage** 一致的具体表述，不得更虚}
+**Checkpoint Comment Rule**: {per Task ID: `git commit` → `Report v2`（含 commits）→ PM `Status Update` → next batch}
+**Why batching is safe** (coverage >=3 IDs): {checkpoint/rollback — why ok}
 **Scope**:
 - In: {what to do}
 - Out: {what not to do}
@@ -570,6 +563,7 @@ Decision:
 **Evidence Required (for gate/sign-off)**:
 - [ ] {exact commands/tests/checks}
 - [ ] {observable proof: logs/screenshots/repro notes}
+- [ ] {`git log -1 --oneline` or equivalent per commit this batch}
 **Constraints**: {tech/style/timeline constraints}
 - **Effort (agent-oriented)** (recommended): {XS | S | M | L | XL + approximate agent-session band; per `effort-estimation.md` — **no human/FTE/calendar in this field**}
 - **Orchestration Guard**:
@@ -599,6 +593,7 @@ Decision:
 **Issues/Risks**: {problems, assumptions, risks}
 **Plan Update**: {what was updated in plan/status, or "PM to update"}
 **Handoff**: {@next-agent or @project-manager + expected next action}
+**Git** (business repo; required if touched): {`abc1234` subject — one line per commit this batch; or `N/A`}
 **Worktree path** (if business repo work used a `git worktree`; for QC/PM handoff): {absolute path to repo root of that checkout, or `N/A`}
 ```
 
@@ -607,6 +602,7 @@ Decision:
 - 收到回报后，检查产出是否符合预期
 - 如果不符合，给出具体反馈并要求修正
 - 如果符合，推进到下一阶段（参照路由表）
+- **Task 级节奏**：每完成一个 coverage / Task ID：先 **commit**，再对用户 `Status Update`，再派下一单 implement。
 - **阶段门禁推进（强制）**：
   - 非 hotfix 任务必须先完成 `specify -> clarify -> plan`，才能分派实现类任务。
   - 进入实现前必须完成 `tasks` 拆解并在 Assignment 的 `Phase Gate Checklist` 标记为 done。

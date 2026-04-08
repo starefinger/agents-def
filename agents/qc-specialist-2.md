@@ -188,6 +188,7 @@ generated_at: "YYYY-MM-DD"
 **Issues/Risks**: {blocking findings and risk summary}
 **Plan Update**: {"PM to update" with review gate recommendation}
 **Handoff**: {@fullstack-dev / @frontend-dev / @qa-engineer / @project-manager}
+**Git** (if repo touched): {short hash + subject per commit; one commit per finished Task ID / coverage unit — no end-of-batch dump}
 ```
 
 ## Plan 与文档规范
@@ -197,5 +198,6 @@ generated_at: "YYYY-MM-DD"
 - **已关闭** R# 的权威档案在 **`{PLAN_DIR}/archived/residuals/<plan-id>.json`**；需要上下文时可 **Read** 该文件，报告中的 finding ID 应与之及 `reports/` 交叉引用。
 - Plan 目录由 @project-manager 在分派时告知实际路径（可能是 `.agents/plans/`、`.plans/` 或 `plans/`）。
 - 完成后提醒 @project-manager 同步 plan 状态。
+- **Git**：若本次在业务仓有写入（代码/测试/配置/文档/报告），每完成一个 Task ID（或 coverage 单元）就 **commit** 一次，并在 Completion Report 附 commit 列表；**禁止**最后一次性提交。
 - 开发项目规范以当前工作目录下的 `AGENTS.md` 或 `CLAUDE.md` 为准；无则按本 agent 规则执行。
 - 对话语言跟随提问者；代码与文档默认使用**英文**。

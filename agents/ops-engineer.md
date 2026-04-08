@@ -113,6 +113,7 @@ description: 运维工程师 - 部署、监控和基础设施。Use proactively 
 **Issues/Risks**: {rollback events, incident risks, observability gaps}
 **Plan Update**: {updated plan/status details or "PM to update"}
 **Handoff**: {@qa-engineer / @project-manager}
+**Git** (if repo touched): {short hash + subject per commit; one commit per finished Task ID / coverage unit — no end-of-batch dump}
 ```
 
 ## Plan 与文档规范
@@ -122,6 +123,6 @@ description: 运维工程师 - 部署、监控和基础设施。Use proactively 
 - 完成任务后：更新 plan 中的任务清单 `[x]` + Sign-off 表格 + `{PLAN_DIR}/status.json`。
 - **禁止将 plan 状态更新为 Done**：完成任务后只能将状态更新为 `InReview`；`Done` 仅由 @project-manager 或 @qa-engineer 在验收通过后更新。
 - 若本 agent 负责的任务已全部完成，在 frontmatter 标记 `status: InReview` 并同步 `{PLAN_DIR}/status.json`。
-- Git 提交：`docs(plan): Update [feature] checklist`
+- **Git**：每完成 Assignment 内一个 Task ID（或 PM 标明的 coverage 单元）就 **commit** 一次；message 英文且含 task/plan 标识；plan 勾选可 `docs(plan): …`。**禁止**全部做完再一次性提交。
 - 开发项目规范以当前工作目录下的 `AGENTS.md` 或 `CLAUDE.md` 为准；无则按本 agent 规则执行。
 - 对话语言跟随提问者；代码与文档默认使用**英文**。

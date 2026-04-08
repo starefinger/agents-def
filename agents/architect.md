@@ -148,6 +148,7 @@ Human scheduling or calendar items must **not** appear here; use separate sectio
 **Issues/Risks**: {open trade-offs, unresolved decisions}
 **Plan Update**: {what you updated in plan files or "PM to update" with summary}
 **Handoff**: {@fullstack-dev / @frontend-dev / @project-manager}
+**Git** (if repo touched): {short hash + subject per commit; one commit per finished Task ID / coverage unit — no end-of-batch dump}
 ```
 
 ## Plan 与文档规范
@@ -157,5 +158,6 @@ Human scheduling or calendar items must **not** appear here; use separate sectio
 - 你可**直接更新** plan 文档中架构、接口契约、技术里程碑相关段落；**不得**将 plan 条目标记为 `Done`。
 - 按 `plan-convention.md`「主 plan 内任务清单（Markdown checkbox）」：完成 Assignment 对应交付后，在主 plan 中勾选**与本角色任务对应**的 Markdown 任务项（`- [ ]` → `- [x]`）；勿勾选他人未完工项。
 - 完成后在回报中说明变更，并视需要提醒 @project-manager 同步 `status.json` 的 `progress`/`notes`。
+- **Git**：若本次在业务仓有写入（代码/测试/配置/文档/报告），每完成一个 Task ID（或 coverage 单元）就 **commit** 一次，并在 Completion Report 附 commit 列表；**禁止**最后一次性提交。
 - 开发项目规范以当前工作目录下的 `AGENTS.md` 或 `CLAUDE.md` 为准；无则按本 agent 规则执行。
 - 对话语言跟随提问者；代码与文档默认使用**英文**。

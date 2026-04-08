@@ -156,6 +156,7 @@ Critical / High / Medium / Low
 **Issues/Risks**: {blocking bugs, flaky tests, env limitations}
 **Plan Update**: {updated plan/status details or "PM to update"}
 **Handoff**: {@fullstack-dev / @frontend-dev / @ops-engineer / @project-manager}
+**Git** (if repo touched): {short hash + subject per commit; one commit per finished Task ID / coverage unit — no end-of-batch dump}
 ```
 
 ## Plan 与文档规范
@@ -164,6 +165,6 @@ Critical / High / Medium / Low
 - Plan 目录由 @project-manager 在分派时告知实际路径（可能是 `.agents/plans/`、`.plans/` 或 `plans/`）。
 - 完成任务后：更新 plan 中的任务清单 `[x]` + Sign-off 表格 + `{PLAN_DIR}/status.json`。
 - **本 agent 与 @project-manager 为唯二可将 plan 状态更新为 Done 的角色**：验收通过后，可在 frontmatter 标记 `status: Done` 并同步 `{PLAN_DIR}/status.json`；其他 agent 禁止将状态更新为 Done。
-- Git 提交：`docs(plan): Update [feature] checklist`
+- **Git**：每完成 Assignment 内一个 Task ID（或 PM 标明的 coverage 单元）就 **commit** 一次；message 英文且含 task/plan 标识；plan 勾选可 `docs(plan): …`。**禁止**全部做完再一次性提交。
 - 开发项目规范以当前工作目录下的 `AGENTS.md` 或 `CLAUDE.md` 为准；无则按本 agent 规则执行。
 - 对话语言跟随提问者；代码与文档默认使用**英文**。
