@@ -522,6 +522,7 @@ jq '.metadata.residual_findings["01-data-infrastructure"]' .agents/plans/status.
 - **batch 之间**：依赖实现方 **`verification-before-completion`**、主 plan 任务勾选与 PM 协调；需要书面中间意见时，用对话、主 plan 批注或**非三审**的定向检查（如单审、架构 review），**不**默认等同「又一轮完整三审」。
 - **Request Changes 后复验**：若须再跑一轮完整三审，使用**新文件名**落盘，避免覆盖首轮报告，例如 `<plan-id>-qc1-rev2.md` … `<plan-id>-qc3-rev2.md`（或团队约定的 `wave2-` 前缀）；@project-manager 在 `QC Consolidated Decision` 中写明**当前以哪一波次为准**。
 - **显式例外**：仅当用户与 PM 书面同意**中间门禁**时，在 Assignment 写清 **`QC gate: incremental — <scope>`**（或等价），并仍须保证该次三审的 **`plan_id` + `Review range` / `Diff basis`** 三份一致；**优先**用子范围专用标签或子目录，避免与「整 plan 终局」那套 `-qc*.md` 混名。
+- **同仓多 worktree 并行 dev**：**推荐**在排各 batch / 各轨 worktree 前确立 **plan 集成分支** 与各轨 topic 线及 **merge 靶**（见 `harness-loop.md` **「推荐默认编排：先建 plan 集成分支，再挂各 worktree」**）。终局（或增量）三审派单前，PM 仍须满足 **单一待审 `Working branch` / `HEAD`** 或已按上条 **拆 scope**；**不得**假设「整 plan 一次三审」可只靠某一个开发 worktree 路径覆盖未合并的其他并行轨。见同文件 **「多 worktree 并行开发与 QC / QA 的门禁衔接」** 全文。
 
 **QC 落盘与宿主权限**：`@qc-specialist` / `@qc-specialist-2` / `@qc-specialist-3` 在支持路径白名单的宿主上（如 OpenCode 的 **`permission.edit`**），**仅可** Write/Edit **`{PLAN_DIR}/reports/`** 下 **`.md`**（全局 agent 提示词中已配置 `.agents/plans/reports/**`、`.plans/reports/**`、`plans/reports/**` 相对路径）。报告文件**必须**以 YAML **frontmatter** 开头（键见各 QC agent 提示词）。**若** 项目的 `{PLAN_DIR}` 不落在上述三种根下，须在**项目级**宿主配置（如 OpenCode）中为 QC 角色追加对应的 `edit` allow 规则。
 

@@ -104,6 +104,8 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 
 - **分派习惯**：在每条 Assignment 末尾增加一行 **`Superpowers`**（见下方模板），列出逗号分隔的 **技能 ID** 或表中英文**短语**，并一句话说明「为何本任务需要加载该项」。
 - **与 harness 并行规则对齐**：写「并行」时同时写 **`dispatching parallel agents`**（或技能 ID），并仍写明各可写角色的 **`Working branch`**；若 **≥2 个可写承接方** 将 **并发** 修改 **同一 Git 仓库**，还须写 **`using git worktrees`** / **`using-git-worktrees`**，并在各 Assignment 写明 **worktree / 检出路径约定**（或要求 Completion Report 回报路径），避免并行绕过分支门禁或共用 cwd 造成冲突（见 `harness-loop.md`、`superpowers-skills.md`「张力与消解」表）。
+- **同仓、同一 plan、多可写并行轨（推荐编排）**：在首次向各轨下发 **实现** Assignment 前，于 Status Update 与用户确认中写明 **plan 集成分支**（`create … from <base>`）、各轨 **topic 分支** 与 **merge 靶**（通常为该集成分支），**再**约定各轨 **`git worktree`**；避免无中枢多头分支。分步清单见 `harness-loop.md` **「推荐默认编排：先建 plan 集成分支，再挂各 worktree」**。
+- **派 QC / 对齐 QA 之前（同仓多流并行时）**：在 Status Update 与 Assignment 中显式确认——待审变更是否已 **全部**落在 **同一条**你将写进 QC Assignment 的 **`Working branch` 的 `HEAD`** 上（**推荐**该分支即为已归并各轨后的 **plan 集成分支**）；若否，**先**安排归并（或拆 scope / 分轮次三审），**再**下发 **`Review cwd` / `Worktree path`** 与 **`Review range` / `Diff basis`**。**禁止**把「其中一条并行开发 worktree」默认当成能覆盖其他轨未合并提交的审查根目录。细则见 `harness-loop.md` **「多 worktree 并行开发与 QC / QA 的门禁衔接」**。
 
 ---
 

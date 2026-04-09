@@ -43,7 +43,7 @@
 
 ### **按任务深入阅读（推荐顺序）**
 
-1. `docs/agents/harness-loop.md` — 端到端任务生命周期、门禁流转；含 RCA、**Spec-Driven 双阶段门禁**、**Git 功能分支门禁**、**开发并发须 `git worktree` 隔离**、**QC / QA：`Review cwd`、同一 `plan_id` 与 `Review range` / `Diff basis`（三审逐字相同）**、**多 batch 计划下 QC 三审默认在整 plan 完成后一次**（细则见 `plan-convention.md`）、**内置 `@explore` 能力边界**（宿主支持时；禁止承接方用 explore 代做交付）、可选前置门、与常见阶段化工作流的对照。
+1. `docs/agents/harness-loop.md` — 端到端任务生命周期、门禁流转；含 RCA、**Spec-Driven 双阶段门禁**、**Git 功能分支门禁**、**开发并发须 `git worktree` 隔离**、**同 plan 多轨并行时推荐先建 plan 集成分支再挂各 worktree**（专节 **「多 worktree 并行开发与 QC / QA 的门禁衔接」** 内 **「推荐默认编排」**）、**多 worktree 并行开发后 QC 前须单一 `HEAD` 快照或拆 scope**、**QC / QA：`Review cwd`、同一 `plan_id` 与 `Review range` / `Diff basis`（三审逐字相同）**、**多 batch 计划下 QC 三审默认在整 plan 完成后一次**（细则见 `plan-convention.md`）、**内置 `@explore` 能力边界**（宿主支持时；禁止承接方用 explore 代做交付）、可选前置门、与常见阶段化工作流的对照。
 2. `docs/agents/evaluation-harness.md` — 如何评估和调优 agent 提示词与工作流。
 3. `docs/agents/review-harness.md` — QC 共享审查清单、报告模板与门禁规则。
 4. `docs/agents/routing-harness.md` — 如何验证 project-manager 的路由行为；配套场景集 `docs/agents/routing-evals.json`。
@@ -83,7 +83,7 @@
 - 对业务 Git 仓库的可合并改动，默认在功能分支上完成；默认分支直改需在 Assignment 显式写 `Branch policy` 例外。新开分支的**祖先**由 Assignment 写明（可从 `main`、已有 `feature/*`、或 `current` 叠分支；细则见 `harness-loop.md`）。
 - **PM 开发分派（Dev 三角）**：`@fullstack-dev` 后端主导；用户可见 UI / 多文件前端默认由 `@frontend-dev` 主责；独立第二实现轨用 `@fullstack-dev-2`。勿在无 `Dev routing: single-stream — …` 时把「API + 实质 UI」默认单点塞给 `@fullstack-dev`。全文见 `agents/project-manager.md`「Dev 三角平衡」。
 - **同仓并行写入**：当 **≥2 个可写 subagent** 可能 **并发** 修改 **同一 Git 仓库** 时，**必须** 使用 `**git worktree`**（或等价独立检出）隔离目录，禁止多代理共用同一工作区 cwd；PM 须在 Assignment 写明分支策略与各流检出约定。细则见 `harness-loop.md`「同仓并发写入与 Git worktree」与 `superpowers-skills.md` 中 `**using-git-worktrees**`。（在 Cursor 使用 Task 并行多代理时，仍须遵守各流 **检出与工作区** 约定，禁止多可写者无隔离地共用一个 cwd，见 `host-cursor.md`。）
-- **QC / QA 与 feature 检出**：QC 三审与 QA 验证针对 **已完成的 feature**；须在 PM 写明的 `**Review cwd / Worktree path`**、`**Working branch**`、`**plan_id**` 与 `**Review range` / `Diff basis**` 上对齐（**三份 QC 与 QA 的 `plan_id`、`Review range` 须逐字相同**）。**同一 plan 多 batch 时**，完整三审**默认在整 plan dev 完成后一次**（非每 batch），见 `plan-convention.md`。见 `harness-loop.md`「QC 三审、QA 验证与 feature 检出上下文」。
+- **QC / QA 与 feature 检出**：QC 三审与 QA 验证针对 **已完成的 feature**；须在 PM 写明的 `**Review cwd / Worktree path`**、`**Working branch**`、`**plan_id**` 与 `**Review range` / `Diff basis**` 上对齐（**三份 QC 与 QA 的 `plan_id`、`Review range` 须逐字相同**）。**同仓、同一 plan、多 worktree 并行时**，**推荐**先建 **plan 集成分支** 再挂各轨 worktree，QC 前再将各轨 **归并**到 PM 指定为待审的 **`Working branch` / `HEAD`**；**强制**要求：派 QC 前须已可归约为 **单一** `HEAD` 快照（或拆 scope / 分轮次审查），**不得**单填一条开发 worktree 却覆盖未并入该分支的并行轨变更；见 `harness-loop.md`「多 worktree 并行开发与 QC / QA 的门禁衔接」（含 **推荐默认编排**）与「QC 三审、QA 验证与 feature 检出上下文」。**同一 plan 多 batch 时**，完整三审**默认在整 plan dev 完成后一次**（非每 batch），见 `plan-convention.md`。
 - 语言约定（PM 编排场景）：Assignment 字段名保持既定英文键名；字段值中的任务描述正文默认可用中文。所有执行产出与报告默认英文，除非用户明确要求其他语言。
 - 执行 Superpowers `writing-plans` 时，计划文件路径必须遵循 `plan-convention.md` 的 `{PLAN_DIR}` 解析结果；不得默认写入 `docs/superpowers/plans/`。
 - **工作量与工期表述**：做计划、写 PRD/架构文档、Assignment 或 Status Update 时，遵循 `effort-estimation.md`：**只写 agent-oriented 预估**；**不得**在同一字段或同一段「预估」中纳入人类时间、人天、FTE 或日历等待（人类排期若有需要，须与 Effort 字段分离撰写）。

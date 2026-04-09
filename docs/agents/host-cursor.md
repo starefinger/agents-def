@@ -13,7 +13,8 @@
 在 **Cursor 当前环境**中，主代理可以使用 `**Task` 工具**并行拉起子代理，**能够**落实与 OpenCode harness 同构的 **QC 三审**分派。
 
 - `**subagent_type`** 可选用 `qc-specialist`、`qc-specialist-2`、`qc-specialist-3`，语义上对应 PM 下发的 **三条独立 Assignment**（三名 reviewer）。
-- **与 harness 对齐的硬性字段**：三份子任务中的 `**plan_id`**、`**Review cwd` / Worktree path**、`**Review range` / Diff basis`** 必须与 OpenCode 流程 **逐字相同**（见` harness-loop.md`、`plan-convention.md`、`review-harness.md`）。
+- **与 harness 对齐的硬性字段**：三份子任务中的 `**plan_id`**、`**Review cwd` / Worktree path**、`**Review range` / Diff basis`** 必须与 OpenCode 流程 **逐字相同**（见 `harness-loop.md`、`plan-convention.md`、`review-harness.md`）。
+- **同仓曾多 worktree 并行开发**：Task 工具 **并行拉起三名 QC** 只解决「三名 reviewer 同时跑」；**不**表示三人应分别进入 **不同** 开发 worktree 各审一段。三份 Task 的 `Review cwd` 等字段仍 **逐字相同**，且该检出必须对应 **已含全部待审提交** 的 **单一** `Working branch` / `HEAD`（多流未合并时须先集成或拆 scope）。**编排侧** 推荐 PM 在并行开发前建立 **plan 集成分支** 再挂各轨 worktree，见 `harness-loop.md` 同节 **「推荐默认编排：先建 plan 集成分支，再挂各 worktree」**。
 - **和 OpenCode 的差别**：主要在 **宿主能力**——会话工具集、`question` 等交互、日志与 **artifact / 报告落盘路径** 的约定，**不是**「不能派三审」或「必须降级为单人扮演三票」。
 
 PM 在 Status Update 中可简要注明本次三审是 **Task 并行子代理** 执行，便于审计与复盘。
@@ -37,7 +38,7 @@ PM 在 Status Update 中可简要注明本次三审是 **Task 并行子代理** 
 
 ### 模式 C — 与 worktree / 写入并发的关系
 
-即使用 Task 并行子代理，仍须遵守 `harness-loop.md`：**同仓 ≥2 可写者并发修改** 时 `**git worktree`**（或等价隔离）与 Assignment 中的分支/路径约定；不要将「能并行跑 QC」与「能多代理共用一个可写 cwd」混为一谈。
+即使用 Task 并行子代理，仍须遵守 `harness-loop.md`：**同仓 ≥2 可写者并发修改** 时 `**git worktree`**（或等价隔离）与 Assignment 中的分支/路径约定；不要将「能并行跑 QC」与「能多代理共用一个可写 cwd」混为一谈；亦不要将「Task 并行 QC」与「QC 应使用多个不同 `Review cwd`」混为一谈（见同文件上一节与 `harness-loop.md` **「多 worktree 并行开发与 QC / QA 的门禁衔接」**）。
 
 ## 澄清交互
 

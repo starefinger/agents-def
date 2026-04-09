@@ -38,7 +38,9 @@
 
 当多个可写 subagent **并发**修改 **同一仓库** 时，**不得**共用同一检出目录作为写入 cwd。PM 在分派前应规划 **`git worktree`** 隔离（Superpowers **`using-git-worktrees`**），并在各承接方 Assignment 中写明 **`Working branch`** / **`Branch policy`** 及 **检出路径约定**（或要求回报实际 worktree 路径）。单分支决策权仍仅属 PM；worktree 只解决「目录与工作区隔离」，不替代分支授权。
 
-**QC / QA 与 feature**：开发常在 **feature 分支的 worktree** 中完成；进入 **QC 三审**与随后的 **QA 验证**时，PM 须在 Assignment 中写明 **`Review cwd` / `Worktree path`**、**`Working branch`**、**`plan_id`**（无 plan 流程时 `N/A` + 不可歧义 **Feature / scope label**）与 **`Review range` / `Diff basis`**；**三份 QC Assignment 与 QA Assignment 中 `plan_id` 与 `Review range` / `Diff basis` 须逐字相同**，保证三票审 **同一 plan/feature 与同一 diff 范围**。见 `harness-loop.md`「QC 三审、QA 验证与 feature 检出上下文」。
+**同仓、同一 plan、多可写并行轨（推荐）**：在挂齐各轨 `git worktree` **之前**，先与用户确认并写明 **plan 集成分支**（从商定 `<base>` 创建）及各轨 **topic 分支** 如何从该线分出或如何 **merge 回** 该线；QC 前再将待一并验收的提交 **全部归并**到 PM 指定为 QC **`Working branch`** 的那条分支的 **`HEAD`**。分步说明与示例命名边界见 `harness-loop.md` **「多 worktree 并行开发与 QC / QA 的门禁衔接」** 中的 **「推荐默认编排：先建 plan 集成分支，再挂各 worktree」**。
+
+**QC / QA 与 feature**：开发常在 **feature 分支的 worktree** 中完成；进入 **QC 三审**与随后的 **QA 验证**时，PM 须在 Assignment 中写明 **`Review cwd` / `Worktree path`**、**`Working branch`**、**`plan_id`**（无 plan 流程时 `N/A` + 不可歧义 **Feature / scope label**）与 **`Review range` / `Diff basis`**；**三份 QC Assignment 与 QA Assignment 中 `plan_id` 与 `Review range` / `Diff basis` 须逐字相同**，保证三票审 **同一 plan/feature 与同一 diff 范围**。见 `harness-loop.md`「QC 三审、QA 验证与 feature 检出上下文」及 **「多 worktree 并行开发与 QC / QA 的门禁衔接」**（含 **plan 集成分支先行** 推荐编排）。
 
 ## Assignment 要求（PM）
 

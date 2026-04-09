@@ -5,6 +5,7 @@
 ## 分派时机（与 plan / batch 对齐）
 
 - **默认**：@project-manager 在 **该 plan 的实现范围已由 dev team 全部交付**、准备进入预合并门禁时，分派完整 QC 三审。**同一 `plan_id` 下多 batch 滚动实现时，不默认每 batch 跑一轮全套三审**（避免 `reports/<plan-id>/` 多套报告与范围串线）；中间阶段靠自检与 PM 协调，**显式增量三审**须在 Assignment 写明（见 `plan-convention.md`「QC 三审触发时机」）。
+- **同仓多 worktree 并行开发**：一轮 QC 三审仍只对应 **一套** `Review cwd` + `Working branch` + `Review range` / `Diff basis`（三票逐字相同）。若成果曾分布在 **未合并** 的多条分支或多个 `HEAD`，PM **须先**完成 Git 归并到 **单一**待审分支再派 QC；**不得**指望 reviewer 自行在多个开发 worktree 之间拼凑审查范围。**推荐** PM 在并行开发开始前已建立 **plan 集成分支** 作为各轨 merge 靶（见 `harness-loop.md` 同节 **「推荐默认编排：先建 plan 集成分支，再挂各 worktree」**）。细则见 `harness-loop.md` **「多 worktree 并行开发与 QC / QA 的门禁衔接」**。
 - **Request Changes 后**：再审为**新波次**，落盘用新文件名（如 `-rev2` / `wave2-`），PM 汇总时标明有效波次。
 
 ## 共享基线（所有审查员）
@@ -14,7 +15,7 @@
 - 行为回归是否已被显式确认
 - 阻塞级安全或数据一致性风险是否已被识别
 - 变更行为的测试覆盖是否充分
-- 若启用功能分支策略：变更分支与 Assignment 的 **`Working branch` / `Branch policy`** 是否一致；且审查在 Assignment 写明的 **`Review cwd` / `Worktree path`**（feature 检出上下文）上执行，而非未核对的默认 cwd
+- 若启用功能分支策略：变更分支与 Assignment 的 **`Working branch` / `Branch policy`** 是否一致；且审查在 Assignment 写明的 **`Review cwd` / `Worktree path`**（feature 检出上下文）上执行，而非未核对的默认 cwd；若曾同仓多流并行开发，还须核对 **`HEAD` 是否已含本 scope 全部待审提交**（见 `harness-loop.md` **「多 worktree 并行开发与 QC / QA 的门禁衔接」**）
 - **三审对齐**：Assignment 已写明 **`plan_id`**（或 `N/A` + **Feature / scope label**）与 **`Review range` / `Diff basis`**；报告 **Scope** 须 **逐字回写** PM 下发的这两字段，**禁止**与同伴 reviewer 使用不同范围或不同 plan 锚点（见 `harness-loop.md`）
 
 ## 标准审查工作流
