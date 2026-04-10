@@ -26,6 +26,7 @@
 4. 运行对应语言的 lint 和静态分析。
 5. 按本文档审查清单进行人工审查。
 6. 产出带严重等级和证据的结构化发现。写入 `status.json` 的 **`metadata.residual_findings[].severity` 时**，**仅允许** `plan-convention.md` 小节 **「Residual findings：severity（SSOT，机器字段）」** 中的枚举与映射表（报告小节 **Critical / Warning / Suggestion** → JSON 档位）；**不要**把报告标题字符串直接当作 `severity`。
+7. **报告入库（Git）**：将 QC 报告 **`.md`** 写入 `{PLAN_DIR}/reports/<plan-id>/` 后，在业务仓根执行 **`git add`**（**仅**本次报告路径）与 **`git commit`**，并在 Completion Report 给出 **真实** `git log -1 --oneline`。**禁止**仅完成 Write/Edit 而不提交（权限与例外见各 `agents/qc-specialist*.md`）。
 
 ## 共享审查清单
 

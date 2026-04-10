@@ -25,6 +25,9 @@ permission:
     "git stash list*": allow
     "git branch*": allow
     "git status*": allow
+    # Versioning QC reports only (paths you edited must stay under allowed reports/ trees)
+    "git add*": allow
+    "git commit*": allow
     # JavaScript / TypeScript
     "eslint*": allow
     "npx eslint*": allow
@@ -188,7 +191,7 @@ generated_at: "YYYY-MM-DD"
 **Issues/Risks**: {blocking findings and risk summary}
 **Plan Update**: {"PM to update" with review gate recommendation}
 **Handoff**: {@fullstack-dev / @frontend-dev / @qa-engineer / @project-manager}
-**Git** (if repo touched): {short hash + subject per commit; one commit per finished Task ID / coverage unit — no end-of-batch dump}
+**Git** (required when you wrote a QC report under `{PLAN_DIR}/reports/`): {`git log -1 --oneline` after commit — one commit per report file / wave; **not** `N/A` unless Blocked with reason}
 ```
 
 ## Plan 与文档规范
@@ -198,6 +201,6 @@ generated_at: "YYYY-MM-DD"
 - **已关闭** R# 的权威档案在 **`{PLAN_DIR}/archived/residuals/<plan-id>.json`**；需要上下文时可 **Read** 该文件，报告中的 finding ID 应与之及 `reports/` 交叉引用。
 - Plan 目录由 @project-manager 在分派时告知实际路径（可能是 `.agents/plans/`、`.plans/` 或 `plans/`）。
 - 完成后提醒 @project-manager 同步 plan 状态。
-- **Git**：若本次在业务仓有写入（代码/测试/配置/文档/报告），每完成一个 Task ID（或 coverage 单元）就 **commit** 一次，并在 Completion Report 附 commit 列表；**禁止**最后一次性提交。
+- **Git（强制；与宿主 bash 权限一致）**：你用 Write/Edit 产出或更新了 **`{PLAN_DIR}/reports/`** 下的 QC **`.md`** 后，在**该业务仓根目录**（`git rev-parse --show-toplevel`）执行：**仅** `git add` 你本次改动的报告路径（**禁止** `git add` 其它目录或整仓 `.`）；再 `git commit -m "docs(qc): <plan-id> qc2 report"`（英文 subject，含 `plan-id` 与 reviewer 编号；复验波次在 message 中标明 `rev2` 等）。**然后**运行 `git log -1 --oneline` 写入 Completion Report **Git** 行。**禁止**认为「文件已保存即完成」却 **不** commit。**若**仓库非 git、用户禁止提交、或 commit 失败 → **Blocked**，在 Report 写明原因；**不得**伪造 hash。
 - 开发项目规范以当前工作目录下的 `AGENTS.md` 或 `CLAUDE.md` 为准；无则按本 agent 规则执行。
 - 对话语言跟随提问者；代码与文档默认使用**英文**。

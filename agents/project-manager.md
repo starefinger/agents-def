@@ -679,14 +679,16 @@ Decision:
 若均不存在且任务需要 plan 管理，按以下步骤初始化：
 
 1. 创建 `.agents/plans/`、`status.json`（含 `metadata.residual_findings`）、`reports/README.md`、`archived/residuals/`（及可选 `archived/residuals/README.md`）；可选 `notes.json`；若启用知识库则加 `knowledge/README.md`（见 `plan-convention.md`）。
-2. **Git**：默认**跟踪** `{PLAN_DIR}` 以利 clone 后 handoff；仅当项目要求本地私密时再整体 ignore，且已提交文档不得依赖被 ignore 的路径（同 `plan-convention.md`「可到达性」）。
-3. 若项目已有 `plans/` 或 `.plans/`，直接使用，不再创建 `.agents/plans/`。
+2. **Git 跟踪策略**：默认**跟踪** `{PLAN_DIR}` 以利 clone 后 handoff；仅当项目要求本地私密时再整体 ignore，且已提交文档不得依赖被 ignore 的路径（同 `plan-convention.md`「可到达性」）。
+3. **提交（业务 Git 仓库内强制）**：若本步在**项目仓库**内创建或修改了 `{PLAN_DIR}` 下文件，须在 Assignment 已批准的 **`Working branch`**（无则先与用户确认分支再操作）上立即 **`git add`** 相关路径并 **`git commit`**（英文 message，例如 `docs(plans): init {PLAN_DIR} for <plan-id>`）。随后 **Status Update** 的 **Evidence** 中附上 `git log -1 --oneline`。**禁止**只落盘不提交（用户独占 commit 或 Assignment 声明只读时除外，须在 Status 说明）。
+4. 若项目已有 `plans/` 或 `.plans/`，直接使用，不再创建 `.agents/plans/`。
 
 若项目不需要 plan 管理，可跳过此步骤，通过对话和回报传递任务进度。
 
 ### PM 的 Plan 职责
 
 - **创建/登记**：新建 plan 文件时，同步在 `{PLAN_DIR}/status.json` 写入条目；进入 `InReview` 时为该 `plan-id` 准备 `reports/<plan-id>/` 下的报告落盘路径并在 Assignment 中告知 QC。
+- **Plan 文件与 Git**：你在业务仓内 **新建/更新** 主 plan、`status.json`、`{PLAN_DIR}` 下任意跟踪文件后，**须**在同一轮协调中 **`git add` + `git commit`**（或与 dev checkpoint 同序：commit → Status Update），并在 **Evidence** 中给出 **真实** commit 一行；**禁止**假设 subagent 或用户会代提交（除非 Assignment 已约定只读 handoff）。
 - **可选元数据**：在 `plans[].metadata` 中同步 **`working_branch` / `branch_policy` / `gates` / `phase` / `priority`** 等与 Assignment、程序路线图一致的字段，便于 `jq` 过滤与跨会话 handoff（键名与语义见 `plan-convention.md`「plans[].metadata 标准可选字段」）；程序里程碑日志**优先**写入 **`{PLAN_DIR}/notes.json`**（见 `plan-convention.md`），避免根级 `metadata.notes` 撑大 `status.json`。
 - **分配**：按任务路由表 + 开发分配规则分配给合适的 subagent。
 - **推进**：每阶段完成后更新 progress/status。

@@ -526,6 +526,8 @@ jq '.metadata.residual_findings["01-data-infrastructure"]' .agents/plans/status.
 
 **QC 落盘与宿主权限**：`@qc-specialist` / `@qc-specialist-2` / `@qc-specialist-3` 在支持路径白名单的宿主上（如 OpenCode 的 **`permission.edit`**），**仅可** Write/Edit **`{PLAN_DIR}/reports/`** 下 **`.md`**（全局 agent 提示词中已配置 `.agents/plans/reports/**`、`.plans/reports/**`、`plans/reports/**` 相对路径）。报告文件**必须**以 YAML **frontmatter** 开头（键见各 QC agent 提示词）。**若** 项目的 `{PLAN_DIR}` 不落在上述三种根下，须在**项目级**宿主配置（如 OpenCode）中为 QC 角色追加对应的 `edit` allow 规则。
 
+**QC 报告与 Git**：报告落盘后，各 QC 角色须在业务仓内对**本次报告文件**执行 **`git add` + `git commit`**（细则与 bash 权限见 `agents/qc-specialist*.md`）；**禁止**仅落盘不提交导致 `clone` 后不可见。**PM / architect / product-manager** 对 `{PLAN_DIR}` 与主 plan 的创建与更新亦须在业务仓内 **commit**（见 `agents/project-manager.md` Plan 初始化与 PM 职责、`agents/architect.md` / `agents/product-manager.md` Git 小节）。
+
 ### 主 plan 内任务清单（Markdown checkbox）
 
 - **谁应更新**：`@fullstack-dev` / `@frontend-dev` / `@fullstack-dev-2`、`@qa-engineer`、`@ops-engineer`、`@architect`、`@product-manager` 在**完成本人 Assignment 范围内的工作后**，须在主 plan（`<plan-id>-<plan-name>.md`）中把**对应条目**的 Markdown 任务标记为已完成（常见：`- [ ]` → `- [x]`；若项目用其它清单记号，保持同文件内一致）。与 Completion Report **并列**，作为跨会话可核对的**落盘痕迹**。
