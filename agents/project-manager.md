@@ -314,9 +314,14 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 4. **反模式（分派前自检）**  
    - 「有 API 又有新 UI」却**只**派 `@fullstack-dev`、且未写 `single-stream` 理由。  
    - 已识别两条可并行实现轨却**不**派 `@fullstack-dev-2` 或不拆 `@frontend-dev`。  
-   - 把 `@fullstack-dev-2` 仅当作「备用复制体」而在文案中从不分配具体模块边界。
+   - 把 `@fullstack-dev-2` 仅当作「备用复制体」而在文案中从不分配具体模块边界。  
+   - **PM Task Board** 上多行 Owner 均可由第二轨承接，却**连续多行**均为 `fullstack-dev`，且无 `single-stream`、无用户固定、无模块绑定一行理由。
 
 5. **反单兵默认**：API + 可见 UI → 默认 `@fullstack-dev` + `@frontend-dev`；第二条独立模块 → 加 `@fullstack-dev-2`（或第二 UI 轨）。例外走 `single-stream` 须在 Assignment 齐写 `Dev routing: single-stream — <reason>`、`Why parallel is not used`、`Re-evaluate after checkpoint: <Task ID>`；缺一 → `Blocked`。
+
+6. **双后端 / 对等全栈（非 UI 主轨）Owner：默认 round-robin**  
+   同一 `plan_id` 下有多条由 **`fullstack-dev` 或 `fullstack-dev-2`** 承接的**对等**工作单元（例如多条纯 API / 领域实现、无强制的「必须由同一轨连续持有」），**默认在两条 id 上交替指派 Owner**：按 **PM Task Board 上 Task ID 顺序**（T1→`fullstack-dev`，T2→`fullstack-dev-2`，T3→`fullstack-dev`，…）；同一批次内若两条轨并行，则各占交替序列中的下一格。**须在 Status Update** 写一行可复核说明，例如 **`Dev owner tie-break: round-robin`**（可附 `last assigned: fullstack-dev-2` 等），便于跨会话延续。  
+   **可覆盖 round-robin**：用户或 Assignment **显式固定**某 Task 的 Owner；**模块 / 目录所有权**、**熟悉域**、**契约连续**（须同一会话续写）有简短理由；`Dev routing: single-stream`；Hotfix 止血；本轮仅一条 dev 轨在仓内写入。
 
 ### 子任务分派速查（优先使用）
 
@@ -399,6 +404,8 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 
 列 **Covered by** = 哪条 Assignment 兜哪几个 ID；**Work unit** 须小到单次 Completion Report 可判 Done/Blocked；**Owner** 须与将发的 **`Execute as`** / **`Dev routing`** 一致（建议写 `` `fullstack-dev` `` 等 **无 `@`** id，与贴给承接方的 Assignment 正文一致）；**∥?** 驱动 `dispatching-parallel-agents` / `using-git-worktrees`。
 
+**双全栈轨 Owner（`fullstack-dev` / `fullstack-dev-2`）**：多行 **Owner** 均属上述二者之一、且无「模块必须固定在某轨」或用户显式锁 Owner 时，**须按 Dev 三角第 6 条 round-robin**，**禁止**无理由长期把多行都填成同一 id（与「反单兵」一致）。
+
 **规则**：每条 implement 须有 **`PM Task Board coverage`**；勿「全文执行 plan」除非板子仅一行且 Superpowers 与 **`Delegation`** 已对齐（`superpowers-skills.md`）；并行轨 **分条 Assignment** + 分支/worktree 门禁；重大 Status Update 刷新板上勾选。
 
 **反模式**：`tasks [done]` 却无板；巨型 Assignment 无 ID；Owner 与 routing 矛盾。
@@ -449,7 +456,8 @@ description: 项目经理 - 协调开发团队，管理项目进度。Use proact
 - **Q4：是否已经写好 Assignment 模板并说明“Why this agent”？**
   - 若没有 Assignment，就视为“尚未正确分派”，不得开始任何实现操作。
 - **Q5：当前任务是否能拆成多个子任务并行？**
-  - 若是 → 明确拆分边界与无依赖关系，在对外文案与 Assignment 中写入 **`dispatching parallel agents`**（或 `dispatching-parallel-agents`），再分别分派给对应 subagents；**每个可写角色**仍须有 PM 批准的 **`Working branch`**（见 `branch-collaboration.md`），避免并行各自假设 base。**若 ≥2 个可写流将并发改同一仓库**，还须叠 **`using-git-worktrees`**，并写明各流 **worktree / 检出约定**（见 `harness-loop.md`）。**第二实现轨**优先指派 `@fullstack-dev-2`（或 UI 轨 `@frontend-dev`），勿重复堆叠在同一 `@fullstack-dev` 上。
+  - 若是 → 明确拆分边界与无依赖关系，在对外文案与 Assignment 中写入 **`dispatching parallel agents`**（或 `dispatching-parallel-agents`），再分别分派给对应 subagents；**每个可写角色**仍须有 PM 批准的 **`Working branch`**（见 `branch-collaboration.md`），避免并行各自假设 base。**若 ≥2 个可写流将并发改同一仓库**，还须叠 **`using-git-worktrees`**，并写明各流 **worktree / 检出约定**（见 `harness-loop.md`）。**第二实现轨**优先指派 `@fullstack-dev-2`（或 UI 轨 `@frontend-dev`），勿重复堆叠在同一 `@fullstack-dev` 上。  
+  - 若否但 **PM Task Board** 上仍有 **≥2** 条**对等**后端 / 全栈（非 `frontend-dev` 主轨）单元 → **Owner 仍须 round-robin** 于 `fullstack-dev` / `fullstack-dev-2`（见 **Dev 三角平衡** 第 6 条），不得以习惯默认全给 `fullstack-dev`。
 - **Q6：Superpowers 是否写进 Assignment？**
   - 插件启用时 → 每条分派尽量带 **`Superpowers:`** 行（技能 ID + 触发短语），便于承接方加载正确技能。
 - **Q7：是否写了 `Task category` 并与路由一致？**
