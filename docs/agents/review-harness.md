@@ -121,9 +121,15 @@
 
 ## 门禁规则
 
-- 存在未解决的 `Critical` → `Request Changes`
-- 无 `Critical` 但有高影响的未解决取舍 → `Needs Discussion`
-- 否则 → `Approve`
+- 存在未解决的 `Critical` 或 `Warning` → `Request Changes`
+- 无 `Critical` / `Warning`，但有高影响且未定案的取舍（通常来自 Suggestion 的架构级分歧）→ `Needs Discussion`
+- 仅在 `Critical = 0` 且 `Warning = 0`（未解决项）时，方可 `Approve`
+
+### CI 门禁补充（强制）
+
+- 任何与本次变更范围相关的 CI 失败（编译、测试、lint、类型检查、构建、发布前校验）默认按 **>= Warning** 处理，进入本轮必须修复项。
+- CI 失败未修复前，不得给出 `Approve`；应按上方门禁判定为 `Request Changes`。
+- 若判断为 CI 环境波动而非代码问题，报告必须给出可复核证据（失败日志、复跑结果、隔离结论）并由 PM 明确记录处置决定；在未形成一致结论前，维持 `Needs Discussion` 或 `Request Changes`，不得直接放行。
 
 ## Residual Findings 留档门禁
 
