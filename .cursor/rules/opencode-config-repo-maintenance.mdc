@@ -44,6 +44,7 @@ alwaysApply: true
 - **单一权威**（入口 + skill 索引）：根目录 `AGENTS.md`。深层流程正文放在 `skills/mstar-*/` 中；阶段或门禁变更时先更新对应 skill，仅当 skill 索引或摘要级不变量需对齐时再改根目录 `AGENTS.md`。
 - 避免漂移：每个主题单一事实来源；`mstar-*` skill 的 `references/` 与 `SKILL.md` 正文间不要双写同一规则。
 - 角色提示词应引用对应 `mstar-*` skill 中的阶段门禁，勿粘贴大段规则。
+- **skill 是 SSOT，不是维护手册**：各 `mstar-*/SKILL.md` 与 `references/` 只承载**执行向**规则；**不得**把"如何修改本 skill / 如何跨文件同步 / 如何评审"之类**维护向**话术塞回 skill 正文——这些一律归入本文件。
 
 ## 快速导航
 
@@ -55,6 +56,72 @@ alwaysApply: true
 ## 库文档与宿主
 
 涉及第三方库 / API / CLI / 云服务语法、配置与迁移时，勿仅依赖模型训练数据。OpenCode 侧单一协议见 `~/.config/opencode/skills/mstar-host-opencode/SKILL.md`「库文档检索（Context7；单一协议）」；Cursor 侧见 `~/.config/opencode/.cursor/skills/mstar-host/SKILL.md`。若变更该协议，请同步引用它的 Cursor 规则。
+
+## 修改 Skills 的工作流（Morning Star 系列）
+
+**迁移后，"维护本仓库" ≈ "修改 mstar-\* skills"**。本节给出规范动作；路径、structure、description 触发语在 skill-creator 指南中有详解，本文不重复，仅强调 Morning Star 本地约束。
+
+### Skill 目录结构（硬性）
+
+```text
+skills/mstar-<topic>/
+├── SKILL.md          # 必含 YAML frontmatter（name + description）
+├── references/       # 可选：SKILL.md 超 ~500 行时拆到这里
+│   └── <subtopic>.md
+└── assets/           # 可选：数据文件（如 routing-evals.json）
+```
+
+Cursor 宿主专属 skill 仍落在 `.cursor/skills/mstar-host/`（结构相同）。
+
+### 动手前先判清「在哪里改」
+
+| 变更性质 | 落点 |
+|---------|------|
+| 核心不变量（状态机 / 两阶段门禁 / 分支 / worktree / QC-QA 对齐）措辞更新 | `skills/mstar-harness-core/SKILL.md` 或对应 `references/*.md` |
+| Spec 级细节（`phase-gate-playbook` / `branch-and-worktree` / `open-harness-principles`） | 优先改 `mstar-harness-core/references/<file>.md`；SKILL.md 只动索引与摘要 |
+| `status.json` / residual lifecycle / knowledge 布局 | 优先改 `mstar-plan-conventions/references/<file>.md`；SKILL.md 动索引 |
+| QC 清单或报告模板 | `mstar-review-qc/SKILL.md`（该 skill 目前不拆 references/，除非超 500 行） |
+| 路由回归场景 | `mstar-routing-eval/assets/routing-evals.json`；相关评分细则改 `SKILL.md` |
+| Superpowers 对照表 | `mstar-superpowers-align/references/per-role-matrix.md` 或 `tension-table.md`；SKILL.md 仅改总体契约 |
+| 宿主能力（OpenCode）或密钥占位 | `mstar-host-opencode/SKILL.md` |
+| Cursor 入口、Task 并行 QC、`/pm` | `.cursor/skills/mstar-host/SKILL.md` |
+| 只涉及 skill 的触发短语 / 描述 | 只改该 skill `SKILL.md` 的 `description`（下节「description 纪律」） |
+| 编排入口、优先级、skill 索引、护栏 | 根目录 `AGENTS.md`（注意与各 skill `description` 的一致性） |
+
+### description 纪律（SKILL.md frontmatter）
+
+- **保持 "pushy"**：description 是 skill 被触发的主要信号。参考 `~/.cursor/skills-cursor/create-skill/SKILL.md` 与 skill-creator 指南，包含"何时触发 / 做什么"两类线索，并列出具体触发短语。
+- **每次修改正文时自检**：若正文新增了重要触发场景（例如 `mstar-review-qc` 新增 high-risk 运维清单），回头把关键词补进 `description`；否则 agent 可能在新场景漏触发。
+- **不要把 description 写成摘要**：它首先是**触发器**，其次才是摘要。
+
+### SKILL.md 体量管理
+
+- **目标**：`SKILL.md` 正文 ≤ 500 行；超过时把分章节拆到 `references/`，`SKILL.md` 保留概述 + 索引。
+- **当前拆分示范**：`mstar-plan-conventions`（5 refs）、`mstar-harness-core`（3 refs）、`mstar-superpowers-align`（2 refs）。保持该风格；勿在 `SKILL.md` 与 `references/` 同时重复完整规则。
+- **references/ 文件命名**：`<subtopic>.md`（小写连字符），与 SKILL.md 中的索引短语对齐。
+
+### 新增 / 拆分 / 重命名 skill
+
+- **新增 mstar-* skill**：命名 `mstar-<topic>`；在 **根目录 `AGENTS.md` 的 skill 索引表** 与 **所有相关 `agents/*.md` 的 "Morning Star Skills（必读）" 块** 中登记；视需要同步 `README.md`「Morning Star Skill 结构」表与本文件「仓库内文件分工」表。
+- **拆分已有 skill**：两步走 — (1) 新 skill 落盘并通过 lint；(2) 在同一 PR 中更新 AGENTS.md、所有引用它的角色开场块、以及其他 skill 中跨引（grep `mstar-<old>`）。
+- **重命名**：不推荐；若必须，走两 PR（新名落盘 + 留重定向说明；次 PR 删旧目录并清理引用）。
+
+### 修改 skill 后的同步清单（每次勾选）
+
+- [ ] **SKILL.md frontmatter `description`** 是否仍能准确触发新场景？
+- [ ] **`SKILL.md` 是否 ≤ 500 行**？若超，把新增内容拆到 `references/`，别让 SKILL.md 肥化。
+- [ ] **跨 skill 引用**：本次变更是否影响其它 `mstar-*` skill 的交叉引用？`grep -rn "mstar-<this-skill>" skills/ .cursor/skills/ agents/ AGENTS.md README.md`。
+- [ ] **`agents/*.md` 必读块**：本次变更是否引入需要让更多角色必读的新场景？按 `role_specific_set` 原则更新相关角色开场块（不要一视同仁全加）。
+- [ ] **`AGENTS.md` skill 索引表**：skill 职责描述一行是否需要更新？
+- [ ] **`README.md`「Morning Star Skill 结构」表**：一行摘要是否需要对齐？
+- [ ] **Lint**：`npx -y markdownlint-cli2`（glob 已覆盖 `skills/mstar-*/**/*.md`）。
+- [ ] **路由回归**：若本次变更涉及 PM 路由或门禁，跑 `mstar-routing-eval` 的 `assets/routing-evals.json` 场景集。
+- [ ] **Git 提交颗粒度**：skill 实体变更 + AGENTS.md 索引 + 角色必读块 + README 摘要 宜在同一 PR，避免 handoff 期间文档半同步。
+
+### skill-creator 流程接入
+
+- 新建或大改 skill 时，**优先** Read `~/.agents/skills/skill-creator/SKILL.md` 与 `~/.cursor/skills-cursor/create-skill/SKILL.md`，尊重其 progressive disclosure、description pushiness、references 布局约定。
+- 如果要为本仓库的某个 `mstar-*` skill 跑 **description 优化回归**（避免描述漂移导致触发率变差），按 skill-creator 的 "Description Optimization" 小节生成 trigger eval queries；结果归档到 `skills/mstar-<topic>/evals/`（若启用）。本文件**不重复** skill-creator 内容。
 
 ## 更新规则（供维护全局配置的用户）
 
@@ -77,6 +144,8 @@ alwaysApply: true
 - 根目录 `AGENTS.md`（全局入口）是否仍结构清晰、便于每会话加载？
 - 角色职责是否与工作流细节分离（细节已在 `mstar-*` skill）？
 - 每个 `mstar-*` skill 的 `description` 是否包含足够「pushy」的触发短语（见 skill-creator 指南）？
+- 每个 SKILL.md 是否 ≤ 500 行？超限场景是否已拆到 `references/`？
 - 每个阶段是否有可观察的具体产出？
-- 反复出现的失败是否已转化为可复用指引（写回相关 `mstar-*` skill）？
-- `AGENTS.md`、`skills/mstar-*/`、`agents/*.md` 是否仍夹带独立的「维护 / 跨文件同步 / 更新规则」长段或对本文件的重复说明？若有，应删除并并入本节「更新规则」，避免执行向文档与维护清单双轨。
+- 反复出现的失败是否已转化为可复用指引（写回相关 `mstar-*` skill，而不是堆回 `agents/*.md`）？
+- `AGENTS.md`、`skills/mstar-*/`、`agents/*.md` 是否仍夹带独立的「维护 / 跨文件同步 / 更新规则」长段或对本文件的重复说明？若有，应删除并并入本节「更新规则」或「修改 Skills 的工作流」，避免执行向文档与维护清单双轨。
+- 各角色 `agents/*.md` 开场块「Morning Star Skills（必读）」清单是否仍与该角色 actual 产出场景一致？（例如新增 skill 后应按 `role_specific_set` 原则补录，但勿一视同仁全加）
