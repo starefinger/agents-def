@@ -4,8 +4,7 @@
     "external_directory": {
       "/private/tmp/**": "allow",
       "/tmp/**": "allow",
-      "~/.cargo/**": "allow",
-      "~/.config/opencode/docs/agents/**": "allow"
+      "~/.cargo/**": "allow"
     },
     "skill": {
       "*": "allow",
