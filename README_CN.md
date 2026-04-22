@@ -11,8 +11,7 @@
 
 </div>
 
-本仓库提供 **Morning Star / 启明星** 的多角色 code agent harness 配置。  
-它主要面向：**已经在用 OpenCode / Cursor，但还不熟 Morning Star 工作方式**的用户。
+本项目为 **Morning Star / 启明星** 的多角色 code agent harness框架。
 
 你能获得的核心价值：
 
@@ -22,7 +21,7 @@
 
 ## 快速开始（用户路径）
 
-> Install 区域目前仍在持续优化，以下步骤先保证“最短可跑通”。
+> 安装流程目前仍在持续优化，以下步骤先保证“最短可跑通”(目前只是临时方案)。
 
 1. 准备配置目录（可选备份旧配置）
    - `mv ~/.config/opencode ~/.config/opencode.backup.$(date +%Y%m%d-%H%M%S)`
@@ -111,4 +110,4 @@
 
 ## 许可
 
-本项目采用 MIT License，详见 `LICENSE`。
+本项目采用 MIT License，详见 [LICENSE](./LICENSE)。

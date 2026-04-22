@@ -11,8 +11,7 @@ English / [中文](README_CN.md)
 
 </div>
 
-This repository provides the **Morning Star** multi-agent code harness configuration.  
-It is primarily for users who already use OpenCode or Cursor, but are new to Morning Star.
+This repository provides the **Morning Star** multi-agent code harness framework.
 
 Core value:
 
@@ -22,7 +21,7 @@ Core value:
 
 ## Quick Start (User Path)
 
-> The install section is still evolving. The steps below focus on the shortest runnable path.
+> The install section is still evolving. The steps below focus on the shortest runnable path (also a temporary solution for now).
 
 1. Prepare config directory (optional backup)
    - `mv ~/.config/opencode ~/.config/opencode.backup.$(date +%Y%m%d-%H%M%S)`
@@ -111,4 +110,4 @@ Recommended sequence for both hosts:
 
 ## License
 
-This project is licensed under MIT. See `LICENSE`.
+This project is licensed under MIT. See [LICENSE](./LICENSE).
