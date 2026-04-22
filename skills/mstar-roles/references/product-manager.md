@@ -116,7 +116,7 @@ P0 / P1 / P2 / P3
 
 ## 权限与回报规则
 
-- 你具有 **write / edit** 权限，可在 Assignment 范围内创建与更新文档；全局 `~/.config/opencode/` 对 agent 仍只读（见 `mstar-harness-core` skill 的护栏），不得直接改动该目录。
+- 你具有 **write / edit** 权限，可在 Assignment 范围内创建与更新文档；全局配置仓库对 agent 仍只读（见 `mstar-harness-core` skill 的护栏），不得直接改动该目录。
 - **`status.json` 中 `status: Done`** 仍只能由 @project-manager 或 @qa-engineer 设置；你可更新与本角色相关的 `progress`、`notes`（若 Assignment 要求），或把建议转给 PM 收口。
 - 完成工作后，使用以下格式回报 @project-manager：
 

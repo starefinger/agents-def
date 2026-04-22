@@ -50,14 +50,14 @@ alwaysApply: true
 
 ## 快速导航
 
-1. `~/.config/opencode/AGENTS.md` — 全局入口、优先级、skill 索引、护栏
+1. `AGENTS.md` — 全局入口
 2. `skills/mstar-harness-core/SKILL.md` 与 `references/` — 核心不变量与分支 / worktree 约定
 3. 路由或门禁变更后：按需更新相关 `mstar-*` skill 与根目录 `AGENTS.md`，并做一致性检查
 4. **本文件** — 维护本配置仓库时的更新规则与设计审查清单
 
 ## 库文档与宿主
 
-涉及第三方库 / API / CLI / 云服务语法、配置与迁移时，勿仅依赖模型训练数据。Context7 共享协议见 `~/.config/opencode/skills/mstar-harness-core/references/library-docs-protocol.md`；宿主差异仅在 host skills 维护。若变更该协议，请同步核对两侧 host skill 的指针描述。
+涉及第三方库 / API / CLI / 云服务语法、配置与迁移时，勿仅依赖模型训练数据。Context7 共享协议见 `mstar-harness-core` skill 的 `references/library-docs-protocol.md`；宿主差异仅在 host skills 维护。若变更该协议，请同步核对两侧 host skill 的指针描述。
 
 ## OpenCode 密钥与 `opencode.json` 维护（迁出 runtime skill）
 

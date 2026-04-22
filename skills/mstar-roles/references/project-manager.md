@@ -29,7 +29,8 @@
 本 agent 的 prompt 文件位于本仓库 **全局配置目录** `agents/` 壳层目录（由 `mstar-roles` skill 承载角色正文）。OpenCode 可在启动时自动加载；Cursor 等宿主通常通过规则或手动 Read 引用；见当前宿主的 `mstar-host` skill。
 运行时 cwd 是**项目工作目录**（如 `~/workspace/my-project/`）。
 
-- 全局配置目录 `~/.config/opencode/` 对 agent **只读**：全局配置的写入仅由用户本人执行。引用其它 Morning Star skill / role / reference 时一律用 **skill 名**（例如 `` `mstar-harness-core` skill ``）或 `mstar-roles` skill 的角色名，而不是绝对路径。如需改动全局规则，在回报中提出建议由用户落盘。
+- 全局配置仓库对 agent 仍只读（见 `mstar-harness-core` skill 的护栏），不得直接改动该目录。
+- 引用其它 Morning Star skill / role / reference 时一律用 **skill 名**（例如 `` `mstar-harness-core` skill ``）或 `mstar-roles` skill 的角色名，而不是绝对路径。如需改动全局规则，在回报中提出建议由用户落盘。
 - 项目级文件（plans、项目 AGENTS.md 等）→ 使用相对路径，可正常读写。
 
 ---

@@ -7,9 +7,7 @@
 - `mstar-plan-conventions` skill — 若 prompt 变更影响 plan 或 residual 规范时同步读取
 - `mstar-coding-behavior` skill — prompt 文档产出同样遵循 Simplicity First / Surgical Changes（不膨胀）
 - `mstar-superpowers-align` skill — 若新增或修改与 Superpowers 交互的规则
-- 当前宿主的 `mstar-host` skill — OpenCode 宿主能力与运行时约束
-- `~/.config/opencode/.cursor/rules/opencode-config-repo-maintenance.mdc` — `opencode.json` 与密钥维护约定（只读，建议由用户本人落盘）
-- 当前宿主的 `mstar-host` skill — Cursor 下必读
+- `mstar-host` skill - 当前宿主的 `mstar-host` skill，各个宿主略有区别
 
 会话启动后，按 `mstar-harness-core` skill 的加载约定先 Read 其 SKILL.md 与当前任务相关的 `references/`（OpenCode 下由根目录 `AGENTS.md` 指到此入口，其它宿主按当前宿主的 `mstar-host` skill 主动 Read）。
 
@@ -24,7 +22,7 @@
 - 引用其它 Morning Star skill / role / reference → 用 skill 名或 `mstar-roles` skill 的角色名，不写 `~/.config/opencode/...` 绝对路径（维护规则见 `.cursor/rules/opencode-config-repo-maintenance.mdc`）。
 - 项目级文件（plans 等）→ 使用相对路径。
 
-对**项目 Git 仓库**内的 prompt、skill、rule、AGENTS.md 等落盘时，遵守**功能分支门禁**：按 `mstar-harness-core` skill 与 `mstar-harness-core` skill 的 `references/branch-and-worktree.md` 执行，仅可使用 Assignment 指定的 **`Working branch`** / **`Branch policy`**，不得自行开新分支或切回 `main`/`master`。仅向用户**提议**修改全局 `~/.config/opencode/` 时不在此约束（由用户本机改）。
+对**项目 Git 仓库**内的 prompt、skill、rule、AGENTS.md 等落盘时，遵守**功能分支门禁**：按 `mstar-harness-core` skill 与 `mstar-harness-core` skill 的 `references/branch-and-worktree.md` 执行，仅可使用 Assignment 指定的 **`Working branch`** / **`Branch policy`**，不得自行开新分支或切回 `main`/`master`。
 
 ## Superpowers 技能（插件）
 
@@ -32,7 +30,6 @@
 
 ## Harness-first 规则
 
-- **全局配置（`~/.config/opencode/`）对 agent 只读。** 不得直接写入全局配置文件——全局配置的写入仅由用户本人执行。如需改动，在回报中提出建议。
 - 在修改项目级 agent prompt 前，以 `mstar-harness-core` skill 为基准，并读取 `mstar-superpowers-align` skill（若涉及角色技能路由）。
 - 流程相关改动须确保与 `mstar-harness-core` skill 保持一致。
 - 评估与迭代方法须遵循 `mstar-routing-eval` skill，避免仅凭主观感受调整 prompt。

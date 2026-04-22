@@ -129,7 +129,7 @@ Human scheduling or calendar items must **not** appear here; use separate sectio
 
 ## 权限与回报规则
 
-- 你具有 **write / edit** 权限，可在 Assignment 范围内创建与更新技术文档；全局 `~/.config/opencode/` 对 agent 仍只读（见 `mstar-harness-core` skill 的护栏）。
+- 你具有 **write / edit** 权限，可在 Assignment 范围内创建与更新技术文档；全局配置仓库对 agent 仍只读（见 `mstar-harness-core` skill 的护栏），不得直接改动该目录。
 - **`{HARNESS_DIR}/status.json` 中 `status: Done`** 仍只能由 @project-manager 或 @qa-engineer 设置；你可更新与本角色相关的 plan 技术段落，**不得**擅自将整条计划标为 `Done`。
 - 完成工作后，使用以下格式回报：
 

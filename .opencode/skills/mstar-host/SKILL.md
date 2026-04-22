@@ -1,6 +1,6 @@
 ---
 name: mstar-host-opencode
-description: Morning Star (启明星) harness 在 OpenCode 宿主上的加载方式与专属能力 —— 强制首先加载 `mstar-harness-core` skill；由 `opencode.json` 驱动的角色加载（`agents/<id>.md` 壳层 + `mstar-roles` skill 的角色正文）；内置 `question` 工具（结构化澄清）；内置 `@explore` 只读导航与 `@general` subagent；具名角色需 PM 经宿主入口实际拉起（仅打印 Assignment Markdown 不会自动创建子代理）；按角色模型（`opencode.json` 中 `agent.<id>.model`）；按能力选配 MCP（现行文档 / Web 检索 / 代码模式 / 仓库图谱 / 浏览器 E2E / Git 工作流 / 系统化排障）。OpenCode 使用者在会话开始前必读；`@project-manager` 编排前必读，以决定是否用 `question` 工具做结构化澄清。维护向规则（包含密钥）请读 `.cursor/rules/opencode-config-repo-maintenance.mdc`。
+description: Morning Star (启明星) harness 在 OpenCode 宿主上的加载方式与专属能力 —— 强制首先加载 `mstar-harness-core` skill；由 `opencode.json` 驱动的角色加载（`agents/<id>.md` 壳层 + `mstar-roles` skill 的角色正文）；内置 `question` 工具（结构化澄清）；内置 `@explore` 只读导航与 `@general` subagent；具名角色需 PM 经宿主入口实际拉起（仅打印 Assignment Markdown 不会自动创建子代理）；按角色模型（`opencode.json` 中 `agent.<id>.model`）；按能力选配 MCP（现行文档 / Web 检索 / 代码模式 / 仓库图谱 / 浏览器 E2E / Git 工作流 / 系统化排障）。OpenCode 使用者在会话开始前必读；`@project-manager` 编排前必读，以决定是否用 `question` 工具做结构化澄清。
 ---
 
 # Morning Star × OpenCode Host Adapter
