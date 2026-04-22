@@ -1,6 +1,6 @@
 # Git 功能分支、同仓并发与 Worktree 对齐（Morning Star）
 
-本 reference 合并了原 `docs/agents/harness-loop.md` 的 Git 相关节与 `docs/agents/branch-collaboration.md` 全文。涵盖：功能分支门禁、分支协作契约、同仓并发写入、多 worktree 并行开发与 QC/QA 衔接、plan 集成分支推荐编排。
+本 reference 涵盖：功能分支门禁、分支协作契约、同仓并发写入、多 worktree 并行开发与 QC/QA 衔接、plan 集成分支推荐编排。
 
 ## Git 功能分支门禁（业务仓库）
 

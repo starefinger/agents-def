@@ -5,15 +5,13 @@ description: Morning Star (启明星) 路由与 prompt 迭代评估体系 ——
 
 # Morning Star Routing & Evaluation Harness
 
-本 skill 合并并取代旧文档 `docs/agents/routing-harness.md`（路由回归）与 `docs/agents/evaluation-harness.md`（迭代评估）。
-
 ## 1. PM 路由评估
 
 本节用于验证 `@project-manager` 是否将任务路由到正确的 agent 和门禁。
 
 ### 输入
 
-- **场景集**：本 skill 的 **`assets/routing-evals.json`**（首选）；历史路径 `~/.config/opencode/docs/agents/routing-evals.json` 已迁出。
+- **场景集**：本 skill 的 **`assets/routing-evals.json`**
 - **路由策略来源**：`~/.config/opencode/agents/project-manager.md`
 - **全局约束**：`~/.config/opencode/AGENTS.md` 与 `mstar-harness-core`
 

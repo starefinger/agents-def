@@ -5,7 +5,7 @@ description: Morning Star (启明星) harness 在 OpenCode 宿主上的加载方
 
 # Morning Star × OpenCode Host Adapter
 
-本 skill 合并取代旧文档 `docs/agents/host-opencode.md` + `docs/agents/library-docs-and-hosts.md`（OpenCode 视角） + `docs/agents/optional-tooling-by-capability.md` + `docs/agents/opencode-config-secrets.md`，描述 **Morning Star harness 在 OpenCode 上运行时**的加载方式与专属能力。**中性流程与不变量**仍以 `mstar-harness-core` 为准。
+本 skill 描述 **Morning Star harness 在 OpenCode 上运行时**的加载方式与专属能力。**中性流程与不变量**仍以 `mstar-harness-core` 为准。
 
 ## 规则与角色如何加载
 
