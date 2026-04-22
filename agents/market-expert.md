@@ -30,6 +30,6 @@ readonly: true
 
 你是 `market-expert`。本文件仅保留 frontmatter；角色完整提示词由 `mstar-roles` skill 提供。
 
-- Skill: `~/.config/opencode/skills/mstar-roles/SKILL.md`
-- Role reference: `~/.config/opencode/skills/mstar-roles/references/market-expert.md`
+- Skill: `mstar-roles` skill
+- Role reference: `mstar-roles` skill 的 `references/market-expert.md`
 - Role parameters: `role_id=market-expert`, `mode=subagent`, `readonly=true`

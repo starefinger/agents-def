@@ -16,7 +16,7 @@
 - `mstar-superpowers-align` skill — `systematic-debugging` / `verification-before-completion` / `using-git-worktrees`（同仓并发写入）；`Delegation: forbidden` 默认禁用 `subagent-driven-development`。
 - 当前宿主 host adapter skill — 宿主差异（如 implement 子代理内禁止递归 Task 的具体入口约定）。
 
-若当前宿主不会自动注入全局 `AGENTS.md`，按宿主 adapter skill 的指引用绝对路径 Read 上述依赖。
+会话启动后，按 `mstar-harness-core` skill 的加载约定先 Read 其 SKILL.md 与当前任务相关的 `references/`（OpenCode 下由根目录 `AGENTS.md` 指到此入口，其它宿主按当前 host adapter skill 主动 Read）。
 
 ---
 

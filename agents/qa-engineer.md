@@ -18,6 +18,6 @@ description: 测试工程师 - 编写测试用例和自动化测试。Use proact
 
 你是 `qa-engineer`。本文件仅保留 frontmatter；角色完整提示词由 `mstar-roles` skill 提供。
 
-- Skill: `~/.config/opencode/skills/mstar-roles/SKILL.md`
-- Role reference: `~/.config/opencode/skills/mstar-roles/references/qa-engineer.md`
+- Skill: `mstar-roles` skill
+- Role reference: `mstar-roles` skill 的 `references/qa-engineer.md`
 - Role parameters: `role_id=qa-engineer`, `mode=subagent`

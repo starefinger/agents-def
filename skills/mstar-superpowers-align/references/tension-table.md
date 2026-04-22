@@ -1,6 +1,6 @@
 # Morning Star × Superpowers：张力与消解表
 
-下列对照用于避免「harness 一套、Superpowers 一套」在执行时打架。**若仍不可裁决**：**用户显式指令** > **项目级 `AGENTS.md` / `CLAUDE.md`** > **根目录 `~/.config/opencode/AGENTS.md` 与 `mstar-*` skills 中的不变量（状态机、门禁、路由）** > **Superpowers 技能的默认做法**。
+下列对照用于避免「harness 一套、Superpowers 一套」在执行时打架。**若仍不可裁决**：**用户显式指令** > **项目级 `AGENTS.md` / `CLAUDE.md`** > **`mstar-*` skills 中的不变量（以 `mstar-harness-core` 为权威：状态机、门禁、路由）** > **Superpowers 技能的默认做法**。
 
 | 主题 | Morning Star 约定 | Superpowers 相关技能 | 结论 |
 |------|------------------|---------------------|------|
@@ -12,6 +12,6 @@
 | `subagent-driven-development` 与 `implementer-prompt` | **PM Assignment**、具名角色 **`Execute as: role-id`**（无 `@`）、仅 PM 可派 subagent；QC 三审 + QA 在 feature / plan 完成后，**`plan_id` + `Review range` 三审与 QA 逐字对齐**；**`{PLAN_DIR}`**；**`InReview` / `Done` 权限** | 上游：**每任务**后 **spec + code-quality 子代理审**；**泛化 implementer** 模板；示例 **`docs/superpowers/plans/`**；默认不并行多个 implementer | **以 harness 为准**：上游模板与 per-task 双审**不替代** Assignment 与 **QC/`mstar-review-qc`**；per-task 双审用 **`@general` / `generalPurpose` 或 informal `@qa-engineer`**，**勿**用 **`@qc-specialist*`**；per-task 审查**仅可作非正式自检**（若 PM 未另授权 `Delegation`）；并行以 **PM + worktree** 为准。细则见 SKILL.md **「`subagent-driven-development` 与上游 implementer-prompt / reviewer 模板」**。 |
 | TDD | 全局流程**未**强制 TDD | `test-driven-development` | **项目/用户优先**：项目或用户禁止 TDD 时，不得因技能强行 TDD。 |
 | `git worktree` / 多工作目录 | `mstar-harness-core` `references/branch-and-worktree.md`：**开发**阶段同仓多可写 **并发**须独立 worktree；**QC / QA** 须在 **该 feature 的检出上下文**（通常 `Review cwd` = 开发所用 worktree，或同分支另开检出）上审查与验证，且 **三份 QC + QA** 共用 **`plan_id`** 与 **`Review range` / `Diff basis`**（逐字相同）；仅 `@project-manager` 决定分支策略、`Assignment` 须写明 **`Working branch`** / **`Branch policy`** 与 **检出路径约定**（含 **`Review cwd` / `Worktree path`**） | `using-git-worktrees` | **不冲突，但须叠同一门禁**：worktree 是「同一仓库多个检出目录」；**分支授权**仍须与 PM 一致。开发并发写入若不用 worktree 易导致互相覆盖；QC/QA 若错用 cwd/分支/**diff 范围**会审错、验错对象——见 `mstar-harness-core` `references/branch-and-worktree.md` **「QC 三审、QA 验证与 feature 检出上下文」**。若在 worktree 里擅自 `checkout -b` 或未授权切换分支，即违规。 |
-| 升级与重复失败 | `AGENTS.md` / `mstar-harness-core`：多次失败升级人工等 | `systematic-debugging`、`verification-before-completion` | **一致**：技能减少「无根因重复改」；**达不到 harness 升级条件**时仍以文档为准。 |
+| 升级与重复失败 | `mstar-harness-core` skill：多次失败升级人工等 | `systematic-debugging`、`verification-before-completion` | **一致**：技能减少「无根因重复改」；**达不到 harness 升级条件**时仍以文档为准。 |
 
 **小结**：Superpowers 主要填充各阶段**如何做**的细节；**阶段顺序、Done 权限、QC/QA 路由、分支唯一决策人**仍以 `mstar-*` skills 与 `@project-manager` 路由表为准。

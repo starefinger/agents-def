@@ -5,14 +5,14 @@ description: Morning Star (启明星) harness 与 Superpowers 技能的对齐与
 
 # Morning Star × Superpowers 对齐契约
 
-本 skill 将 **Superpowers** 插件中的技能（`~/.config/opencode/opencode.json` 中 `plugin` 已启用时）映射到 `~/.config/opencode/agents/*.md` 业务流程，并定义冲突时的消解规则。
+本 skill 将 **Superpowers** 插件中的技能（`opencode.json` 中 `plugin` 已启用时）映射到 `mstar-roles` skill 的各角色 业务流程，并定义冲突时的消解规则。
 
 ## 未安装插件时
 
 若当前环境没有 Superpowers（`skill` 里看不到、`plugin` 未配置）：拉取并按官方说明操作即可。
 
 - **安装说明（英文）**: `https://raw.githubusercontent.com/obra/superpowers/refs/heads/main/.opencode/INSTALL.md`  
-- **改 `~/.config/opencode/opencode.json` 须先征得用户同意**（见 `mstar-harness-core` 护栏）；不同意就只口述步骤，不代写。
+- **改 `opencode.json` 须先征得用户同意**（见 `mstar-harness-core` 护栏）；不同意就只口述步骤，不代写。
 
 **Agent 可照做的英文一句**：
 
@@ -21,7 +21,7 @@ description: Morning Star (启明星) harness 与 Superpowers 技能的对齐与
 ## 如何"使用"技能
 
 - 各角色在对应任务阶段应 **显式加载并遵循** 相应技能的完整内容（在支持 `/skill-name` 或少样本名称的环境中，通过技能名调用；以**宿主客户端**实际能力为准，宿主差异见当前 host adapter skill）。
-- **优先级（本仓库强制）**：**用户显式指令**（含项目 `AGENTS.md` / `CLAUDE.md`）> **`~/.config/opencode/AGENTS.md` 与 `mstar-*` skills 中的 harness 不变量**（状态机与门禁、plan 约定、review 基线、branch 协作等）> **Superpowers 技能正文中的流程、阶段划分与审查模型** > 一般惯例。当技能描述的顺序、谁可派 subagent、何时审查与 **harness 不一致**时，**以 harness 与 PM Assignment 为准**，技能仅保留**不冲突**的技巧（例如自检清单、模型分档、提问纪律）。若用户禁止 TDD，则不得强制 `test-driven-development`。
+- **优先级（本仓库强制）**：**用户显式指令**（含项目 `AGENTS.md` / `CLAUDE.md`）> **`mstar-*` skills 中的 harness 不变量**（`mstar-harness-core` 里的状态机与门禁、plan 约定、review 基线、branch 协作等）> **Superpowers 技能正文中的流程、阶段划分与审查模型** > 一般惯例。当技能描述的顺序、谁可派 subagent、何时审查与 **harness 不一致**时，**以 harness 与 PM Assignment 为准**，技能仅保留**不冲突**的技巧（例如自检清单、模型分档、提问纪律）。若用户禁止 TDD，则不得强制 `test-driven-development`。
 - **`writing-plans` 保存路径（门限）**：`mstar-plan-conventions` 中的 **`{PLAN_DIR}`**（主 plan Markdown；与 **`{HARNESS_DIR}`** 分层见同 skill）优先于上游技能正文中的 `docs/superpowers/plans/`；执行该技能时仍须将计划落在 **`{PLAN_DIR}`**，**`{HARNESS_DIR}/status.json`**、**`{HARNESS_DIR}/notes.json`**、**`{HARNESS_DIR}/archived/`**、**`{HARNESS_DIR}/knowledge/`** 等仍按 **`{HARNESS_DIR}`**。
 - **与 harness 的关系**：不改变 `mstar-harness-core` 的阶段顺序；技能规定的是**每个阶段内的做法**（例如排障前先走系统化调试、宣称完成前先有验证证据）——**但不得用技能覆盖 harness 的门禁**（见下节「`subagent-driven-development` 与上游模板」）。
 

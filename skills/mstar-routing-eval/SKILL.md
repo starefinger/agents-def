@@ -1,6 +1,6 @@
 ---
 name: mstar-routing-eval
-description: Morning Star (启明星) 路由与 prompt 迭代评估体系 —— (1) PM 路由回归：用 routing-evals.json 验证 `@project-manager` 是否把任务分派给正确的 agent、是否经过正确门禁、是否满足 `must_have_artifacts`、是否触发 `hard_fail_if`；(2) Prompt/规则迭代评估：在不过拟合单次对话的前提下迭代调优 `~/.config/opencode/agents/*.md` 与 `mstar-*` skills，含测试集设计、评分维度、Prompt 变更最低接受标准、回归记录；(3) Routing Eval Report 输出模板（含 phase_gate_compliance_rate）。`@project-manager` 回归本轮路由合规时必读；`@prompt-engineer` 设计/修改提示词、规则或 skill 前必读；任何评估、打分或回归场景引用 routing-evals.json 时必读。场景集数据见本 skill 的 assets/routing-evals.json。
+description: Morning Star (启明星) 路由与 prompt 迭代评估体系 —— (1) PM 路由回归：用 routing-evals.json 验证 `@project-manager` 是否把任务分派给正确的 agent、是否经过正确门禁、是否满足 `must_have_artifacts`、是否触发 `hard_fail_if`；(2) Prompt/规则迭代评估：在不过拟合单次对话的前提下迭代调优 `mstar-roles` skill 的各角色 与 `mstar-*` skills，含测试集设计、评分维度、Prompt 变更最低接受标准、回归记录；(3) Routing Eval Report 输出模板（含 phase_gate_compliance_rate）。`@project-manager` 回归本轮路由合规时必读；`@prompt-engineer` 设计/修改提示词、规则或 skill 前必读；任何评估、打分或回归场景引用 routing-evals.json 时必读。场景集数据见本 skill 的 assets/routing-evals.json。
 ---
 
 # Morning Star Routing & Evaluation Harness
@@ -12,8 +12,8 @@ description: Morning Star (启明星) 路由与 prompt 迭代评估体系 ——
 ### 输入
 
 - **场景集**：本 skill 的 **`assets/routing-evals.json`**
-- **路由策略来源**：`~/.config/opencode/agents/project-manager.md`
-- **全局约束**：`~/.config/opencode/AGENTS.md` 与 `mstar-harness-core`
+- **路由策略来源**：`mstar-roles` skill 的 `project-manager` 角色
+- **全局约束**：`mstar-harness-core` skill（含 harness 不变量与 skill 索引）
 
 ### 评估方法
 
@@ -86,7 +86,7 @@ description: Morning Star (启明星) 路由与 prompt 迭代评估体系 ——
 
 如果任一场景失败：
 
-- 向用户提议对 `~/.config/opencode/agents/project-manager.md` 或 `mstar-*` skills 的修改（全局配置写入仅由用户本人执行，agent 不得直接落盘）
+- 向用户提议对 `mstar-roles` skill 的 `project-manager` 角色 或 `mstar-*` skills 的修改（全局配置写入仅由用户本人执行，agent 不得直接落盘）
 - 重新运行完整场景集
 - 在 plan notes 中记录变更内容及原因
 

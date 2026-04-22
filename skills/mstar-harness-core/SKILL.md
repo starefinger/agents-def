@@ -1,31 +1,46 @@
 ---
 name: mstar-harness-core
-description: Morning Star (启明星) harness 核心入口 —— 多角色 agent 交付的生命周期、状态机、Spec-Driven 双阶段门禁、Task category 路由、意图门禁、@explore 能力边界、长任务纪律、Git 功能分支与 worktree 隔离、QC/QA 检出上下文对齐、反模式与升级触发。任何非平凡 code agent 任务开工前都必须 Read 本 skill（及其 references/），不得凭记忆或角色提示词残留处理生命周期与门禁；`@project-manager` 每轮编排前必读；所有实现/审查/QA/运维角色在接受 Assignment 后动手前必读。用于 OpenCode、Cursor 或任何多角色 code agent harness；与业务仓库具体技术栈无关。
+description: Morning Star (启明星) harness 的**强制全局入口** —— 多角色 agent 交付的生命周期、状态机、Spec-Driven 双阶段门禁、Task category 路由、意图门禁、@explore 能力边界、长任务纪律、Git 功能分支与 worktree 隔离、QC/QA 检出上下文对齐、Context7 共享检索协议、Morning Star Skill 索引、护栏不变量、反模式与升级触发。**任何**在本配置仓库下工作的 code agent，在开始**任何非平凡任务之前**都必须 Read 本 skill 与当前任务相关的 `references/`。`@project-manager` 每轮编排前必读；所有实现/审查/QA/运维角色在接受 Assignment 后动手前必读；`@prompt-engineer` 改 prompt/skill 前必读；宿主自动注入的根目录 `AGENTS.md` 的全部作用就是把你指到本 skill。用于 OpenCode、Cursor 或任何多角色 code agent harness；与业务仓库具体技术栈无关。
 ---
 
 # Morning Star Harness Core（启明星核心）
 
-本 skill 是 **Morning Star / 启明星** code agent harness 的**总入口与不变量 SSOT**。其它 `mstar-*` skill 只承载细分主题的展开；与本 skill **有冲突时，以本 skill 的状态机、门禁与路由表为准**。
+本 skill 是 **Morning Star / 启明星** code agent harness 的**唯一全局入口与 SSOT**。根目录 `AGENTS.md` 已瘦身为一句"强制读本 skill"的提示；所有执行向规则、skill 索引、护栏不变量与交付循环，全部在此维护。其它 `mstar-*` skill 只承载细分主题的展开；与本 skill **有冲突时，以本 skill 的状态机、门禁与路由表为准**。
 
-## 信息源优先级（与 `AGENTS.md` 根对齐）
+## 信息源优先级
 
 1. **当前轮次的用户显式指令**
 2. **项目级 `AGENTS.md` / `CLAUDE.md`**（自 cwd 向上解析）
-3. **`~/.config/opencode/AGENTS.md`**（Morning Star 全局入口；含 mstar-* skill 索引）
-4. **`mstar-*` skills 正文**（含本 skill 与 `references/`）
-5. **角色提示词 `~/.config/opencode/agents/*.md`**
+3. **`mstar-*` skills 正文**（本 skill + 其它 `mstar-*` 的 SKILL.md 与 `references/`）
+4. **`mstar-roles` skill 的角色正文**（`references/<role>.md`）
 
-冲突且无法调和时，以**当轮用户明确指令**为准；未覆盖或相互矛盾则**暂停并升级人工**。
+**冲突裁决**：同一事实在多层同时出现且仍无法一致解释时，以**当轮用户明确指令**为准；指令未覆盖或相互矛盾时，**暂停并升级人工**，不得擅自择一执行。
+
+## 宿主区别 **mstar-host**
+
+| 宿主 | 启动方式 |
+|---|---|
+| **OpenCode** | 每会话自动注入根目录 `AGENTS.md`（其内容就是把你指到本 skill）；支持内置 `question`、可调 subagent；差异细节见宿主加载到的 `mstar-host` skill |
+| **Cursor** | 不自动注入 `AGENTS.md`；会话启动时先 Read 本 skill；`/pm` 等指令走 PM 角色；可用 **Task** 工具并行拉起 QC 三审；差异细节见宿主加载到的 `mstar-host` skill |
+| 其它宿主 | 按宿主支持的 Rules / Skills 机制在会话初始化时强制 Read 本 skill；其它 `mstar-*` skill 按本 skill 的索引表按需加载 |
+
+## 最小交付循环（非平凡任务）
+
+1. **准备阶段**：`specify → clarify → plan`（含意图门禁）
+2. **执行准备**：`plan(locked)` 后执行 `tasks` 拆解
+3. **分派到最匹配角色**并 `implement`
+4. **审查与验证门禁**（QC 三审 + QA）
+5. **复盘沉淀**为可复用规则 / skill 更新
 
 ## 适用范围
 
-- 适用于使用 `~/.config/opencode/agents/*.md` 角色提示词的执行场景（与具体业务仓库无关的流程规则）。
-- 专题深度在 `references/` 与其他 `mstar-*` skill；本 SKILL.md 给出**状态机、门禁、不变量、索引**。
+- 适用于通过 `mstar-roles` skill 加载角色提示词的执行场景（与具体业务仓库无关的流程规则）。
+- 专题深度在本 skill 的 `references/` 与其它 `mstar-*` skill；本 SKILL.md 只给**状态机、门禁、不变量、索引**。
 
 ## 加载约定（强制）
 
 - **`@project-manager`**：开轮次前**必须** Read 全部 `mstar-*` skills；编排动作与 Assignment 须与本 skill 一致。
-- **实现/审查/QA/运维角色**：接到 Assignment 后、动手（写盘或第一次 `git commit`）**之前**，**必须** Read 本 skill 与角色对应的 `mstar-*` skills（见 `AGENTS.md` 角色→必读表）。
+- **实现/审查/QA/运维角色**：接到 Assignment 后、动手（写盘或第一次 `git commit`）**之前**，**必须** Read 本 skill 与角色对应的 `mstar-*` skills（各角色对应的必读清单见 `mstar-roles` skill 的 role profiles）。
 - 本 skill 与 `references/` 都是**可复核规则**；不得在回报中声称已遵循而实际未读。
 
 ## 状态机
@@ -86,7 +101,7 @@ description: Morning Star (启明星) harness 核心入口 —— 多角色 agen
 
 ## Task category 与角色倾向
 
-`@project-manager` 在 Assignment 写明 **`Task category`**（一个主类 + 可选 `secondary`），驱动「按任务性质选强项」的编排：
+`@project-manager` 在 Assignment 写明 **`Task category`**（一个主类 + 可选 `secondary`），驱动"按任务性质选强项"的编排：
 
 | Category | 典型工作 | 倾向角色 |
 |----------|----------|----------|
@@ -125,7 +140,7 @@ description: Morning Star (启明星) harness 核心入口 —— 多角色 agen
 
 - 独立模块可并行；避免写操作归属重叠。
 - 跨领域变更时，先锁定接口契约再并行编码。
-- **串行多批** ≠ **全程仅 `fullstack-dev`**：纯后端多单元仍可在 `fullstack-dev` / `fullstack-dev-2` 间串行 round-robin（见 `~/.config/opencode/agents/project-manager.md` Dev 三角 §6）。
+- **串行多批** ≠ **全程仅 `fullstack-dev`**：纯后端多单元仍可在 `fullstack-dev` / `fullstack-dev-2` 间串行 round-robin（见 `mstar-roles` skill 的 `project-manager` 角色 Dev 三角 §6）。
 - **QC 三审**在 feature 开发完成后执行，三名 reviewer 共用同一组 `Review cwd` / `Working branch` / `plan_id` / `Review range` / `Diff basis`。
 - **同一 plan 多 batch**：默认**仅**对整 plan 交付完成跑一轮完整三审；复验波次用新文件名（详见 `mstar-plan-conventions` 与 `mstar-review-qc`）。
 - 完整并发/worktree/QC 对齐规则见 `references/branch-and-worktree.md`。
@@ -177,27 +192,40 @@ description: Morning Star (启明星) harness 核心入口 —— 多角色 agen
 - 意图未收敛即实现。
 - 省略 `Task category` 导致角色/模型选择错配（除非极简 explore-only 且路由表已唯一）。
 
-## Skill 索引（Morning Star 系列）
+## Morning Star Skill 索引
 
-| Skill | 何时读 |
-|-------|--------|
-| **本 skill `mstar-harness-core`** | 任务开始前必读；含状态机、门禁、分支/worktree、Task category、调度、并行规则 |
-| `mstar-plan-conventions` | 读写 `{HARNESS_DIR}/status.json`、登记/归档 residual findings、初始化 `.agents/`、Done 瘦身、工期预估 |
-| `mstar-review-qc` | QC 三审与 QA 验证：清单、报告模板、门禁规则、high-risk 清单、residual 留档 |
-| `mstar-routing-eval` | 验证 PM 路由 + prompt/规则迭代评估；Routing Eval Report 模板 |
-| `mstar-coding-behavior` | 实现/重构/调试/审查任务：Think Before Coding / Simplicity First / Surgical Changes / Goal-Driven |
-| `mstar-superpowers-align` | Superpowers 技能与 harness 的对齐与消解；按角色必用/宜用清单 |
-| 宿主 adapter skills | 各宿主的入口/工具差异（`question`、Task 并行、会话加载方式等） |
+下列 skills 承载 harness 全部执行向规则。角色运行时先按本 skill 进入，再按角色职责按需加载对应 skill。
+
+| Skill | 职责范围 |
+|---|---|
+| **本 skill `mstar-harness-core`** | 总入口与不变量：状态机、Spec-Driven 双阶段门禁、Task category、`@explore` 边界、并行规则、Git 分支 / worktree、QC-QA 检出对齐、调度防串扰、升级触发、反模式、**Context7 共享检索协议**、宿主入口、最小交付循环 |
+| `mstar-plan-conventions` | `{HARNESS_DIR}` / `{PLAN_DIR}` 发现与初始化、`status.json` SSOT、residual findings（severity 枚举 / 生命周期 / 归档）、`notes.json`、`tech_debt_summary`、`knowledge/` 开发知识库、reports 命名、QC 三审触发时机、Done 瘦身 Profile A/B、工期预估（agent-oriented only） |
+| `mstar-review-qc` | QC 审查基线：工作流、清单、标准报告 Markdown 模板（YAML frontmatter + Findings 三档 + Summary + Verdict）、高危变更最小检查、门禁（Approve / Request Changes / Needs Discussion）、CI 门禁、residual 留档 |
+| `mstar-routing-eval` | PM 路由回归（`assets/routing-evals.json`）+ prompt/规则迭代评估 + `Routing Eval Report` 输出模板 |
+| `mstar-coding-behavior` | 跨角色通用编码行为：Think Before Coding / Simplicity First / Surgical Changes / Goal-Driven Execution |
+| `mstar-superpowers-align` | Morning Star × Superpowers：加载契约、最小声明契约、编排触发短语表、per-role 必用/宜用、`subagent-driven-development` 与 implementer-prompt 降权、QC 三审 × `using-git-worktrees` 叠用约束、张力与消解表 |
+| `mstar-roles` | 角色提示词总线：`agents/*.md` 仅保留 frontmatter + 参数绑定；完整角色正文在 `mstar-roles` skill 的 `references/`（含重复角色共享 reference） |
+| `mstar-host-opencode` | OpenCode 宿主：全局规则注入、`question` 工具、`@explore` / `@general`、按角色模型、按能力选配 MCP |
+| `mstar-host-cursor` | Cursor 宿主：Task 工具并行 QC 三审、单会话多帽 / 多窗口模式、implement 内禁止递归 Task、结构化 Markdown 澄清兜底 |
 
 ## 护栏（不变量）
 
-- 未经用户**明确同意**，不得修改 `~/.config/opencode/opencode.json`、凭据文件或 `secrets.env`。
+- 未经用户**明确同意**，不得修改 `opencode.json`、凭据文件或 `secrets.env`（维护细节见 `.cursor/rules/opencode-config-repo-maintenance.mdc`）。
 - 行为变更必须有对应验证证据；拒绝未记录的破坏性变更。
-- 对业务 Git 仓库的可合并改动，默认在功能分支上完成（除 `Branch policy` 例外）。
-- 同仓 ≥2 可写并发时**必须** `git worktree` 隔离；详见 `references/branch-and-worktree.md`。
-- 执行 Superpowers `writing-plans` 时计划文件落在 `mstar-plan-conventions` 解析到的 `{PLAN_DIR}`，**不得**写入 `docs/superpowers/plans/`。
-- **工作量与工期表述**只写 agent-oriented 预估；**不得**纳入人天、FTE、人类日历（见 `mstar-plan-conventions` 工期节）。
-- **结构化澄清**优先宿主提供的 `question` 类工具；宿主差异以对应 host adapter skill 为准。
+- 对业务 Git 仓库的可合并改动，默认在功能分支上完成（除 Assignment 显式写 `Branch policy` 例外）。
+- **Dev 三角**：`@fullstack-dev` 后端主导；用户可见 UI / 多文件前端默认由 `@frontend-dev` 主责；独立第二实现轨用 `@fullstack-dev-2`。详见 `mstar-roles` skill 的 `project-manager` 角色「Dev 三角平衡」。
+- **同仓并行写入**：当 ≥2 个可写 subagent 并发修改同一 Git 仓库时，**必须**使用 `git worktree`（或等价独立检出）隔离；详见 `references/branch-and-worktree.md`。
+- **QC / QA 与 feature 检出**：三审与 QA 须在 PM 写明的 **`Review cwd` / `Worktree path`**、**`Working branch`**、**`plan_id`**、**`Review range` / `Diff basis`** 上对齐（三份 QC 与 QA 逐字相同）。
+- **工作量与工期表述**：只写 agent-oriented 预估；不得纳入人天 / FTE / 人类日历（见 `mstar-plan-conventions` `references/effort-estimation.md`）。
+- **结构化澄清**：宿主提供 `question` 类工具时优先使用；宿主差异以对应 host adapter skill 为准。
+- 执行 Superpowers `writing-plans` 时计划文件落在 `mstar-plan-conventions` 解析到的 `{PLAN_DIR}`，不得默认写入 `docs/superpowers/plans/`。
+- **语言约定**（PM 编排场景）：Assignment 字段名保持既定英文键名；字段值中的任务描述正文默认可用中文；执行产出与报告默认英文。
+
+## 知识库目标
+
+- 保持角色提示词聚焦且稳定（长正文走 `mstar-roles` 的 references）。
+- 将可复用的流程知识从角色文件中抽离进 `mstar-*` skills。
+- 使行为可审计、易演进；单一 SSOT、skill-name 引用，不散落绝对路径。
 
 ## References
 

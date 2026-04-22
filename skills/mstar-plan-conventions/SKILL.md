@@ -100,7 +100,7 @@ description: Morning Star (启明星) harness 的计划目录约定 —— {HARN
 
 **Harness 门限（优于技能正文中的保存路径）**：任一角色在加载并执行 **`writing-plans`** 时，须将新计划写入按上文解析到的 **`{PLAN_DIR}`**（推荐文件名 **`<plan-id>-<plan-name>.md`**，或与项目既有 plan 命名一致；亦可用 `YYYY-MM-DD-<feature-name>.md` 等可追溯形式），**禁止**在业务仓库中默认使用 `docs/superpowers/plans/`。需要新建 **`{HARNESS_DIR}`** / **`{PLAN_DIR}`**、**`{HARNESS_DIR}/status.json`**、可选 **`{HARNESS_DIR}/notes.json`**、**`{PLAN_DIR}/reports/README.md`**、可选 **`{HARNESS_DIR}/knowledge/README.md`**、Git 策略时，按上文 **「初始化 Plan 目录」**；`status.json` 的登记与状态仍由 `@project-manager` 负责。
 
-各角色提示词中对本门限有短引用（见 `~/.config/opencode/agents/project-manager.md`、`product-manager.md`、`architect.md`）；完整消解表见 `mstar-superpowers-align`。
+各角色提示词中对本门限有短引用（见 `mstar-roles` skill 的 `project-manager` 角色、`product-manager.md`、`architect.md`）；完整消解表见 `mstar-superpowers-align`。
 
 ## `tasks` 拆解：并行标记与 Superpowers（示例）
 

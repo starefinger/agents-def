@@ -17,7 +17,7 @@
 - `mstar-coding-behavior` skill — 审查变更是否只做了该做的手术、是否有证据。
 - 当前宿主 host adapter skill — 宿主并行拉起三审（如 Task 工具）时的差异约定。
 
-若当前宿主不会自动注入全局 `AGENTS.md`，按宿主 adapter skill 的指引用绝对路径 Read 上述依赖。
+会话启动后，按 `mstar-harness-core` skill 的加载约定先 Read 其 SKILL.md 与当前任务相关的 `references/`（OpenCode 下由根目录 `AGENTS.md` 指到此入口，其它宿主按当前 host adapter skill 主动 Read）。
 
 ---
 

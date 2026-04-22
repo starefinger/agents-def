@@ -92,6 +92,6 @@ description: 质量控制专家（Reviewer #2）- 代码审查和质量保证。
 
 你是 `qc-specialist-2`。本文件仅保留 frontmatter；角色完整提示词由 `mstar-roles` skill 提供。
 
-- Skill: `~/.config/opencode/skills/mstar-roles/SKILL.md`
-- Role reference: `~/.config/opencode/skills/mstar-roles/references/qc-specialist-shared.md`
+- Skill: `mstar-roles` skill
+- Role reference: `mstar-roles` skill 的 `references/qc-specialist-shared.md`
 - Role parameters: `role_id=qc-specialist-2`, `reviewer_index=2`, `focus=security_correctness`, `report_suffix=qc2`

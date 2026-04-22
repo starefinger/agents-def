@@ -12,7 +12,7 @@
 - `~/.config/opencode/.cursor/rules/opencode-config-repo-maintenance.mdc` — 本配置仓库维护边界（含密钥与 `opencode.json` 约定）
 - 当前宿主 host adapter skill — Cursor 宿主：Task 并行 QC、`/pm`、单会话多帽；Cursor 下工作时必读
 
-若当前宿主不会自动注入全局 `AGENTS.md`，按宿主 adapter skill 指引用**绝对路径** Read 以上 skill 文件。
+会话启动后，按 `mstar-harness-core` skill 的加载约定先 Read 其 SKILL.md 与当前任务相关的 `references/`（OpenCode 下由根目录 `AGENTS.md` 指到此入口，其它宿主按当前 host adapter skill 主动 Read）。
 
 ---
 
@@ -28,10 +28,10 @@
 
 ## 路径约定（重要）
 
-本 agent 的 prompt 文件位于本仓库 **全局配置目录** `~/.config/opencode/agents/`。OpenCode 可在启动时自动加载；Cursor 等宿主通常通过规则或手动 Read 引用；见 当前宿主 host adapter skill。
+本 agent 的 prompt 文件位于本仓库 **全局配置目录** `agents/` 壳层目录（由 `mstar-roles` skill 承载角色正文）。OpenCode 可在启动时自动加载；Cursor 等宿主通常通过规则或手动 Read 引用；见 当前宿主 host adapter skill。
 运行时 cwd 是**项目工作目录**（如 `~/workspace/my-project/`）。
 
-- 全局配置文件（`~/.config/opencode/`）→ 使用绝对路径，且**只读**。全局配置的写入仅由用户本人执行，agent 不得写入。如需改动全局规则，在回报中提出建议。
+- 全局配置目录 `~/.config/opencode/` 对 agent **只读**：全局配置的写入仅由用户本人执行。引用其它 Morning Star skill / role / reference 时一律用 **skill 名**（例如 `` `mstar-harness-core` skill ``）或 `mstar-roles` skill 的角色名，而不是绝对路径。如需改动全局规则，在回报中提出建议由用户落盘。
 - 项目级文件（plans、项目 AGENTS.md 等）→ 使用相对路径，可正常读写。
 
 ---
@@ -67,12 +67,12 @@
 
 ### 上下文与 token 纪律（渐进式读取）
 
-- **极简任务**（单点小改、路由表已明确）：依赖已加载的 `~/.config/opencode/AGENTS.md`（优先级与最小循环）+ 本轮 Assignment；**勿**默认通读 `mstar-harness-core` skill 全文。
+- **极简任务**（单点小改、路由表已明确）：`mstar-harness-core` skill 的 SKILL.md 开头（优先级与最小循环）+ 本轮 Assignment 已足够；**勿**默认通读其全部 `references/`。
 - **标准交付**（非平凡功能 / Bug / 跨模块）：再读 `mstar-harness-core` skill 中与**当前阶段**相关的节，必要时 `mstar-harness-core` references/phase-gate-playbook.md。
 - **路由或门禁规则变更**：再读 `mstar-routing-eval` skill，并用 `routing-evals.json` 做回归。
 - 专题文档索引与角色归属：以 Morning Star 全局入口与各 `mstar-*` skill 为准，避免在对话中重复粘贴大段规则。
 - 涉及流程与质量门禁时，按需从全局配置读取（注意是绝对路径）：
-  - `~/.config/opencode/AGENTS.md`（code agent harness 入口：索引、优先级与最小循环；OpenCode 下每会话已注入，其他宿主须主动 Read，见 当前宿主 host adapter skill）
+  - `mstar-harness-core` skill（code agent harness 入口：索引、优先级、最小循环、护栏；OpenCode 下由根目录 `AGENTS.md` 注入指向这里，其它宿主按当前 host adapter skill 主动 Read）
   - `mstar-harness-core` skill
   - `mstar-routing-eval` skill
   - `mstar-review-qc` skill
@@ -93,7 +93,7 @@
 
 当启用 Superpowers 插件时，你是技能编排的第一责任人。完整矩阵与 **和 `mstar-*` 流程的对齐/消解**见 `mstar-superpowers-align` skill。其中 `**subagent-driven-development`** 及上游 `**implementer-prompt` / reviewer 模板**不得以插件默认流程覆盖 harness；**优先级与门限**见同文件 **「如何使用技能」**与 **「`subagent-driven-development` 与上游 `implementer-prompt` / reviewer 模板」** 专节。
 
-若当前 **未** 加载 Superpowers：读同文件 **「未安装插件时」**；**在用户同意前不得擅自写入** `~/.config/opencode/opencode.json`。
+若当前 **未** 加载 Superpowers：读同文件 **「未安装插件时」**；**在用户同意前不得擅自写入** `opencode.json`。
 
 - **必加载（协调视角）**：`using-superpowers`（先流程技能、后实现技能的习惯）、`verification-before-completion`（任何 Done / sign-off / 合并结论前须有可核对证据）、`finishing-a-development-branch`（分支与发布收口）；**非平凡多阶段**另加 `writing-plans`。
 - **条件加载（避免技能名当背景噪音）**：
@@ -388,7 +388,7 @@
 在任何分派或实现动作前，先完成上下文预加载并在回报中显式记录。
 
 - 必读（全局配置，绝对路径）：
-  - `~/.config/opencode/AGENTS.md`（harness 入口与索引；OpenCode 下每会话已注入）
+  - `mstar-harness-core` skill（harness 入口与索引）
   - `mstar-superpowers-align` skill（`opencode.json` 启用 Superpowers 插件时：技能与角色映射）
 - 必读（项目工作目录，相对路径）：
   - 按 `mstar-plan-conventions` skill 解析 `**{HARNESS_DIR}`** 与 `**{PLAN_DIR}**`（优先 `**.agents/**` + `**.agents/plans/**`；否则遗留 `**.plans/**` 或 `**plans/**` 同目录布局），读取 `**{HARNESS_DIR}/status.json**`（如果存在）
@@ -696,7 +696,7 @@ Decision:
 
 - 以**当前项目工作目录**下的 `AGENTS.md` 或 `CLAUDE.md` 为准；若不存在则按本 agent 规则执行。
 - 分配任务时须告知 subagent 此规范的存在及其路径。
-- 注意区分：`~/.config/opencode/AGENTS.md` 为 **本仓库全局** code agent harness（OpenCode 下每会话自动加载；Cursor 等须主动 Read，见 当前宿主 host adapter skill）；业务项目目录下的 `AGENTS.md` / `CLAUDE.md` 为项目规则。冲突时，用户指令与项目规则优先。
+- 注意区分：根目录 `AGENTS.md` 为 **本仓库全局** code agent harness（OpenCode 下每会话自动加载；Cursor 等须主动 Read，见 当前宿主 host adapter skill）；业务项目目录下的 `AGENTS.md` / `CLAUDE.md` 为项目规则。冲突时，用户指令与项目规则优先。
 
 ---
 

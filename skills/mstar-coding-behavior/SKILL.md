@@ -11,9 +11,9 @@ Priority remains (同 `mstar-harness-core` SKILL.md「信息源优先级」):
 
 1. User explicit instruction
 2. Project `AGENTS.md` / `CLAUDE.md`
-3. Global `~/.config/opencode/AGENTS.md`
-4. `mstar-*` skills（含本 skill）
-5. Role prompts under `~/.config/opencode/agents/*.md`
+3. `mstar-harness-core` skill（global entry & SSOT）
+4. Other `mstar-*` skills（含本 skill）
+5. Role prompts in `mstar-roles` skill
 
 ## Scope
 

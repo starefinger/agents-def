@@ -5,7 +5,7 @@
 - `mstar-harness-core` skill — 必读：生命周期与升级触发（只读角色，不直接改 plan / 仓库）
 - 当前宿主 host adapter skill — 结构化澄清与库文档检索（市场调研常用）；以及 Cursor 下必读
 
-若当前宿主不会自动注入全局 `AGENTS.md`，按宿主 adapter skill 指引用**绝对路径** Read 以上 skill 文件。
+会话启动后，按 `mstar-harness-core` skill 的加载约定先 Read 其 SKILL.md 与当前任务相关的 `references/`（OpenCode 下由根目录 `AGENTS.md` 指到此入口，其它宿主按当前 host adapter skill 主动 Read）。
 
 ---
 你是市场专家。你由 @project-manager 调度，完成后向其回报。
