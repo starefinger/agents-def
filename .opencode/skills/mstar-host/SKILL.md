@@ -1,6 +1,6 @@
 ---
 name: mstar-host-opencode
-description: OpenCode host adapter for Morning Star harness. Use this skill whenever running Morning Star in OpenCode, especially for host entry behavior, `opencode.json`-driven role loading, `question`-based structured clarify, `@explore`/`@general` usage boundaries, and PM-triggered named-role invocation. Always load this after `mstar-harness-core` to keep host behavior aligned with shared gates and routing.
+description: OpenCode host adapter for Morning Star harness. Use this skill whenever running Morning Star in OpenCode, especially for host entry behavior, `opencode.json`-driven role loading, `question`-based structured clarify, `@explore`/`@general` usage boundaries, and PM-triggered named-role invocation (including paste-only dispatch failure: Assignment Markdown without matching subagent/Task tool calls). Always load this after `mstar-harness-core` to keep host behavior aligned with shared gates and routing.
 ---
 
 # Morning Star × OpenCode Host Adapter
@@ -34,11 +34,27 @@ Use this default sequence unless a project rule explicitly overrides it:
 - **Named roles (`@<agent-id>`)**: roles configured in `opencode.json` `agent.<id>` must be **actually invoked** by PM through host entry points. Printing Assignment Markdown alone does not create subagent sessions.
 - **Per-role models**: different models can be configured per subagent in `opencode.json`.
 
+### OpenCode PM: dispatch order and “no tool = no dispatch” (critical)
+
+Some models **only paste** `## Assignment` in the main thread and **never call** the host subagent / Task entry. That is **not** delegation; downstream work **does not start**. Parallel dispatch makes this worse (two Assignments printed, **zero** invokes).
+
+**Mandatory order in the same assistant turn that issues dispatch**
+
+1. **Count** independent Assignments for this turn (`N` = number of distinct `Execute as` sessions you must open).
+2. **Issue `N` host invocations first** (subagent / Task / equivalent), each carrying **one** Assignment body as the task message. For **parallel** work, put **all `N` tool calls in this single assistant message** when the host allows it.
+3. **Only after** those tool calls, optionally post a short user-facing **Status Update** (may repeat Assignment titles as audit trail — **does not** replace step 2).
+
+**Hard rules**
+
+- **Do not end** the dispatch turn until **`N` invocations have been emitted** (or you explicitly mark `Blocked` / `dispatch incomplete` with host reason and a follow-up plan).
+- **Dual-track implement** (two dev Assignments) uses the **same** rule as QC tri-review: **`N = 2` ⇒ two invocations in one message** when parallel is required — not one invoke “and we’ll do the second later.”
+- In Status Update for dispatch turns, include **`Subagent invokes issued: N`** (must match Assignment count). If `N` is 0 while Assignments were written → state **`dispatch failed — paste-only`** and fix in the **next** message.
+
 ## OpenCode parallel dispatch contract (critical)
 
-When PM dispatches parallel work (especially QC tri-review), treat "parallel" as a **tool-level requirement**, not only a wording requirement.
+When PM dispatches parallel work (especially QC tri-review **or two concurrent implement tracks**), treat "parallel" as a **tool-level requirement**, not only a wording requirement.
 
-- **Hard rule**: if 2+ subagents must run in parallel, emit all corresponding subagent/task invocations in the **same assistant message**.
+- **Hard rule**: if 2+ subagents must run in parallel, emit all corresponding subagent/task invocations in the **same assistant message**. **Printing two Assignments without two matching tool calls is a failed dispatch**, not partial success.
 - **QC tri-review**: launch `qc-specialist`, `qc-specialist-2`, and `qc-specialist-3` in one dispatch turn (three invocations in one message block).
 - **Failure mode to avoid**: sending only one invocation and planning to send the others later is a serial rollout, not a successful parallel launch.
 - **Completion claim gate**: do not claim "QC tri-review dispatched in parallel" unless all three invocations were issued in that same dispatch turn.

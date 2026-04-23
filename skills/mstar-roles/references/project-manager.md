@@ -120,6 +120,8 @@
 
 **OpenCode 上 PM 派单与 §1.3 的边界**：下文 **§1.3** 要求写入承接方 Assignment 的 `**Execute as: <role-id>` 不带 `@`**，是为防止**承接方**把正文里的 `@` 当成再派单信号；**不**表示 PM 只能「贴字」。在 OpenCode 上，PM **必须**用宿主支持的 `**@<agent-id>`（与 `opencode.json` 的 `agent.<id>` 一致）或 Task / subagent 工具** 实际发起子代理，**每条 Assignment 对应一次 invoke**；若本轮要下发 **多条** 独立 Assignment（如 **QC 三审**、多轨并行实现），则 **invoke 次数 = Assignment 条数**，且 **默认应在同一调度轮次内一次性发完**（机械规则见 **§2「PM：同轮多 invoke」**）。详见 **§2**。
 
+**回合内强制顺序（防「只贴 Assignment」）**：先发出 **全部** 与 Assignment 条数一致的 **宿主 invoke / Task**（并行时 **同一条 assistant 消息内** 发齐），**再**（可选）对用户贴简短 Status 或审计用 Assignment 摘要。**禁止**仅用主线程 Markdown 结束「分派」回合而未发 tool。**并发两条实现轨**与 QC 三审同理：两条 Assignment ⇒ **两次** invoke，缺一即 **`dispatch incomplete`**。详见 `mstar-host-opencode` skill **「OpenCode PM: dispatch order」**。
+
 
 | Agent    | 能力          | 用途                                                                                                                      |
 | -------- | ----------- | ----------------------------------------------------------------------------------------------------------------------- |
@@ -492,8 +494,9 @@
 - **Q10：`Delegation` ↔ `Superpowers`**：`forbidden` 同条勿写 `subagent-driven-development`（见 `mstar-superpowers-align` skill「Delegation 与 Superpowers 清单一致」）。
 - **Q11：Task Board**：非平凡 plan 已公示板且本条含 `**PM Task Board coverage`**？否 → 先补 Status Update，再 implement。
 - **Q12：单层 dispatch**：承接方是否在**一条** Assignment 外又要求「再 Task 同名」代做本条？**禁止**；§1.3、当前宿主的 `mstar-host` skill。**勿与**「PM 同轮多次 invoke」混淆：QC 三审 = 三条 Assignment = PM **三次** invoke（§2「PM：同轮多 invoke」）。
-- **Q13：宿主级 invoke（OpenCode 等）**：本轮每条 **已下发的** Assignment 是否已对 `**Execute as`** 对应角色执行 **invoke**（而非仅把 Markdown 贴进主会话）？**N** 条独立 Assignment（含 QC 三审的 **3** 条）→ **N 次** invoke，**默认同轮发完**（宿主支持时）。仅打印正文 → **分派未完成**，不得写「已派 `@fullstack-dev`」类表述。见 **§2**、当前宿主的 `mstar-host` skill。
+- **Q13：宿主级 invoke（OpenCode 等）**：本轮每条 **已下发的** Assignment 是否已对 `**Execute as`** 对应角色执行 **invoke**（而非仅把 Markdown 贴进主会话）？**N** 条独立 Assignment（含 QC 三审的 **3** 条、**双轨并行实现的 2** 条）→ **N 次** invoke，**默认同轮发完**（宿主支持时）。仅打印正文 → **分派未完成**，不得写「已派 `@fullstack-dev`」类表述。见 **§2**、当前宿主的 `mstar-host` skill。
 - **Q14：QC 三审运行身份/模型核对**：若本轮派发 QC 三审，是否已核对三条实际会话分别对应 `qc-specialist`、`qc-specialist-2`、`qc-specialist-3`，且运行模型与 `opencode.json` 对应角色映射一致？若任一不符，标记 `dispatch invalid` 并重派，禁止进入 consolidated 结论。
+- **Q15：回合是否在 tool 前结束？**（OpenCode / 任意「须 invoke 才起子会话」的宿主）若本回合写了 **≥1** 条待执行的 Assignment，但 **assistant 消息末尾没有任何** 与条数一致的 subagent/Task **tool 调用** → **本回合分派无效**；下一回合须 **先补 invoke** 再写新文案。禁止把「Assignment 已写好」当成「已 delegate」。
 
 ### 1.1.2 Pre-implement Gate Check（强制输出）
 
@@ -577,7 +580,7 @@ Decision:
 - **与模板字段**：`Parallelism`、`dispatching-parallel-agents` 等表示 **计划意图与 Superpowers 对齐**；**执行手法**（本回复里 invoke 几次、是否同轮发完）以本条为准。
 
 **OpenCode（及任何「具名 subagent / Task」宿主）：贴出 Assignment ≠ 已完成分派**  
-若你**只**在用户可见的主回复里打印 `## Assignment` 全文、或仅在 Status Update 里复述 Assignment，而**没有**通过宿主机制 **invoke** 对应 `Execute as` 角色（例如 OpenCode 里对 `@fullstack-dev` / `@qc-specialist` 等**各起一轮**子代理或等价 Task，消息体为该条 Assignment；**QC 三审则须三次 such invoke，见上节**），则 **分派视为未发出**：没有子代理被拉起，不是「子代理坏了」。**正确顺序**：先 **invoke**（每条 Assignment 一次；多 Assignment 则多次，**优先同轮发完**），再（可选）对用户摘要 Status；**禁止**用「已粘贴 Assignment」代替 invoke。若 UI 要求先选角色再输入任务，则 **先选与子代理 id 一致的入口，再粘贴 Assignment 正文**。
+若你**只**在用户可见的主回复里打印 `## Assignment` 全文、或仅在 Status Update 里复述 Assignment，而**没有**通过宿主机制 **invoke** 对应 `Execute as` 角色（例如 OpenCode 里对 `@fullstack-dev` / `@qc-specialist` 等**各起一轮**子代理或等价 Task，消息体为该条 Assignment；**QC 三审则须三次 such invoke**；**两条并行实现轨则须两次 such invoke**，见上节），则 **分派视为未发出**：没有子代理被拉起，不是「子代理坏了」。**正确顺序**：先 **invoke**（每条 Assignment 一次；多 Assignment 则多次，**优先同轮发完**），再（可选）对用户摘要 Status；**禁止**用「已粘贴 Assignment」代替 invoke。若 UI 要求先选角色再输入任务，则 **先选与子代理 id 一致的入口，再粘贴 Assignment 正文**。模型易漏发第二轨 invoke：见 **Q15** 与 `mstar-host-opencode` **「OpenCode PM: dispatch order」**。
 
 调用 subagent 时，**必须提供以下上下文**：
 
@@ -694,6 +697,7 @@ Decision:
 **Phase**: {current phase}
 **Phase Gates**: {specify/clarify/plan/tasks/implement current state}
 **PM Task Board** (非平凡 plan 在 implement 前必填；可含下拨摘要): {表或列表；下拨摘要用 id 勿 `@role`，见 Q12}
+**Subagent invokes issued** (OpenCode 等 tool-host；凡本回合已派 subagent 则必填): {N} — 须等于本回合 **独立 Assignment** 条数；若为 0 且本回合写了 Assignment → 写 **`dispatch failed — paste-only`** 并在下一回合先补 invoke（见 Q13、Q15 与 `mstar-host-opencode` skill）
 **Context Loaded**: {exact file paths loaded in preflight}
 **Progress**: {percentage}
 **Completed** / **Next**: {可带 Task Board ID}
