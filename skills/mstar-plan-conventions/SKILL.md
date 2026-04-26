@@ -7,7 +7,7 @@ description: Morning Star (启明星) harness 的计划目录约定 —— {HARN
 
 **在同一会话或任务中首次 Read 本 skill 时：必须先 Read `mstar-harness-core` skill（SKILL.md，以及本任务将涉及的 `mstar-harness-core/references/`，尤其是并行 / worktree / QC-QA 检出时读 `references/branch-and-worktree.md`）。** 本 skill 只约定 `{HARNESS_DIR}` / `{PLAN_DIR}`、`status.json`、residuals、reports 等**计划资产**形态；**不得**突破 harness 的状态机、门禁与路由。冲突时 **以 `mstar-harness-core` 为准**。
 
-**摘要**：`mstar-harness-core` — 全局 SSOT 与「Morning Star Skill 索引」；本 skill — plan 目录、SSOT JSON、归档与工期口径的专题展开。
+**摘要**：`mstar-harness-core` — 全局 SSOT 与「Morning Star Skill 索引」；本 skill — plan 目录、SSOT JSON、归档与工期口径的专题展开。**派发 QC 或处理 `InReview` 闸门**：还须 Read **`mstar-review-qc`**（本 skill 不承载 QC 清单与 verdict 规则）。
 
 # Morning Star Plan Conventions（计划管理约定）
 
@@ -124,7 +124,9 @@ description: Morning Star (启明星) harness 的计划目录约定 —— {HARN
 
 **编排面**：PM 须在 Status Update 发与主 plan 对齐的 **`PM Task Board`**，implement Assignment 写 **`PM Task Board coverage`**（见 `agents/project-manager.md`）。
 
-**QC pre-dispatch gate (mandatory)**: before PM dispatches any QC task (`@qc-specialist*`), PM must read `mstar-review-qc` skill (including relevant `references/`) in the current round, then issue QC assignments.
+**QC pre-dispatch gate (mandatory)**: before PM dispatches any QC task (`@qc-specialist*`), PM must read **`mstar-review-qc`** skill (including relevant `references/`) **in the same coordination round**, then issue QC assignments. **Rationale**: `mstar-plan-conventions` alone does **not** carry QC checklists, report YAML, verdict rules, or tri-review field parity — skipping `mstar-review-qc` is a common cause of missed or batched-wrong QC.
+
+**InReview backlog gate (mandatory for PM orchestration)**: whenever **`{HARNESS_DIR}/status.json`** has one or more `plans[]` rows with **`status: InReview`**, PM must **not** treat plan orchestration as “implement-only”. Either **dispatch per-`plan_id` QC → QA** (per rules below) or set **`Blocked`** / user-approved deferral **in writing** in the same Status Update. Silent continuation into new implement waves while multiple plans sit `InReview` without QC artifacts is **`Blocked`-class drift**.
 
 以下为 plan 正文内 **tasks** 片段示例（字段名可按团队习惯调整，语义对齐即可）：
 
@@ -183,9 +185,18 @@ Assignment 模板中的 **`Parallelism`** 行应与上表 **`Parallelism`** / **
 | `Done` | 已合并/收口 | 主 plan Sign-off、**`{HARNESS_DIR}/status.json`** 的 `done_at`；仍 open 的 R# 留在 `metadata.residual_findings`，已关闭的已迁入 **`{HARNESS_DIR}/archived/residuals/<plan-id>.json`** |
 | `Blocked` | 等待外部输入或决策 | 顶层 `notes` + 建议填 `plans[].metadata.blocked_*` / `blocked_by_plan_id` |
 
+## InReview 与 QC+QA：多 plan 编排硬门禁（`@project-manager`）
+
+**典型反模式**：多个 **`plan_id`** 已进入 **`InReview`**，PM 仍持续派发**新的**实现单（下一 topic / 其它 plan），或试图把多个 plan **攒成一次 QC**、混用单一 `plan_id` / 单一 `Review range` —— 均偏离 harness，易导致 **QC 被跳过或审错范围**。
+
+1. **`InReview` 语义**：该 **`plan_id`** 的实现约定范围**已交付待闸**；下一协调动作应进入 **QC 三审 →（汇总）→ QA → `Done`** 管线，或显式 **`Blocked` / 延期说明**。**禁止**长期 `InReview` 却无 `{PLAN_DIR}/reports/<plan-id>/` 下有效 `-qc*.md` 波次且无解释。
+2. **一 plan 一套三审（默认）**：每个 **`plan_id`** **单独**一组 QC Assignment：`plan_id`、`Review cwd` / `Worktree path`、`Working branch`、`Review range` / `Diff basis` **仅对应该 plan 的待审变更**；三份 QC + 后续 QA **逐字对齐同一组字段**。**禁止**用一次三审 Assignment 覆盖多个不同 `plan_id` 的合并 diff（若需「多 plan 同一发布火车」，须拆成**显式** scope 与用户同意的集成策略，仍须每 plan 可审计的 QC 产物或书面豁免）。
+3. **多 plan 同时 InReview**：允许 **并行**派发多组三审（每组不同 `plan_id`、不同 `reports/<plan-id>/`），**不**等于省略某一 plan 的 QC；也**不**要求强行「一个大 QC session」串所有 plan。若资源上必须串行，**顺序**由 PM 写明，但**每个** `plan_id` 仍须完整三审 + QA，不得合并为单套 `Review range`。
+4. **与「仅读 plan skill」的关系**：编排 `InReview`、写 QC/QA Assignment、或解释 `reports/<plan-id>/` 时，**必须**已读 **`mstar-review-qc`**（见上文 **QC pre-dispatch gate**）。**仅加载 `mstar-plan-conventions`** 不能替代 QC 基线。
+
 ## 各角色与 Plan 的关系
 
-- **`@project-manager`**：负责发现 plan 目录、创建/登记 plan、分配任务、推进状态、Done 收口。分配时须告知 subagent plan 目录的实际路径；涉及业务 Git 仓库写操作时须在 Assignment 中写明 **`Working branch`** 或 **`Branch policy`**（见 `mstar-harness-core` `references/branch-and-worktree.md`）。启用 **`knowledge/`** 时维护索引 README，并在 Assignment 中点名 **`primary_spec` / `spec_refs`**（若本轮依赖知识库）。
+- **`@project-manager`**：负责发现 plan 目录、创建/登记 plan、分配任务、推进状态、Done 收口。分配时须告知 subagent plan 目录的实际路径；涉及业务 Git 仓库写操作时须在 Assignment 中写明 **`Working branch`** 或 **`Branch policy`**（见 `mstar-harness-core` `references/branch-and-worktree.md`）。启用 **`knowledge/`** 时维护索引 README，并在 Assignment 中点名 **`primary_spec` / `spec_refs`**（若本轮依赖知识库）。**维护 `status.json` 时**：若存在 **`InReview`** 行，每轮 Status Update **自检**是否对该 `plan_id` 已派或未派 QC；派发前 **Read `mstar-review-qc`**。
 - **`@architect`** / **`@product-manager`**：产出规格或评审结论若适合跨会话复用，写入 **`{HARNESS_DIR}/knowledge/`**（或 `{SPECS_DIR}`）并更新对应 **README**，建议由 PM 在 `plans[].metadata` 挂接路径。
 - **可写盘 agent**（dev / qa / ops）：完成任务后更新主 plan 中**本人负责**的任务 checkbox（见 `references/plan-files-and-reports.md`）、相关 Sign-off 栏位，并更新 `status.json`（权限见上）。**实现前**若 `plans[].metadata` 含 `primary_spec` / `spec_refs`，须先阅读对应文件（见 `references/knowledge-and-designs.md`）。
 - **`@product-manager`**：可更新 plan 文档中需求/验收/用户故事等产品负责部分，并在交付后勾选**与之对应**的主 plan 任务 checkbox；**不得**将 `status.json` 中计划状态设为 `Done`；如需改 `progress`/`notes`，以 Assignment 为准或交由 PM 收口。
@@ -198,6 +209,6 @@ Assignment 模板中的 **`Parallelism`** 行应与上表 **`Parallelism`** / **
 
 - `references/status-and-residuals.md` — `{HARNESS_DIR}/status.json` SSOT 结构、`plans[].metadata` 标准字段、根级 `metadata` 字段、residual findings 的 **severity** 枚举（SSOT）、生命周期（open → closed → archived）、`notes.json` 程序时间线、`tech_debt_summary` 技术债一览、常用 jq 查询。
 - `references/knowledge-and-designs.md` — `{HARNESS_DIR}/knowledge/` 开发过程知识库（目录、索引、命名、维护）、`{SPECS_DIR}`（`specs/` or `designs/`）规格目录、`{PLAN_DIR}/residuals/<plan-id>/` open residual 散文详情、与 `reports/` 的分工。
-- `references/plan-files-and-reports.md` — 主 plan 文件命名、审查报告命名表、QC 分报告与 consolidated 保留原则、**QC 三审触发时机（单 plan · 多 batch）**、residual findings 权威位置与顺序、主 plan Markdown checkbox 规则、Done 标记方式、QC 落盘宿主权限。
+- `references/plan-files-and-reports.md` — 主 plan 文件命名、审查报告命名表、QC 分报告与 consolidated 保留原则、**QC 三审触发时机（单 plan · 多 batch）**、**多 `plan_id` 同时 `InReview` 的 QC 编排**、residual findings 权威位置与顺序、主 plan Markdown checkbox 规则、Done 标记方式、QC 落盘宿主权限。
 - `references/done-compaction.md` — `Done` 计划行冷快照（`{HARNESS_DIR}/archived/plans/`）、Profile A（瘦 Done 行）/ Profile B（不留 Done 行）、原子更新约束、仓库级采用声明模板、合并前 SSOT 与事实一致门禁。
 - `references/effort-estimation.md` — Agent-oriented 工期与工作量预估（T 恤尺码 + agent 会话带）；**禁止**混入人天 / FTE / 人类日历；Assignment / PRD / 架构文档字段名建议。
