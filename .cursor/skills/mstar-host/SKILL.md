@@ -48,6 +48,7 @@ Execution precedence:
 
 In Cursor, the main agent can use the **Task tool** to spawn subagents in parallel and implement the same **QC tri-review** structure used in OpenCode harness flows.
 
+- **Prerequisite vs dispatch (same as OpenCode harness intent)**: one assistant message may run **`bash` / `read` / `glob`** only to pin `Review range`, merge-base, or cwd — **no** QC/dev Task dispatches for the batch in that message (unless `N = 1`). The **next** message that emits **any** Task for that batch must emit **all `N`** Tasks (**3** for tri-review) in **one** message. **Emit zero** Task dispatches until all `N` payloads are ready; **do not** send QC1 alone then QC2 after return.
 - **Paste-only failure mode**: writing `## Assignment` in the main chat **without** issuing the matching **Task** calls means **dispatch did not happen**. **N** Assignments ⇒ **N** Task invocations in the dispatch turn (parallel QC ⇒ **3** Tasks in **one** assistant message when supported).
 - Use `subagent_type`: `qc-specialist`, `qc-specialist-2`, `qc-specialist-3`, matching PM-issued **three independent Assignments**.
 - Required alignment fields across all three QC Tasks: **`plan_id`**, **`Review cwd` / Worktree path**, **`Review range` / Diff basis`** must be text-identical to harness requirements (see `mstar-harness-core` `references/branch-and-worktree.md`, `mstar-plan-conventions`, `mstar-review-qc`).

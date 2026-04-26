@@ -38,21 +38,28 @@ Use this default sequence unless a project rule explicitly overrides it:
 
 Some models **only paste** `## Assignment` in the main thread and **never call** the host subagent / Task entry. That is **not** delegation; downstream work **does not start**. Parallel dispatch makes this worse (two Assignments printed, **zero** invokes).
 
+**Turn model: prerequisite vs dispatch (prevents “bash then one QC” failure)**
+
+- **Prerequisite turn** (optional, any assistant message): use `bash` / `read` / `glob` / `grep` to collect facts (`merge-base`, `Review range`, `git rev-parse`, paths). **Do not** emit **any** subagent/Task **dispatch** for the batch in this same message **unless** `N = 1` and that single tool call *is* the dispatch.
+- **Dispatch turn** (mandatory shape when `N ≥ 2` concurrent assignees): the **first** message where you emit **any** dispatch for that batch must contain **all `N`** host invocations (each with its Assignment body). If you are **not** ready to emit all `N`, emit **zero** dispatches in that message — finish prep, then send **one** message with **`N`** calls.
+
 **Mandatory order in the same assistant turn that issues dispatch**
 
-1. **Count** independent Assignments for this turn (`N` = number of distinct `Execute as` sessions you must open).
-2. **Issue `N` host invocations first** (subagent / Task / equivalent), each carrying **one** Assignment body as the task message. For **parallel** work, put **all `N` tool calls in this single assistant message** when the host allows it.
-3. **Only after** those tool calls, optionally post a short user-facing **Status Update** (may repeat Assignment titles as audit trail — **does not** replace step 2).
+1. **Finalize** all `N` Assignment payloads (after any prerequisite turn).
+2. **Count** independent Assignments for this turn (`N` = number of distinct `Execute as` sessions you must open).
+3. **Issue `N` host invocations first** (subagent / Task / equivalent), each carrying **one** Assignment body as the task message. For **parallel** work, put **all `N` tool calls in this single assistant message** when the host allows it.
+4. **Only after** those tool calls, optionally post a short user-facing **Status Update** (may repeat Assignment titles as audit trail — **does not** replace the **`N`** invocations in step 3).
 
 **Hard rules**
 
+- **Emit zero until batch-ready**: if `N ≥ 2` and you can only issue **one** invoke right now, **do not issue that one** yet; complete the other payloads, then issue **all `N` in one message**. Partial single-invoke sends are **serial rollout**, not parallel launch.
 - **Do not end** the dispatch turn until **`N` invocations have been emitted** (or you explicitly mark `Blocked` / `dispatch incomplete` with host reason and a follow-up plan).
 - **Dual-track implement** (two dev Assignments) uses the **same** rule as QC tri-review: **`N = 2` ⇒ two invocations in one message** when parallel is required — not one invoke “and we’ll do the second later.”
 - In Status Update for dispatch turns, include **`Subagent invokes issued: N`** (must match Assignment count). If `N` is 0 while Assignments were written → state **`dispatch failed — paste-only`** and fix in the **next** message.
 
 ## OpenCode parallel dispatch contract (critical)
 
-When PM dispatches parallel work (especially QC tri-review **or two concurrent implement tracks**), treat "parallel" as a **tool-level requirement**, not only a wording requirement.
+When PM dispatches parallel work (especially QC tri-review **or two concurrent implement tracks**), treat "parallel" as a **tool-level requirement**, not only a wording requirement. The **Turn model: prerequisite vs dispatch** rules above apply here too (bash/read prep ≠ partial dispatch).
 
 - **Hard rule**: if 2+ subagents must run in parallel, emit all corresponding subagent/task invocations in the **same assistant message**. **Printing two Assignments without two matching tool calls is a failed dispatch**, not partial success.
 - **QC tri-review**: launch `qc-specialist`, `qc-specialist-2`, and `qc-specialist-3` in one dispatch turn (three invocations in one message block).
@@ -60,9 +67,11 @@ When PM dispatches parallel work (especially QC tri-review **or two concurrent i
 - **Completion claim gate**: do not claim "QC tri-review dispatched in parallel" unless all three invocations were issued in that same dispatch turn.
 
 Quick self-check before sending:
-1. How many independent assignments are required this turn?
-2. Does the outgoing message contain the same number of invocation calls?
-3. For QC tri-review, is the count exactly 3 in one message?
+1. How many independent assignments are required this turn? (`N`)
+2. Am I in a **prerequisite-only** message? If yes, ensure **zero** batch dispatches here unless `N = 1`.
+3. If this message is the **dispatch** message, does it contain **exactly `N`** invocation calls (not `1` when `N = 3`)?
+4. For QC tri-review, is the count **exactly 3** in **one** message in the dispatch turn?
+5. If the **previous** message was prerequisite-only, this message **must** include all **`N`** dispatches (not “start with QC1 only”).
 
 Post-dispatch validation (mandatory for QC tri-review):
 1. Verify the three runtime invocations were started as the intended agent IDs: `qc-specialist`, `qc-specialist-2`, `qc-specialist-3` (not three runs of the same role).

@@ -122,6 +122,8 @@
 
 **回合内强制顺序（防「只贴 Assignment」）**：先发出 **全部** 与 Assignment 条数一致的 **宿主 invoke / Task**（并行时 **同一条 assistant 消息内** 发齐），**再**（可选）对用户贴简短 Status 或审计用 Assignment 摘要。**禁止**仅用主线程 Markdown 结束「分派」回合而未发 tool。**并发两条实现轨**与 QC 三审同理：两条 Assignment ⇒ **两次** invoke，缺一即 **`dispatch incomplete`**。详见 `mstar-host-opencode` skill **「OpenCode PM: dispatch order」**。
 
+**前提消息 vs 派发消息（防「bash 后只发 QC1」）**：若某条 assistant 消息**仅**用于 `bash` / `read` / `glob` 收集 `Review range`、merge-base、路径等，**该条内不要**夹杂本批并发的 **第 1 个** QC/Task 派发（除非整批 `N=1`）。准备完成后，**下一条**派发消息须**一次性**含本批所需的 **全部 `N` 次** invoke（QC 三审 ⇒ **3**）。**禁止**先发 1 次、等子代理返回再在同主题下补发其余 —— 见 `mstar-host-opencode`「Turn model: prerequisite vs dispatch」与 `mstar-harness-core`「并发分派完整性门禁」。
+
 
 | Agent    | 能力          | 用途                                                                                                                      |
 | -------- | ----------- | ----------------------------------------------------------------------------------------------------------------------- |
