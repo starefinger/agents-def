@@ -3,7 +3,10 @@
   "displayName": "Morning Star Harness",
   "version": "0.1.0",
   "description": "Morning Star harness engineering framework as a Cursor plugin.",
-  "author": "Bohao Tang",
+  "author": {
+    "name": "Bohao Tang",
+    "email": "tech@btang.cn"
+  },
   "homepage": "https://github.com/btspoony/mstar-harness",
   "repository": "https://github.com/btspoony/mstar-harness.git",
   "license": "MIT",
@@ -25,8 +28,8 @@
     "agents/"
   ],
   "skills": [
-    "skills/",
-    "skills-cursor/"
+    "skills-cursor/",
+    "skills/"
   ],
   "rules": [
     "rules/"
