@@ -19,25 +19,28 @@ Core value:
 - Run with unified `mstar-*` skills instead of scattered rules
 - Reuse one core process across OpenCode and Cursor
 
-## Quick Start (Recommended)
+## Quick Start
 
-1. Clone repository to a stable source path:
-   - `git clone https://github.com/btspoony/mstar-harness.git ~/.mstar-harness`
-2. Install to target code agents:
-   - **Cursor (local plugin directory, clone directly)**
-     - `mkdir -p ~/.cursor/plugins/local`
-     - `git clone https://github.com/btspoony/mstar-harness.git ~/.cursor/plugins/local/mstar-harness`
-   - **OpenCode (plugin install, recommended)**
-     - add plugin config in `opencode.json`:
-       ```json
-       {
-         "plugin": [
-           "superpowers@git+https://github.com/obra/superpowers.git",
-           "morning-star@git+https://github.com/btspoony/mstar-harness.git"
-         ]
-       }
-       ```
-     - restart OpenCode
+### Cursor Installation
+
+- Local plugin install (direct clone):
+  - `mkdir -p ~/.cursor/plugins/local`
+  - `git clone https://github.com/btspoony/mstar-harness.git ~/.cursor/plugins/local/mstar-harness`
+  - Restart Cursor or run `Developer: Reload Window`
+
+### OpenCode Installation
+
+- Plugin install (recommended):
+  - Add plugin config in `opencode.json`:
+    ```json
+    {
+      "plugin": [
+        "superpowers@git+https://github.com/obra/superpowers.git",
+        "morning-star@git+https://github.com/btspoony/mstar-harness.git"
+      ]
+    }
+    ```
+  - Restart OpenCode
 
 That completes installation.
 
@@ -87,25 +90,6 @@ Recommended sequence for both hosts:
 | `mstar-superpowers-align` | Alignment and conflict handling with Superpowers |
 
 **Morning Star load order:** In any session or task, **read `skills/mstar-harness-core/SKILL.md` before** any other `skills/mstar-*/SKILL.md`. Each non-core skill begins with a **Load order** section that repeats this; on conflict, **`mstar-harness-core` wins**. See `mstar-harness-core/SKILL.md` →「与其它 `mstar-*` skill 的加载契约」.
-
-**Cursor-only maint:** PM routing scenario regression + `Routing Eval Report` live in **`.cursor/skills/mstar-routing-eval/`** (maint-only), while runtime host skills live in **`.cursor-plugin/skills/`**. See `.cursor/rules/repo-maintenance.mdc`.
-
-## Common Flows (Short)
-
-### I want to start a task now
-
-1. Read `AGENTS.md`
-2. Let `project-manager` establish context and route
-3. Execution roles work via `mstar-roles` + relevant skills
-4. Close through QC/QA gates
-
-### I just need rule entry points
-
-- Global entry: `AGENTS.md`
-- Core workflow: `skills/mstar-harness-core/SKILL.md`
-- Role hub: `skills/mstar-roles/SKILL.md`
-
-> Maintainer workflows, cross-file sync rules, and lint/maintenance checklists are intentionally kept in maintainer rule docs, not in this user-facing README.
 
 ## License
 

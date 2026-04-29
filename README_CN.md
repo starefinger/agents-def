@@ -21,23 +21,26 @@
 
 ## 快速开始（推荐方式）
 
-1. 克隆仓库到固定源码目录：
-   - `git clone https://github.com/btspoony/mstar-harness.git ~/.mstar-harness`
-2. 安装到目标 code agent：
-   - **Cursor（本地插件目录，直接 clone）**
-     - `mkdir -p ~/.cursor/plugins/local`
-     - `git clone https://github.com/btspoony/mstar-harness.git ~/.cursor/plugins/local/mstar-harness`
-   - **OpenCode（推荐使用 plugin 安装）**
-     - 在 `opencode.json` 增加插件配置：
-       ```json
-       {
-         "plugin": [
-           "superpowers@git+https://github.com/obra/superpowers.git",
-           "morning-star@git+https://github.com/btspoony/mstar-harness.git"
-         ]
-       }
-       ```
-     - 重启 OpenCode
+### Cursor 安装方式
+
+- 本地插件安装（直接 clone）：
+  - `mkdir -p ~/.cursor/plugins/local`
+  - `git clone https://github.com/btspoony/mstar-harness.git ~/.cursor/plugins/local/mstar-harness`
+  - 重启 Cursor or 运行 `Developer: Reload Window`
+
+### OpenCode 安装方式
+
+- 推荐使用 plugin 安装：
+  - 在 `opencode.json` 增加插件配置：
+    ```json
+    {
+      "plugin": [
+        "superpowers@git+https://github.com/obra/superpowers.git",
+        "morning-star@git+https://github.com/btspoony/mstar-harness.git"
+      ]
+    }
+    ```
+  - 重启 OpenCode
 
 完成以上两步即安装完成。
 
@@ -87,32 +90,6 @@
 | `mstar-host`（按宿主） | 宿主能力差异（OpenCode / Cursor） |
 
 **Morning Star 加载顺序：** 任意会话或任务中，**须先 Read `skills/mstar-harness-core/SKILL.md`**，再读其它 `skills/mstar-*/SKILL.md`。各非核心 skill 正文开头的 **「Load order」** 小节重复此要求；冲突以 **`mstar-harness-core`** 为准。详见该文件「与其它 `mstar-*` skill 的加载契约」。
-
-**仅 Cursor 维护：** PM 路由场景回归与 `Routing Eval Report` 在 **`.cursor/skills/mstar-routing-eval/`**（维护专用）；运行时宿主技能在 **`.cursor-plugin/skills/`**。见 `.cursor/rules/repo-maintenance.mdc`。
-
-## 常见使用流（最短）
-
-### 我想马上开工
-
-1. 先读 `AGENTS.md`
-2. 由 `project-manager` 建立任务上下文并分派
-3. 执行角色按 `mstar-roles` + 对应 skills 工作
-4. 经 QC / QA 门禁后收口
-
-### 我只想快速定位规则入口
-
-- 全局入口：`AGENTS.md`
-- 核心流程：`skills/mstar-harness-core/SKILL.md`
-- 角色总线：`skills/mstar-roles/SKILL.md`
-
-## 深入文档
-
-- `AGENTS.md`：全局入口与索引
-- `skills/mstar-harness-core/`：核心执行规则
-- `skills/mstar-roles/`：角色正文与参数化
-- `skills/mstar-plan-conventions/`：plan 与状态约定
-
-> 维护者流程、跨文件同步规则、lint/维护清单等内容，统一放在维护规则文档中，不在面向使用者的 README 展开。
 
 ## 许可
 
