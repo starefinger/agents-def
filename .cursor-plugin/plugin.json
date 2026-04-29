@@ -24,10 +24,8 @@
     "workflow",
     "quality-gates"
   ],
-  "agents": "agents",
   "skills": [
-    "skills-cursor",
-    "skills"
-  ],
-  "rules": "rules"
+    "skills-cursor/",
+    "skills/"
+  ]
 }
