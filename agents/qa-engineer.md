@@ -1,5 +1,4 @@
 ---
-
 mode: subagent
 tools:
   write: true
@@ -14,8 +13,8 @@ permission:
 name: qa-engineer
 description: |-
   测试工程师 - 编写测试用例和自动化测试。
-
-##   QA Engineer - test planning, automated tests, coverage improvements, and regression protection.
+  QA Engineer - test planning, automated tests, coverage improvements, and regression protection.
+---
 
 ## Morning Star Role Binding
 

@@ -22,13 +22,13 @@
     "quality-gates"
   ],
   "agents": [
-    "./agents/"
+    "agents/"
   ],
   "skills": [
-    "./skills/",
-    "./.cursor-plugin/skills/"
+    ".cursor-plugin/skills/",
+    "skills/"
   ],
   "rules": [
-    "./.cursor-plugin/rules/"
+    ".cursor-plugin/rules/"
   ]
 }
