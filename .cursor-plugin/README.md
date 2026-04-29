@@ -12,11 +12,9 @@ Provide Morning Star harness capabilities in Cursor with:
 
 ## Install / Use
 
-1. Clone repository to a stable source path:
-   - `git clone https://github.com/btspoony/mstar-harness.git ~/.mstar-harness`
-2. Install in Cursor local plugin directory:
+1. Clone directly into Cursor local plugin directory:
    - `mkdir -p ~/.cursor/plugins/local`
-   - `ln -sfn ~/.mstar-harness ~/.cursor/plugins/local/mstar-harness`
+   - `git clone https://github.com/btspoony/mstar-harness.git ~/.cursor/plugins/local/mstar-harness`
 3. Restart Cursor or run `Developer: Reload Window`.
 4. Start a new chat and invoke a Morning Star workflow (for example, PM routing or a role-specific task).
 

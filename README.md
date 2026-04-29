@@ -24,9 +24,9 @@ Core value:
 1. Clone repository to a stable source path:
    - `git clone https://github.com/btspoony/mstar-harness.git ~/.mstar-harness`
 2. Install to target code agents:
-   - **Cursor (local plugin directory)**
+   - **Cursor (local plugin directory, clone directly)**
      - `mkdir -p ~/.cursor/plugins/local`
-     - `ln -sfn ~/.mstar-harness ~/.cursor/plugins/local/mstar-harness`
+     - `git clone https://github.com/btspoony/mstar-harness.git ~/.cursor/plugins/local/mstar-harness`
    - **OpenCode (symlink contents, not the whole directory)**
      - `mkdir -p ~/.config/opencode/agents ~/.config/opencode/skills`
      - `ln -sfn ~/.mstar-harness/agents/*.md ~/.config/opencode/agents/`

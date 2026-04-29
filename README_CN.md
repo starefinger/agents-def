@@ -24,9 +24,9 @@
 1. 克隆仓库到固定源码目录：
    - `git clone https://github.com/btspoony/mstar-harness.git ~/.mstar-harness`
 2. 安装到目标 code agent：
-   - **Cursor（本地插件目录）**
+   - **Cursor（本地插件目录，直接 clone）**
      - `mkdir -p ~/.cursor/plugins/local`
-     - `ln -sfn ~/.mstar-harness ~/.cursor/plugins/local/mstar-harness`
+     - `git clone https://github.com/btspoony/mstar-harness.git ~/.cursor/plugins/local/mstar-harness`
    - **OpenCode（软链接内容，不软链接整个目录）**
      - `mkdir -p ~/.config/opencode/agents ~/.config/opencode/skills`
      - `ln -sfn ~/.mstar-harness/agents/*.md ~/.config/opencode/agents/`
